@@ -1,0 +1,28 @@
+{
+  "builders": [
+    {
+      "type": "veertu-anka",
+      "vm_name": "osx-10.13-base",
+      "installer_app": "/Applications/Install macOS High Sierra.app/",
+      "cpu_count": "2",
+      "ram_size": "6G",
+      "disk_size": "40G"
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "yes '' | ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo \"export LANG=en_US.UTF-8\" >> ~/.bash_profile",
+        "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.bash_profile",
+        "source ~/.bash_profile"
+      ],
+      "type": "shell"
+    }
+  ]
+}

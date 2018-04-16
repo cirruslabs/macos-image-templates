@@ -1,0 +1,41 @@
+{
+  "builders": [
+    {
+      "type": "veertu-anka",
+      "vm_name": "osx-10.13-xcode-{{user `xcode_version`}}",
+      "source_vm_name": "osx-10.13-base",
+      "cpu_count": "2",
+      "ram_size": "6G",
+      "disk_size": "50G"
+    }
+  ],
+  "variables": {
+    "fastlane_user": "{{env `FASTLANE_USER`}}",
+    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
+    "xcode_version": "9.3"
+  },
+  "provisioners": [
+    {
+      "inline": [
+        "sudo gem install fastlane cocoapods",
+        "pod setup"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "FASTLANE_USER={{user `fastlane_user`}}",
+        "FASTLANE_PASSWORD={{user `fastlane_password`}}",
+        "XCODE_VERSION={{user `xcode_version`}}"
+      ],
+      "inline": [
+        "sudo gem install xcode-install",
+        "xcversion install $XCODE_VERSION",
+        "xcversion select $XCODE_VERSION",
+        "xcversion simulators --install='iOS 11.2'",
+        "xcversion cleanup"
+      ],
+      "type": "shell"
+    }
+  ]
+}
