@@ -6,3 +6,6 @@ packer_cache/
 
 # IntelliJ
 .idea
+
+packer-builder-veertu-anka
+build
