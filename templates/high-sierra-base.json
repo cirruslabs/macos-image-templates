@@ -6,10 +6,17 @@
       "installer_app": "/Applications/Install macOS High Sierra.app/",
       "cpu_count": "2",
       "ram_size": "4G",
-      "disk_size": "40G"
+      "disk_size": "80G"
     }
   ],
   "provisioners": [
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
+      ],
+      "type": "shell"
+    },
     {
       "inline": [
         "yes '' | ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""

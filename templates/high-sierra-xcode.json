@@ -6,13 +6,13 @@
       "source_vm_name": "high-sierra-base",
       "cpu_count": "2",
       "ram_size": "4G",
-      "disk_size": "50G"
+      "disk_size": "80G"
     }
   ],
   "variables": {
     "fastlane_user": "{{env `FASTLANE_USER`}}",
     "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
-    "xcode_version": "9.3"
+    "xcode_version": "9.4"
   },
   "provisioners": [
     {
@@ -35,6 +35,13 @@
         "xcversion simulators --install='iOS 11.3'",
         "xcversion simulators --install='watchOS 4.2'",
         "xcversion cleanup"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
       ],
       "type": "shell"
     },
