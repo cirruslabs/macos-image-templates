@@ -2,10 +2,10 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "osx-10.13-xcode-{{user `xcode_version`}}",
-      "source_vm_name": "osx-10.13-base",
+      "vm_name": "high-sierra-xcode-{{user `xcode_version`}}",
+      "source_vm_name": "high-sierra-base",
       "cpu_count": "2",
-      "ram_size": "6G",
+      "ram_size": "4G",
       "disk_size": "50G"
     }
   ],
@@ -32,8 +32,17 @@
         "sudo gem install xcode-install",
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",
-        "xcversion simulators --install='iOS 11.2'",
+        "xcversion simulators --install='iOS 11.3'",
+        "xcversion simulators --install='watchOS 4.2'",
         "xcversion cleanup"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew --version",
+        "brew update",
+        "brew install xctool"
       ],
       "type": "shell"
     }
