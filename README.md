@@ -1,6 +1,9 @@
 # osx-images
 
-Packer templates to build [Mac OS Anka images](https://veertu.com/anka-technology/) to use in CI.
+Packer templates to build [Mac OS Anka images](https://veertu.com/anka-technology/) to use in CI:
+
+  * `high-sierra-base` image has only `brew` pre-installed
+  * `high-sierra-xcode-9.4` image is based of `high-sierra-base` and has only `Xcode 9.4` pre-installed
 
 # Building Base Image
 
