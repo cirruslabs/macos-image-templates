@@ -12,12 +12,12 @@
   "variables": {
     "fastlane_user": "{{env `FASTLANE_USER`}}",
     "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
-    "xcode_version": "9.4"
+    "xcode_version": "9.4.1"
   },
   "provisioners": [
     {
       "inline": [
-        "sudo gem install fastlane cocoapods",
+        "sudo gem install fastlane cocoapods rake -NV",
         "pod setup"
       ],
       "type": "shell"
