@@ -6,7 +6,8 @@
       "source_vm_name": "high-sierra-base",
       "cpu_count": "2",
       "ram_size": "4G",
-      "disk_size": "80G"
+      "disk_size": "80G",
+      "boot_delay": "30s"
     }
   ],
   "variables": {
