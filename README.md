@@ -4,6 +4,7 @@ Packer templates to build [Mac OS Anka images](https://veertu.com/anka-technolog
 
   * `high-sierra-base` image has only `brew` pre-installed
   * `high-sierra-xcode-9.4` image is based of `high-sierra-base` and has only `Xcode 9.4` pre-installed
+  * `high-sierra-xcode-9.4.1` image is based of `high-sierra-base` and has only `Xcode 9.4.1` pre-installed
 
 # Building Base Image
 
@@ -27,5 +28,5 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build -var xcode_version="9.4" templates/high-sierra-xcode.json
+packer build -var xcode_version="9.4.1" templates/high-sierra-xcode.json
 ```
