@@ -13,7 +13,7 @@
   "variables": {
     "fastlane_user": "{{env `FASTLANE_USER`}}",
     "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
-    "xcode_version": "9.4.1"
+    "xcode_version": "10.0"
   },
   "provisioners": [
     {
@@ -33,7 +33,7 @@
         "sudo gem install xcode-install",
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",
-        "xcversion simulators --install='iOS 11.3'",
+        "xcversion simulators --install='iOS 11.4'",
         "xcversion simulators --install='watchOS 4.2'",
         "xcversion cleanup"
       ],
