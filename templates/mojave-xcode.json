@@ -24,6 +24,13 @@
       "type": "shell"
     },
     {
+      "inline": [
+        "brew --version",
+        "brew update"
+      ],
+      "type": "shell"
+    },
+    {
       "environment_vars": [
         "FASTLANE_USER={{user `fastlane_user`}}",
         "FASTLANE_PASSWORD={{user `fastlane_password`}}",
