@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "high-sierra-base",
-      "installer_app": "/Applications/Install macOS High Sierra.app/",
+      "vm_name": "mojave-base",
+      "installer_app": "/Applications/Install macOS Mojave.app/",
       "cpu_count": "2",
       "ram_size": "4G",
       "disk_size": "80G"
@@ -27,6 +27,7 @@
       "inline": [
         "echo \"export LANG=en_US.UTF-8\" >> ~/.profile",
         "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.profile",
+        "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.profile",
         "source ~/.profile"
       ],
       "type": "shell"
