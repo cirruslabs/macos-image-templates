@@ -27,5 +27,5 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build -var xcode_version="10.0" templates/mojave-xcode.json
+packer build -var xcode_version="10.1" templates/mojave-xcode.json
 ```

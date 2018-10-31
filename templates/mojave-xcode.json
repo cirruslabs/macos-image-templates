@@ -13,7 +13,7 @@
   "variables": {
     "fastlane_user": "{{env `FASTLANE_USER`}}",
     "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
-    "xcode_version": "10.0"
+    "xcode_version": "10.1"
   },
   "provisioners": [
     {
@@ -41,8 +41,8 @@
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",
         "xcversion simulators",
-        "xcversion simulators --install='iOS 11.4'",
-        "xcversion simulators --install='watchOS 4.2'",
+        "xcversion simulators --install='iOS 12.0'",
+        "xcversion simulators --install='watchOS 5.0'",
         "xcversion cleanup"
       ],
       "type": "shell"
