@@ -1,6 +1,6 @@
 # osx-images
 
-Packer templates to build [Mac OS Anka images](https://veertu.com/anka-technology/) to use in CI:
+Packer templates to build [macOS Anka images](https://veertu.com/anka-technology/) to use in CI:
 
   * `mojave-base` image has only `brew` pre-installed
   * `mojave-xcode-10.0` image is based of `mojave-base` and has only `Xcode 10.0` pre-installed

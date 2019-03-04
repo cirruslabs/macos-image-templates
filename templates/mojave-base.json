@@ -40,6 +40,13 @@
         "brew install wget"
       ],
       "type": "shell"
+    },
+    {
+      "inline": [
+        "brew install cmake",
+        "brew install gcc"
+      ],
+      "type": "shell"
     }
   ]
 }
