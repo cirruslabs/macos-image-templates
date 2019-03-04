@@ -58,7 +58,7 @@
       "inline": [
         "brew install xctool",
         "brew install gcc",
-        "brew install gcc"
+        "brew install cmake"
       ],
       "type": "shell"
     }
