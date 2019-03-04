@@ -56,7 +56,9 @@
     },
     {
       "inline": [
-        "brew install xctool"
+        "brew install xctool",
+        "brew install gcc",
+        "brew install gcc"
       ],
       "type": "shell"
     }
