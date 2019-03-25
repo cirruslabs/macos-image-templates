@@ -37,14 +37,26 @@
       "inline": [
         "brew --version",
         "brew update",
-        "brew install wget"
       ],
       "type": "shell"
     },
     {
       "inline": [
         "brew install cmake",
-        "brew install gcc"
+        "brew install gcc",
+        "brew install wget",
+        "brew install mysql",
+        "brew install node",
+        "brew install python",
+        "brew install clojure",
+        "brew install php"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew upgrade",
+        "brew cleanup"
       ],
       "type": "shell"
     }
