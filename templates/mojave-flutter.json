@@ -53,7 +53,8 @@
     {
       "inline": [
         "sdkmanager tools platform-tools emulator",
-        "yes | sdkmanager \"platforms;android-28\" \"build-tools;28.0.3\""
+        "yes | sdkmanager \"platforms;android-28\" \"build-tools;28.0.3\"",
+        "echo \"export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH\" >> ~/.profile"
       ],
       "type": "shell"
     },
