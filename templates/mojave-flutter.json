@@ -2,14 +2,17 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "mojave-flutter",
-      "source_vm_name": "mojave-xcode-10.1",
+      "vm_name": "mojave-xcode-{{user `xcode_version`}}-flutter",
+      "source_vm_name": "mojave-xcode-{{user `xcode_version`}}",
       "cpu_count": "2",
       "ram_size": "8G",
       "disk_size": "100G",
       "boot_delay": "30s"
     }
   ],
+  "variables": {
+    "xcode_version": "10.2"
+  },
   "provisioners": [
     {
       "inline": [
