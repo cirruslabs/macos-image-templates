@@ -57,14 +57,14 @@
       "inline": [
         "sdkmanager tools platform-tools emulator",
         "yes | sdkmanager \"platforms;android-28\" \"build-tools;28.0.3\"",
-        "echo \"export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH\" >> ~/.profile"
+        "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.profile"
       ],
       "type": "shell"
     },
     {
       "inline": [
-        "echo \"export FLUTTER_HOME=$HOME/flutter\" >> ~/.profile",
-        "echo \"export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH\" >> ~/.profile",
+        "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.profile",
+        "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.profile",
         "source ~/.profile",
         "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
         "cd $FLUTTER_HOME",
