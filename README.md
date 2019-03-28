@@ -4,6 +4,7 @@ Packer templates to build [macOS Anka images](https://veertu.com/anka-technology
 
   * `mojave-base` image has only `brew` pre-installed
   * `mojave-xcode-10.1` image is based of `mojave-base` and has only `Xcode 10.1` pre-installed
+  * `mojave-xcode-10.2` image is based of `mojave-base` and has only `Xcode 10.2` pre-installed
   * `mojave-flutter` image is based of `mojave-xcode-10.1` and has only [`Flutter`](https://flutter.dev/) pre-installed
 
 # Building Base Image
@@ -28,5 +29,5 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build -var xcode_version="10.1" templates/mojave-xcode.json
+packer build -var xcode_version="10.2" templates/mojave-xcode.json
 ```
