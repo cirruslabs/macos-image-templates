@@ -18,7 +18,7 @@
   "provisioners": [
     {
       "inline": [
-        "sudo gem install bundler fastlane cocoapods rake -NV",
+        "sudo gem install bundler fastlane cocoapods rake xcpretty -NV",
         "pod setup"
       ],
       "type": "shell"
