@@ -41,8 +41,8 @@
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",
         "xcversion simulators",
-        "xcversion simulators --install='iOS 12.0'",
-        "xcversion simulators --install='watchOS 5.0'",
+        "xcversion simulators --install='iOS 12.2'",
+        "xcversion simulators --install='watchOS 5.2",
         "xcversion cleanup"
       ],
       "type": "shell"
