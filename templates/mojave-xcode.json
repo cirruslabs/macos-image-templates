@@ -25,8 +25,8 @@
     },
     {
       "inline": [
-        "brew --version",
-        "brew update"
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
       ],
       "type": "shell"
     },
@@ -49,13 +49,8 @@
     },
     {
       "inline": [
-        "echo 'Disabling spotlight...'",
-        "sudo mdutil -a -i off"
-      ],
-      "type": "shell"
-    },
-    {
-      "inline": [
+        "brew --version",
+        "brew update",
         "brew install xctool"
       ],
       "type": "shell"
