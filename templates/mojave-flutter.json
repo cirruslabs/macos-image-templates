@@ -11,7 +11,7 @@
     }
   ],
   "variables": {
-    "xcode_version": "10.3"
+    "xcode_version": "11.0"
   },
   "provisioners": [
     {
