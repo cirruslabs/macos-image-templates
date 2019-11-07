@@ -1,7 +1,7 @@
 """
 Run this to generate the templates.
 
-.. moduleauthor:: Reece Dunham
+.. moduleauthor:: Reece Dunham <me@rdil.rocks>
 """
 
 import sys
@@ -24,17 +24,18 @@ def template(t):
             "provisioners": [
             ]
         }
-    p = ""
+    vmname = "mojave-xcode-{{user `xcode_version`}}"
     if t == "flutter":
-        p = "mojave-xcode-{{user `xcode_version`}}"
+        p = str(vmname)  # yeah this looks bad but we need to shallow clone it
+        vmname += "-flutter"
     else:
         p = "mojave-base"
+
     # no need for else, it will have returned by now
-    r = "mojave-xcode-{{user `xcode_version`}}-flutter"
     return {
         "builders": [
             {
-                "vm_name": r,
+                "vm_name": vmname,
                 "source_vm_name": p,
                 "type": "veertu-anka",
                 "installer_app": "/Applications/Install macOS Mojave.app/",
@@ -135,8 +136,8 @@ def main():
     args = sys.argv[1:]
 
     if all in args:
-        print(add_base_meta(TEMPLATE))
-        print(add_xcode_meta(TEMPLATE))
+        print(add_base_meta(template("base")))
+        print(add_xcode_meta(template("xcode")))
     else:
         for u, z in enumerate(args):  # noqa
             if args[u] == "--image-variant" or args[u] == "-t":
