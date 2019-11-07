@@ -144,11 +144,11 @@ def main():
                 imagev = args[u + 1]
                 print("Building image " + imagev + " metadata")
                 if imagev == "base":
-                    print(add_base_meta(TEMPLATE))
+                    print(add_base_meta(template("base")))
                 elif imagev == "flutter":
                     pass
                 elif imagev == "xcode":
-                    print(add_xcode_meta(TEMPLATE))
+                    print(add_xcode_meta(template("xcode")))
                 else:
                     raise ValueError("Unknown image variant " + imagev + "!")
         print("You didn't specify an image variant via `--image-variant` (or `-t`),")
