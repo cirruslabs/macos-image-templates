@@ -155,3 +155,4 @@ def main():
         print("and didn't put `--all` (or `-a`), so I don't know what image to build!")
         raise RuntimeError("")
 
+main()
