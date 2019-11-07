@@ -214,6 +214,8 @@ def main():
         print(add_xcode_meta(template("xcode")))
         print(add_flutter_meta(template("flutter")))
     else:
+        if not "--build-meta" in args and "-m" not in args:
+            raise RuntimeError("Unsupported mode! You need to specify `-m` to build.")
         for u, z in enumerate(args):  # noqa
             if args[u] == "--image-variant" or args[u] == "-t":
                 imagev = args[u + 1]
