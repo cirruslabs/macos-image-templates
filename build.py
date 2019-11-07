@@ -84,6 +84,70 @@ scriptTemplate = {
     ]
 }
 
+flutterScriptTemplate = {
+    [
+        {
+            "inline": [
+                "brew cask install homebrew/cask-versions/adoptopenjdk8"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "brew cask install android-sdk android-ndk"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.profile",
+                "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.profile",
+                "source ~/.profile"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "sdkmanager --update"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "yes | sdkmanager --licenses"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "sdkmanager tools platform-tools emulator",
+                "yes | sdkmanager \"platforms;android-29\" \"build-tools;29.0.2\"",
+                "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.profile"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.profile",
+                "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.profile",
+                "source ~/.profile",
+                "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
+                "cd $FLUTTER_HOME",
+                "git checkout beta",
+                "git checkout stable",
+                "flutter doctor"
+            ],
+            "type": "shell"
+        },
+        {
+            "inline": [
+                "brew install libimobiledevice ideviceinstaller ios-deploy"
+            ],
+            "type": "shell"
+        }
+    ]
+}
+
 xcodeScriptTemplate = {
     {
         "inline": [
@@ -122,14 +186,24 @@ def add_base_meta(templateDict):
 
 
 def add_xcode_meta(templateDict):
-    di = add_base_meta(templateDict.copy())
+    di = templateDict.copy()
     di["variables"] = {
         "fastlane_user": "{{env `FASTLANE_USER`}}",
         "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
         "xcode_version": "11.1"
     }
-    di["provisions"].update(xcodeScriptTemplate)
+    di["provisions"] = xcodeScriptTemplate
     return di
+
+def add_flutter_meta(templateDict):
+    dii = templateDict.copy()
+    dii["variables"] = {
+        "fastlane_user": "{{env `FASTLANE_USER`}}",
+        "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
+        "xcode_version": "11.1"
+    }
+    dii["provisions"] = flutterScriptTemplate
+    return dii
 
 
 def main():
@@ -138,6 +212,7 @@ def main():
     if all in args:
         print(add_base_meta(template("base")))
         print(add_xcode_meta(template("xcode")))
+        print(add_flutter_meta(template("flutter")))
     else:
         for u, z in enumerate(args):  # noqa
             if args[u] == "--image-variant" or args[u] == "-t":
@@ -145,10 +220,13 @@ def main():
                 print("Building image " + imagev + " metadata")
                 if imagev == "base":
                     print(add_base_meta(template("base")))
+                    return
                 elif imagev == "flutter":
-                    pass
+                    print(add_flutter_meta(template("flutter")))
+                    return
                 elif imagev == "xcode":
                     print(add_xcode_meta(template("xcode")))
+                    return
                 else:
                     raise ValueError("Unknown image variant " + imagev + "!")
         print("You didn't specify an image variant via `--image-variant` (or `-t`),")
