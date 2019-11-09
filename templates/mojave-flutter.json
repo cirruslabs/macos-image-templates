@@ -6,7 +6,7 @@
       "source_vm_name": "mojave-xcode-{{user `xcode_version`}}",
       "cpu_count": "2",
       "ram_size": "8G",
-      "disk_size": "100G",
+      "disk_size": "80G",
       "boot_delay": "30s"
     }
   ],
