@@ -43,6 +43,13 @@
     },
     {
       "inline": [
+        "echo \"export PATH=/usr/local/opt/ruby/bin:$PATH\" >> ~/.profile",
+        "source ~/.profile"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
         "brew install cmake",
         "brew install gcc"
       ],
