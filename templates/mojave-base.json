@@ -37,7 +37,7 @@
       "inline": [
         "brew --version",
         "brew update",
-        "brew install wget"
+        "brew install wget ruby"
       ],
       "type": "shell"
     },
