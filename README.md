@@ -5,7 +5,6 @@ Packer templates to build [macOS Anka images](https://veertu.com/anka-technology
   * `mojave-base` image has only `brew` pre-installed
   * `mojave-xcode-10.1` image is based of `mojave-base` and has only `Xcode 10.1` pre-installed
   * `mojave-xcode-10.2` image is based of `mojave-base` and has only `Xcode 10.2` pre-installed
-  * `mojave-xcode-11.1` image is based of `mojave-base` and has only `Xcode 11.1` pre-installed
   * `mojave-xcode-11.2.1` image is based of `mojave-base` and has only `Xcode 11.2.1` pre-installed
   * `mojave-flutter` image is based of `mojave-xcode-11.2.1` and has only [`Flutter`](https://flutter.dev/) pre-installed
 
