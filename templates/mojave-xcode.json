@@ -25,13 +25,6 @@
       "type": "shell"
     },
     {
-      "inline": [
-        "echo 'Disabling spotlight...'",
-        "sudo mdutil -a -i off"
-      ],
-      "type": "shell"
-    },
-    {
       "environment_vars": [
         "FASTLANE_USER={{user `fastlane_user`}}",
         "FASTLANE_PASSWORD={{user `fastlane_password`}}",
@@ -51,6 +44,13 @@
         "brew --version",
         "brew update",
         "brew install xctool"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
       ],
       "type": "shell"
     }
