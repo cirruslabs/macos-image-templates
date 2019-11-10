@@ -18,6 +18,7 @@
   "provisioners": [
     {
       "inline": [
+        "source ~/.profile",
         "sudo gem install fastlane cocoapods rake xcpretty -NV",
         "pod setup"
       ],
@@ -37,6 +38,7 @@
         "XCODE_VERSION={{user `xcode_version`}}"
       ],
       "inline": [
+        "source ~/.profile",
         "sudo gem install xcode-install",
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",

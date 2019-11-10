@@ -37,14 +37,7 @@
       "inline": [
         "brew --version",
         "brew update",
-        "brew install wget ruby"
-      ],
-      "type": "shell"
-    },
-    {
-      "inline": [
-        "echo \"export PATH=/usr/local/opt/ruby/bin:$PATH\" >> ~/.profile",
-        "source ~/.profile"
+        "brew install wget rvm"
       ],
       "type": "shell"
     },
@@ -52,6 +45,17 @@
       "inline": [
         "brew install cmake",
         "brew install gcc"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew install rbenv ruby-build",
+        "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
+        "source ~/.profile",
+        "rbenv install 2.6.5",
+        "rbenv global 2.6.5",
+        "sudo gem install bundler"
       ],
       "type": "shell"
     }
