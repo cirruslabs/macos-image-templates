@@ -37,7 +37,7 @@
       "inline": [
         "brew --version",
         "brew update",
-        "brew install wget rvm"
+        "brew install wget"
       ],
       "type": "shell"
     },
@@ -50,7 +50,7 @@
     },
     {
       "inline": [
-        "brew install ruby ruby-build",
+        "brew install ruby ruby-build rbenv",
         "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
         "source ~/.profile",
         "rbenv install 2.6.5",
