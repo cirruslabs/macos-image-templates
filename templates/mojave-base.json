@@ -50,7 +50,7 @@
     },
     {
       "inline": [
-        "brew install rbenv ruby-build",
+        "brew install ruby ruby-build",
         "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
         "source ~/.profile",
         "rbenv install 2.6.5",
