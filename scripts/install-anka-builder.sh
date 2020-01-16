@@ -2,7 +2,7 @@
 
 set -e
 
-BUILDER_VERSION=1.0.1
+BUILDER_VERSION=1.1.0
 
 curl -L -o packer-builder-veertu-anka.tar.gz \
      https://github.com/veertuinc/packer-builder-veertu-anka/releases/download/v${BUILDER_VERSION}/packer-builder-veertu-anka_${BUILDER_VERSION}_darwin_amd64.tar.gz

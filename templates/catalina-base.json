@@ -5,6 +5,7 @@
       "vm_name": "catalina-base",
       "installer_app": "/Applications/Install macOS Catalina.app/",
       "cpu_count": "2",
+      "enable_htt": true,
       "ram_size": "8G",
       "disk_size": "80G",
       "boot_delay": "30s"
