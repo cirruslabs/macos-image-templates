@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "mojave-xcode-{{user `xcode_version`}}",
-      "source_vm_name": "mojave-base",
+      "vm_name": "catalina-xcode-{{user `xcode_version`}}",
+      "source_vm_name": "catalina-base",
       "cpu_count": "2",
       "ram_size": "8G",
       "disk_size": "80G",
@@ -13,7 +13,7 @@
   "variables": {
     "fastlane_user": "{{env `FASTLANE_USER`}}",
     "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
-    "xcode_version": "11.3"
+    "xcode_version": "11.3.1"
   },
   "provisioners": [
     {

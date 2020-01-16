@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "mojave-base",
-      "installer_app": "/Applications/Install macOS Mojave.app/",
+      "vm_name": "catalina-base",
+      "installer_app": "/Applications/Install macOS Catalina.app/",
       "cpu_count": "2",
       "ram_size": "8G",
       "disk_size": "80G",
