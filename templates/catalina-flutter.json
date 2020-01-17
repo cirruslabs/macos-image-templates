@@ -2,8 +2,8 @@
   "builders": [
     {
       "type": "veertu-anka",
-      "vm_name": "mojave-xcode-{{user `xcode_version`}}-flutter",
-      "source_vm_name": "mojave-xcode-{{user `xcode_version`}}",
+      "vm_name": "catalina-xcode-{{user `xcode_version`}}-flutter",
+      "source_vm_name": "catalina-xcode-{{user `xcode_version`}}",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
