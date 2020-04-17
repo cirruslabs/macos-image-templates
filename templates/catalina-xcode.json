@@ -12,8 +12,6 @@
     }
   ],
   "variables": {
-    "fastlane_user": "{{env `FASTLANE_USER`}}",
-    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
     "xcode_version": "11.4.1"
   },
   "provisioners": [
