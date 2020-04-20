@@ -19,7 +19,7 @@ packer build templates/catalina-base.json
 We also need to add a port forwarding rule so VMs based of `catalina-base` image can be SSHable:
 
 ```bash
-anka modify catalina-base add port-forwarding --host-port 0 --guest-port 22 --protocol tcp ssh
+anka modify catalina-base add port-forwarding --host-port 0 --guest-port 22 ssh
 ```
 
 ## Building Xcode Images
