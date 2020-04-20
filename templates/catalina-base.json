@@ -54,8 +54,8 @@
         "brew install ruby ruby-build rbenv",
         "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
         "source ~/.profile",
-        "rbenv install 2.7.0",
-        "rbenv global 2.7.0",
+        "rbenv install 2.7.1",
+        "rbenv global 2.7.1",
         "sudo gem install bundler"
       ],
       "type": "shell"
