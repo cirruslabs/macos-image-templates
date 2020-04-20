@@ -32,7 +32,8 @@
         "sudo gem install xcode-install",
         "xcversion install $XCODE_VERSION",
         "xcversion select $XCODE_VERSION",
-        "xcversion cleanup"
+        "xcversion cleanup",
+        "sudo xcodebuild -runFirstLaunch"
       ],
       "type": "shell"
     },
