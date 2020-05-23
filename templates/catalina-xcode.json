@@ -20,6 +20,9 @@
     {
       "inline": [
         "source ~/.profile",
+        "brew --version",
+        "brew update",
+        "brew upgrade",
         "sudo gem update",
         "sudo gem install fastlane cocoapods rake xcpretty -NV"
       ],
@@ -43,9 +46,6 @@
     },
     {
       "inline": [
-        "brew --version",
-        "brew update",
-        "brew upgrade",
         "brew install xctool"
       ],
       "type": "shell"
