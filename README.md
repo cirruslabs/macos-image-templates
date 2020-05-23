@@ -3,8 +3,8 @@
 Packer templates to build [macOS Anka images](https://veertu.com/anka-technology/) to use in CI:
 
   * `catalina-base` image has only `brew` pre-installed
-  * `catalina-xcode-11.4.1` image is based of `catalina-base` and has only `Xcode 11.4.1` pre-installed
-  * `catalina-flutter` image is based of `catalina-xcode-11.4.1` and has only [`Flutter`](https://flutter.dev/) pre-installed
+  * `catalina-xcode-11.5` image is based of `catalina-base` and has only `Xcode 11.5` pre-installed
+  * `catalina-flutter` image is based of `catalina-xcode-11.5` and has only [`Flutter`](https://flutter.dev/) pre-installed
 
 ## Building Base Image
 
