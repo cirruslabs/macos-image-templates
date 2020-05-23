@@ -12,6 +12,8 @@
     }
   ],
   "variables": {
+    "fastlane_user": "{{env `FASTLANE_USER`}}",
+    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
     "xcode_version": "11.5"
   },
   "provisioners": [
@@ -25,7 +27,9 @@
     },
     {
       "environment_vars": [
-        "XCODE_VERSION={{user `xcode_version`}}"
+        "XCODE_VERSION={{user `xcode_version`}}",
+        "FASTLANE_PASSWORD={{user `fastlane_password`}}",
+        "FASTLANE_USER={{user `fastlane_user`}}"
       ],
       "inline": [
         "source ~/.profile",
