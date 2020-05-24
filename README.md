@@ -28,5 +28,8 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build templates/catalina-flutter.json
+packer build -var xcode_version="11.5" \
+  -var fastalne_user="$FASTLANE_USER" \
+  -var fastlane_password="$FASTLANE_PASSWORD" \
+  templates/catalina-xcode.json
 ```
