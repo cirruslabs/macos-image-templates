@@ -2,12 +2,12 @@
 
 set -e
 
-BUILDER_VERSION=1.2.0
+BUILDER_VERSION=1.3.0
 
-curl -L -o packer-builder-veertu-anka.tar.gz \
-     https://github.com/veertuinc/packer-builder-veertu-anka/releases/download/v${BUILDER_VERSION}/packer-builder-veertu-anka_${BUILDER_VERSION}_darwin_amd64.tar.gz
+curl -L -o packer-builder-veertu-anka.zip \
+     https://github.com/veertuinc/packer-builder-veertu-anka/releases/download/v${BUILDER_VERSION}/packer-builder-veertu-anka.zip
 
 mkdir -p build
-tar -xvzf packer-builder-veertu-anka.tar.gz -C build
-mv build/packer-builder-veertu-anka packer-builder-veertu-anka
-rm -rf build packer-builder-veertu-anka.tar.gz
+unzip packer-builder-veertu-anka.zip
+rm packer-builder-veertu-anka.zip
+chmod +x packer-builder-veertu-anka
