@@ -29,7 +29,7 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 
 ```bash
 packer build -var xcode_version="12.0" \
-  -var fastalne_user="$FASTLANE_USER" \
+  -var fastlane_user="$FASTLANE_USER" \
   -var fastlane_password="$FASTLANE_PASSWORD" \
   templates/catalina-xcode.json
 ```
