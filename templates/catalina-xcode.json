@@ -14,7 +14,7 @@
   "variables": {
     "fastlane_user": "",
     "fastlane_password": "",
-    "xcode_version": "12.0"
+    "xcode_version": "12.1"
   },
   "provisioners": [
     {
@@ -54,6 +54,65 @@
       "inline": [
         "echo 'Disabling spotlight...'",
         "sudo mdutil -a -i off"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew cask install homebrew/cask-versions/adoptopenjdk8"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew cask install android-sdk android-ndk"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.profile",
+        "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.profile",
+        "source ~/.profile"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "sdkmanager --update"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "yes | sdkmanager --licenses"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "sdkmanager tools platform-tools emulator",
+        "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.0\"",
+        "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.profile"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.profile",
+        "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.profile",
+        "source ~/.profile",
+        "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
+        "cd $FLUTTER_HOME",
+        "git checkout beta",
+        "git checkout stable",
+        "flutter doctor"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "brew install libimobiledevice ideviceinstaller ios-deploy"
       ],
       "type": "shell"
     }
