@@ -3,9 +3,9 @@
 Packer templates to build [macOS Anka images](https://veertu.com/anka-technology/) to use in CI:
 
   * `catalina-base` image has only `brew` pre-installed
-  * `catalina-xcode-12.1` image is based of `catalina-base` and has `Xcode 12.1` with [`Flutter`](https://flutter.dev/) pre-installed
+  * `catalina-xcode-12.2` image is based of `catalina-base` and has `Xcode 12.2` with [`Flutter`](https://flutter.dev/) pre-installed
   * `big-sur-base` image has only `brew` pre-installed
-  * `big-sur-xcode-12.2` image is based of `catalina-base` and has `Xcode 12.2` with [`Flutter`](https://flutter.dev/) pre-installed
+  * `big-sur-xcode-12.3` image is based of `big-sur-base` and has `Xcode 12.3` with [`Flutter`](https://flutter.dev/) pre-installed
 
 ## Building Base Image
 
@@ -29,7 +29,7 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build -var xcode_version="12.2" \
+packer build -var xcode_version="12.3" \
   -var fastlane_user="$FASTLANE_USER" \
   -var fastlane_password="$FASTLANE_PASSWORD" \
   templates/big-sur-xcode.json

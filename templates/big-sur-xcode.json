@@ -14,7 +14,7 @@
   "variables": {
     "fastlane_user": "",
     "fastlane_password": "",
-    "xcode_version": "12.2"
+    "xcode_version": "12.3"
   },
   "provisioners": [
     {
