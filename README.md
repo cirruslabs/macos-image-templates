@@ -9,7 +9,13 @@ Packer templates to build [macOS Anka images](https://veertu.com/anka-technology
 
 ## Building Base Image
 
-First, run `./scripts/install-anka-builder.sh` to install Anka builder for Packer.
+First, convert a macOS installation in Anka format:
+
+```bash
+anka create --ram-size 8G --cpu-count 2 --disk-size 80G --app /Applications/Install\ macOS\ Big\ Sur.app big-sure-vanilla
+```
+
+Then run `./scripts/install-anka-builder.sh` to install Anka builder for Packer.
 
 To build the base image (you need to have `/Applications/Install macOS Big Sur.app/` installed from App Store):
 

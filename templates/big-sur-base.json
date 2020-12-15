@@ -3,7 +3,7 @@
     {
       "type": "veertu-anka",
       "vm_name": "big-sur-base",
-      "installer_app": "/Applications/Install macOS Big Sur.app/",
+      "source_vm_name": "big-sur-vanilla",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
