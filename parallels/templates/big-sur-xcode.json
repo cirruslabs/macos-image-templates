@@ -1,0 +1,95 @@
+{
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "fastlane_user": "{{env `FASTLANE_USER`}}",
+    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
+    "xcode_version": "12.3"
+  },
+  "builders": [
+    {
+      "type": "parallels-pvm",
+      "parallels_tools_flavor": "mac",
+      "vm_name": "big-sur-xcode-{{user `xcode_version`}}",
+      "source_path": "{{ user `home` }}/Parallels/big-sur-base/big-sur-base.pvm",
+      "output_directory": "{{ user `home` }}/Parallels/big-sur-xcode-{{user `xcode_version`}}",
+      "ssh_username": "admin",
+      "ssh_password": "admin",
+      "ssh_timeout": "120s",
+      "shutdown_command": "sudo shutdown -h now",
+      "skip_compaction": "false",
+      "prlctl": [
+        ["set", "{{.Name}}", "--cpus", "4"],
+        ["set", "{{.Name}}", "--memsize", "8192"],
+        ["set", "{{.Name}}", "--videosize", "512"],
+        ["set", "{{.Name}}", "--3d-accelerate", "highest"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "source ~/.profile",
+        "ruby --version",
+        "sudo gem update",
+        "sudo gem install fastlane cocoapods rake xcpretty -NV"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "XCODE_VERSION={{user `xcode_version`}}",
+        "FASTLANE_PASSWORD={{user `fastlane_password`}}",
+        "FASTLANE_USER={{user `fastlane_user`}}"
+      ],
+      "inline": [
+        "source ~/.profile",
+        "sudo gem install xcode-install",
+        "xcversion install $XCODE_VERSION",
+        "xcversion select $XCODE_VERSION",
+        "xcversion cleanup",
+        "sudo xcodebuild -runFirstLaunch"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "source ~/.profile",
+        "brew --version",
+        "brew update",
+        "brew upgrade",
+        "brew install xctool",
+        "brew install --cask homebrew/cask-versions/adoptopenjdk8",
+        "brew install --cask android-sdk android-ndk",
+        "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.profile",
+        "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.profile",
+        "source ~/.profile",
+        "sdkmanager --update",
+        "yes | sdkmanager --licenses",
+        "sdkmanager tools platform-tools emulator",
+        "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.0\"",
+        "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.profile"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.profile",
+        "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.profile",
+        "source ~/.profile",
+        "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
+        "cd $FLUTTER_HOME",
+        "git checkout beta",
+        "git checkout stable",
+        "flutter doctor"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "source ~/.profile",
+        "brew install libimobiledevice ideviceinstaller ios-deploy"
+      ],
+      "type": "shell"
+    }
+  ]
+}

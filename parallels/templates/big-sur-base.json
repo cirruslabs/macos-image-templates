@@ -1,0 +1,54 @@
+{
+  "variables": {
+    "home": "{{env `HOME`}}"
+  },
+  "builders": [
+    {
+      "type": "parallels-pvm",
+      "parallels_tools_flavor": "mac",
+      "vm_name": "big-sur-base",
+      "source_path": "{{ user `home` }}/Parallels/big-sur-vanilla.pvm",
+      "output_directory": "{{ user `home` }}/Parallels/big-sur-base",
+      "ssh_username": "admin",
+      "ssh_password": "admin",
+      "ssh_timeout": "120s",
+      "shutdown_command": "sudo shutdown -h now",
+      "skip_compaction": "false",
+      "prlctl": [
+        ["set", "{{.Name}}", "--cpus", "4"],
+        ["set", "{{.Name}}", "--memsize", "8192"],
+        ["set", "{{.Name}}", "--videosize", "512"],
+        ["set", "{{.Name}}", "--3d-accelerate", "highest"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off",
+        "echo 'Installing homebrew...'",
+        "export NONINTERACTIVE=true",
+        "sudo -v",
+        "yes '' | /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"",
+        "echo \"export LANG=en_US.UTF-8\" >> ~/.profile",
+        "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.profile",
+        "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.profile",
+        "source ~/.profile",
+        "brew --version",
+        "brew install wget cmake gcc",
+        "echo 'Installing Ruby...'",
+        "brew install ruby ruby-build rbenv",
+        "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+        "rbenv global $(rbenv install -l | grep -v - | tail -1)",
+        "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
+        "source ~/.profile",
+        "sudo gem install bundler",
+        "echo 'Configuring Safari...'",
+        "sudo safaridriver --enable",
+        "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1"
+      ],
+      "type": "shell"
+    }
+  ]
+}
