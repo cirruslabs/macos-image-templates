@@ -30,6 +30,7 @@
         "echo \"export LANG=en_US.UTF-8\" >> ~/.profile",
         "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.profile",
         "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.profile",
+        "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.profile",
         "source ~/.profile"
       ],
       "type": "shell"
