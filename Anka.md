@@ -1,26 +1,13 @@
-# osx-images
-
-Packer templates to build [macOS Anka images](https://veertu.com/anka-technology/) to use in CI:
-
-  * `catalina-base` image has only `brew` pre-installed
-  * `catalina-xcode-12.2` image is based of `catalina-base` and has `Xcode 12.2` with [`Flutter`](https://flutter.dev/) pre-installed
-  * `big-sur-base` image has only `brew` pre-installed
-  * `big-sur-xcode-12.3` image is based of `big-sur-base` and has `Xcode 12.3` with [`Flutter`](https://flutter.dev/) pre-installed
-
 ## Building Base Image
 
-First, convert a macOS installation in Anka format:
-
-```bash
-anka create --ram-size 8G --cpu-count 2 --disk-size 80G --app /Applications/Install\ macOS\ Big\ Sur.app big-sur-vanilla
-```
+First, download macOS from App Store to have a `*.app` installation in `/Applications` folder.
 
 Then run `./scripts/install-anka-builder.sh` to install Anka builder for Packer.
 
 To build the base image (you need to have `/Applications/Install macOS Big Sur.app/` installed from App Store):
 
 ```bash
-packer build templates/big-sur-base.json
+packer build -only=anka templates/big-sur-base.json
 ```
 
 We also need to add a port forwarding rule so VMs based of `catalina-base` image can be SSHable:
@@ -35,7 +22,8 @@ To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PAS
 [xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
 
 ```bash
-packer build -var xcode_version="12.3" \
+packer build -only=anka \
+  -var xcode_version="12.3" \
   -var fastlane_user="$FASTLANE_USER" \
   -var fastlane_password="$FASTLANE_PASSWORD" \
   templates/big-sur-xcode.json

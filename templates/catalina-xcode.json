@@ -1,9 +1,10 @@
 {
   "builders": [
     {
+      "name": "anka",
       "type": "veertu-anka",
-      "vm_name": "big-sur-xcode-{{user `xcode_version`}}",
-      "source_vm_name": "big-sur-base",
+      "vm_name": "catalina-xcode-{{user `xcode_version`}}",
+      "source_vm_name": "catalina-base",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
@@ -14,7 +15,7 @@
   "variables": {
     "fastlane_user": "",
     "fastlane_password": "",
-    "xcode_version": "12.3"
+    "xcode_version": "12.1"
   },
   "provisioners": [
     {
@@ -47,6 +48,13 @@
     {
       "inline": [
         "brew install xctool"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
       ],
       "type": "shell"
     },

@@ -1,9 +1,10 @@
 {
   "builders": [
     {
+      "name": "anka",
       "type": "veertu-anka",
-      "vm_name": "big-sur-base",
-      "source_vm_name": "big-sur-vanilla",
+      "vm_name": "catalina-base",
+      "installer_app": "/Applications/Install macOS Catalina.app/",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
@@ -55,6 +56,8 @@
         "brew install ruby ruby-build rbenv",
         "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
         "source ~/.profile",
+        "rbenv install 2.7.1",
+        "rbenv global 2.7.1",
         "sudo gem install bundler"
       ],
       "type": "shell"
