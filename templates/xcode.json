@@ -1,10 +1,33 @@
 {
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "mac-os-version": "big-sur",
+    "fastlane_user": "{{env `FASTLANE_USER`}}",
+    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
+    "xcode_version": "12.3"
+  },
   "builders": [
+    {
+      "name": "parallels",
+      "type": "parallels-pvm",
+      "parallels_tools_flavor": "mac",
+      "vm_name": "{{ user `mac-os-version` }}-xcode-{{user `xcode_version`}}",
+      "source_path": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-base/{{ user `mac-os-version` }}-base.pvm",
+      "output_directory": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-xcode-{{user `xcode_version`}}",
+      "ssh_username": "admin",
+      "ssh_password": "admin",
+      "ssh_timeout": "120s",
+      "shutdown_command": "sudo shutdown -h now",
+      "skip_compaction": "false",
+      "prlctl": [
+        ["set", "{{.Name}}", "--3d-accelerate", "highest"]
+      ]
+    },
     {
       "name": "anka",
       "type": "veertu-anka",
-      "vm_name": "big-sur-xcode-{{user `xcode_version`}}",
-      "source_vm_name": "big-sur-base",
+      "vm_name": "{{ user `mac-os-version` }}-xcode-{{user `xcode_version`}}",
+      "source_vm_name": "{{ user `mac-os-version` }}-base",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
@@ -12,11 +35,6 @@
       "boot_delay": "30s"
     }
   ],
-  "variables": {
-    "fastlane_user": "",
-    "fastlane_password": "",
-    "xcode_version": "12.3"
-  },
   "provisioners": [
     {
       "inline": [
