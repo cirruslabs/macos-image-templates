@@ -12,7 +12,7 @@
       "type": "parallels-pvm",
       "parallels_tools_flavor": "mac",
       "vm_name": "{{ user `mac-os-version` }}-xcode-{{user `xcode_version`}}",
-      "source_path": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-base/{{ user `mac-os-version` }}-base.pvm",
+      "source_path": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-base.pvm",
       "output_directory": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-xcode-{{user `xcode_version`}}",
       "ssh_username": "admin",
       "ssh_password": "admin",
@@ -40,6 +40,7 @@
       "inline": [
         "source ~/.profile",
         "brew --version",
+        "ruby --version",
         "brew update",
         "brew upgrade",
         "sudo gem update",

@@ -63,6 +63,8 @@
       "inline": [
         "source ~/.profile",
         "brew install ruby ruby-build rbenv",
+        "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+        "rbenv global $(rbenv install -l | grep -v - | tail -1)",
         "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
         "source ~/.profile",
         "sudo gem install bundler"
