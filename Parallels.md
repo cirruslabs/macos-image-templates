@@ -32,13 +32,13 @@ prlctl unregister big-sur-vanilla
 
 ## Building Xcode Images
 
-To build an Xcode image (don't forget to setup `FASTLANE_USER` and `FASTLANE_PASSWORD` since they are required by
-[xcode-install](https://github.com/KrauseFx/xcode-install#usage)):
+To build an Xcode image (don't forget to setup `DEVPORTAL_EMAIL` and `DEVPORTAL_PASSWORD` since they are required by
+[xcodes](https://github.com/RobotsAndPencils/xcodes#usage)):
 
 ```bash
 packer build -only=parallels \
   -var xcode_version="12.3" \
-  -var fastlane_user="$FASTLANE_USER" \
-  -var fastlane_password="$FASTLANE_PASSWORD" \
+  -var devportal_email="$DEVPORTAL_EMAIL" \
+  -var devportal_password="$DEVPORTAL_PASSWORD" \
   templates/xcode.json
 ```

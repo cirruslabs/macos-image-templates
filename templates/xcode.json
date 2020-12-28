@@ -2,8 +2,8 @@
   "variables": {
     "home": "{{env `HOME`}}",
     "mac-os-version": "big-sur",
-    "fastlane_user": "{{env `FASTLANE_USER`}}",
-    "fastlane_password": "{{env `FASTLANE_PASSWORD`}}",
+    "devportal_email": "{{env `DEVPORTAL_EMAIL`}}",
+    "devportal_password": "{{env `DEVPORTAL_PASSWORD`}}",
     "xcode_version": "12.3"
   },
   "builders": [
@@ -48,8 +48,8 @@
     {
       "environment_vars": [
         "XCODE_VERSION={{user `xcode_version`}}",
-        "XCODES_PASSWORD={{user `fastlane_password`}}",
-        "XCODES_USERNAME={{user `fastlane_user`}}"
+        "XCODES_PASSWORD={{user `devportal_password`}}",
+        "XCODES_USERNAME={{user `devportal_email`}}"
       ],
       "inline": [
         "source ~/.profile",
