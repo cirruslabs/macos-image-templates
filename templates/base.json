@@ -48,11 +48,11 @@
     },
     {
       "inline": [
-        "echo \"export LANG=en_US.UTF-8\" >> ~/.profile",
-        "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.profile",
-        "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.profile",
-        "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.profile",
-        "source ~/.profile",
+        "echo \"export LANG=en_US.UTF-8\" >> ~/.zprofile",
+        "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.zprofile",
+        "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.zprofile",
+        "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.zprofile",
+        "source ~/.zprofile",
         "brew --version",
         "brew update",
         "brew install wget cmake gcc"
@@ -61,12 +61,12 @@
     },
     {
       "inline": [
-        "source ~/.profile",
+        "source ~/.zprofile",
         "brew install ruby ruby-build rbenv",
         "rbenv install $(rbenv install -l | grep -v - | tail -1)",
         "rbenv global $(rbenv install -l | grep -v - | tail -1)",
-        "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.profile",
-        "source ~/.profile",
+        "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
+        "source ~/.zprofile",
         "sudo gem install bundler"
       ],
       "type": "shell"

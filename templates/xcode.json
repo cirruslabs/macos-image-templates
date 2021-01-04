@@ -38,7 +38,7 @@
   "provisioners": [
     {
       "inline": [
-        "source ~/.profile",
+        "source ~/.zprofile",
         "brew --version",
         "brew update",
         "brew upgrade"
@@ -52,7 +52,7 @@
         "XCODES_USERNAME={{user `devportal_email`}}"
       ],
       "inline": [
-        "source ~/.profile",
+        "source ~/.zprofile",
         "brew install robotsandpencils/made/xcodes",
         "xcodes install $XCODE_VERSION",
         "xcodes select $XCODE_VERSION",
@@ -62,27 +62,27 @@
     },
     {
       "inline": [
-        "source ~/.profile",
+        "source ~/.zprofile",
         "brew install xctool",
         "brew install --cask homebrew/cask-versions/adoptopenjdk8",
         "brew install --cask android-sdk android-ndk",
-        "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.profile",
-        "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.profile",
-        "source ~/.profile",
+        "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.zprofile",
+        "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.zprofile",
+        "source ~/.zprofile",
         "sdkmanager --update",
         "yes | sdkmanager --licenses",
         "sdkmanager tools platform-tools emulator",
         "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.0\"",
-        "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.profile"
+        "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.zprofile"
       ],
       "type": "shell"
     },
     {
       "inline": [
-        "source ~/.profile",
-        "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.profile",
-        "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.profile",
-        "source ~/.profile",
+        "source ~/.zprofile",
+        "echo 'export FLUTTER_HOME=$HOME/flutter' >> ~/.zprofile",
+        "echo 'export PATH=$HOME/flutter:$HOME/flutter/bin/:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH' >> ~/.zprofile",
+        "source ~/.zprofile",
         "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
         "cd $FLUTTER_HOME",
         "git checkout beta",
@@ -93,8 +93,9 @@
     },
     {
       "inline": [
-        "source ~/.profile",
-        "brew install libimobiledevice ideviceinstaller ios-deploy"
+        "source ~/.zprofile",
+        "brew install libimobiledevice ideviceinstaller ios-deploy",
+        "sudo gem install cocoapods"
       ],
       "type": "shell"
     }
