@@ -1,16 +1,16 @@
 {
   "variables": {
     "home": "{{env `HOME`}}",
-    "mac-os-version": "big-sur"
+    "mac_os_version": "big-sur"
   },
   "builders": [
     {
       "name": "parallels",
       "type": "parallels-pvm",
       "parallels_tools_flavor": "mac",
-      "vm_name": "{{ user `mac-os-version` }}-base",
-      "source_path": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-vanilla.pvm",
-      "output_directory": "{{ user `home` }}/Parallels/{{ user `mac-os-version` }}-base",
+      "vm_name": "{{ user `mac_os_version` }}-base",
+      "source_path": "{{ user `home` }}/Parallels/{{ user `mac_os_version` }}-vanilla.pvm",
+      "output_directory": "{{ user `home` }}/Parallels/{{ user `mac_os_version` }}-base",
       "ssh_username": "admin",
       "ssh_password": "admin",
       "ssh_timeout": "120s",
@@ -23,8 +23,8 @@
     {
       "name": "anka",
       "type": "veertu-anka",
-      "vm_name": "{{ user `mac-os-version` }}-base",
-      "installer_app": "{{ user `mac-os-version` }}-vanilla",
+      "vm_name": "{{ user `mac_os_version` }}-base",
+      "installer_app": "{{ user `mac_os_version` }}-vanilla",
       "cpu_count": "2",
       "enable_htt": true,
       "ram_size": "8G",
