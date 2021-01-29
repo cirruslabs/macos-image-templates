@@ -1,0 +1,82 @@
+{
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "mac_os_version": "big-sur"
+  },
+  "builders": [
+    {
+      "name": "parallels",
+      "type": "parallels-pvm",
+      "parallels_tools_flavor": "mac",
+      "vm_name": "{{ user `mac_os_version` }}-base",
+      "source_path": "{{ user `home` }}/Parallels/{{ user `mac_os_version` }}-vanilla.pvm",
+      "output_directory": "{{ user `home` }}/Parallels/{{ user `mac_os_version` }}-base",
+      "ssh_username": "admin",
+      "ssh_password": "admin",
+      "ssh_timeout": "120s",
+      "shutdown_command": "sudo shutdown -h now",
+      "skip_compaction": "false",
+      "prlctl": [
+        ["set", "{{.Name}}", "--3d-accelerate", "highest"]
+      ]
+    },
+    {
+      "name": "anka",
+      "type": "veertu-anka",
+      "vm_name": "{{ user `mac_os_version` }}-base",
+      "installer_app": "{{ user `mac_os_version` }}-vanilla",
+      "cpu_count": "2",
+      "enable_htt": true,
+      "ram_size": "8G",
+      "disk_size": "80G",
+      "boot_delay": "30s"
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "echo 'Disabling spotlight...'",
+        "sudo mdutil -a -i off"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "yes '' | ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "echo \"export LANG=en_US.UTF-8\" >> ~/.zprofile",
+        "echo \"export PATH=/usr/local/bin:$PATH\" >> ~/.zprofile",
+        "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.zprofile",
+        "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.zprofile",
+        "source ~/.zprofile",
+        "brew --version",
+        "brew update",
+        "brew install wget cmake gcc"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "source ~/.zprofile",
+        "brew install ruby ruby-build rbenv",
+        "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+        "rbenv global $(rbenv install -l | grep -v - | tail -1)",
+        "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
+        "source ~/.zprofile",
+        "sudo gem install bundler"
+      ],
+      "type": "shell"
+    },
+    {
+      "inline": [
+        "sudo safaridriver --enable",
+        "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1"
+      ],
+      "type": "shell"
+    }
+  ]
+}
