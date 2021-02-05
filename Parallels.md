@@ -10,7 +10,7 @@ Use VM's UI to change some settings:
 4. Allow SSH. Sharing -> Remote Login
 5. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
 6. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
-7. **optional** Disable SIP by [getting into Recov ery Mode](https://kb.parallels.com/cn/116526), `Utilities -> Terminal` and run `csrutil disable`.
+7. **optional** Disable SIP by [getting into Recovery Mode](https://kb.parallels.com/cn/116526), `Utilities -> Terminal` and run `csrutil disable`.
 
 Shutdown macOS.
 
