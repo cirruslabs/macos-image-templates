@@ -94,7 +94,7 @@
     {
       "inline": [
         "source ~/.zprofile",
-        "brew install libimobiledevice ideviceinstaller ios-deploy",
+        "brew install libimobiledevice ideviceinstaller ios-deploy fastlane",
         "sudo gem install cocoapods"
       ],
       "type": "shell"
