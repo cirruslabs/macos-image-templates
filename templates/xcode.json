@@ -55,7 +55,7 @@
         "source ~/.zprofile",
         "brew install wget robotsandpencils/made/xcodes",
         "wget --quiet https://storage.googleapis.com/cirrus-parallels-vms/xcodes/Xcode_$XCODE_VERSION.xip",
-        "xcodes install --path Xcode_$XCODE_VERSION.xip",
+        "xcodes install $XCODE_VERSION --path Xcode_$XCODE_VERSION.xip",
         "rm Xcode_$XCODE_VERSION.xip",
         "xcodes select $XCODE_VERSION",
         "sudo xcodebuild -runFirstLaunch"
