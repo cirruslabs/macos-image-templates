@@ -45,7 +45,7 @@
     },
     {
       "environment_vars": [
-        "XCODE_VERSION={{user `xcode_version`}}",
+        "XCODE_VERSION={{user `xcode_version`}}"
       ],
       "inline": [
         "source ~/.zprofile",
