@@ -1,6 +1,6 @@
 ## Building Vanilla Image
 
-First, start Parallels 16 for Desktop and create a `big-sur-vanilla` VM by just creating it from a recovery partition in the UI.
+First, start Parallels 17 for Desktop and create a `monterey-vanilla` VM by just creating it from a recovery partition in the UI.
 
 Use VM's UI to change some settings:
 
@@ -25,10 +25,10 @@ Also change some VM settings:
 packer build -only=parallels templates/base.json
 ```
 
-If you are getting `prlctl error: Failed to register the VM: "big-sur-vanilla" is already registered.` error, run:
+If you are getting `prlctl error: Failed to register the VM: "monterey-vanilla" is already registered.` error, run:
 
 ```bash
-prlctl unregister big-sur-vanilla
+prlctl unregister monterey-vanilla
 ```
 
 ## Building Xcode Images

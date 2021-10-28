@@ -4,7 +4,7 @@ First, download macOS from App Store to have a `*.app` installation in `/Applica
 base all other VMs from:
 
 ```bash
-anka create --ram-size 8G --cpu-count 2 --disk-size 80G -a /Applications/Install\ macOS\ Big\ Sur.app big-sur-vanilla
+anka create --ram-size 8G --cpu-count 2 --disk-size 80G -a /Applications/Install\ macOS\ Big\ Sur.app monterey-vanilla
 ```
 
 Then run `./scripts/install-anka-builder.sh` to install Anka builder for Packer.
@@ -18,7 +18,7 @@ packer build -only=anka templates/base.json
 We also need to add a port forwarding rule so VMs based of `catalina-base` image can be SSHable:
 
 ```bash
-anka modify big-sur-base add port-forwarding --host-port 0 --guest-port 22 ssh
+anka modify monterey-base add port-forwarding --host-port 0 --guest-port 22 ssh
 ```
 
 ## Building Xcode Images
