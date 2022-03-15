@@ -14,7 +14,7 @@
       "output_directory": "{{ user `home` }}/Parallels/{{ user `mac_os_version` }}-xcode-{{user `xcode_version`}}",
       "ssh_username": "admin",
       "ssh_password": "admin",
-      "ssh_timeout": "120s",
+      "ssh_timeout": "300s",
       "shutdown_command": "sudo shutdown -h now",
       "skip_compaction": "false",
       "prlctl": [
