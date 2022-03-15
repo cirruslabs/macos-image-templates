@@ -2,7 +2,7 @@
   "variables": {
     "home": "{{env `HOME`}}",
     "mac_os_version": "monterey",
-    "xcode_version": "12.3"
+    "xcode_version": "13.3"
   },
   "builders": [
     {
