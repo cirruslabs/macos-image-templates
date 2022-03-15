@@ -38,8 +38,6 @@ To build an Xcode image (don't forget to setup `DEVPORTAL_EMAIL` and `DEVPORTAL_
 
 ```bash
 packer build -only=parallels \
-  -var xcode_version="12.5" \
-  -var devportal_email="$DEVPORTAL_EMAIL" \
-  -var devportal_password="$DEVPORTAL_PASSWORD" \
+  -var xcode_version="13.3" \
   templates/xcode.json
 ```
