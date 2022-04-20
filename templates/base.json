@@ -30,6 +30,15 @@
       "ram_size": "8G",
       "disk_size": "80G",
       "boot_delay": "30s"
+    },
+    {
+      "name": "tart",
+      "type": "tart-cli",
+      "vm_name": "{{ user `mac_os_version` }}-base",
+      "vm_base_name": "{{ user `mac_os_version` }}-vanilla",
+      "ssh_username": "admin",
+      "ssh_password": "admin",
+      "ssh_timeout": "120s"
     }
   ],
   "provisioners": [
@@ -42,7 +51,7 @@
     },
     {
       "inline": [
-        "yes '' | ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\""
+        "yes '' | /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
       ],
       "type": "shell"
     },

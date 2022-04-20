@@ -16,3 +16,11 @@ See a full list of VMs available on Cirrus CI [here](https://cirrus-ci.org/guide
 ## Anka
 
 Please see [`Anka.md`](Anka.md) for details on how to build Anka VMs.
+
+## Parallels
+
+Please see [`Parallels.md`](Parallels.md) for details on how to build Parallels VMs.
+
+## Tart
+
+Please see [`Tart.md`](Tart.md) for details on how to build Tart VMs.
