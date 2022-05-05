@@ -1,26 +1,44 @@
-# macOS Packer Templates for Cirrus CI
+## macOS Packer Templates for Cirrus CI
 
-Repository with Packer templates to build VMs to use with [Cirrus CI](https://cirrus-ci.org/).
+Repository with Packer templates to build VMs to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
 
-* `catalina-base` image has only `brew` pre-installed
-* `catalina-xcode-N` image is based of `catalina-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
-* `big-sur-base` image has only `brew` pre-installed
-* `big-sur-xcode-N` image is based of `big-sur-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
-* `monterey-base` image has only `brew` pre-installed
-* `monterey-xcode-N` image is based of `monterey-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
+* `macos-monterey-vanilla` image has only `brew` pre-installed
+* `macos-monterey-base` image has only `brew` pre-installed
+* `macos-monterey-xcode:N` image is based of `macos-monterey-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
 
-See a full list of VMs available on Cirrus CI [here](https://cirrus-ci.org/guide/macOS/#list-of-available-images).
+See a full list of VMs available on Cirrus CI [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
-# Supported Virtualization Technologies
+## Building Vanilla Image
 
-## Anka
+First, create a `monterey-vanilla` VM from the latest available IPSW with following command:
 
-Please see [`Anka.md`](Anka.md) for details on how to build Anka VMs.
+```console
+tart create --from-ipsw=latest --disk-size=25 monterey-vanilla
+```
 
-## Parallels
+Start the VM and use UI to change some settings:
 
-Please see [`Parallels.md`](Parallels.md) for details on how to build Parallels VMs.
+```console
+tart run monterey-vanilla
+```
 
-## Tart
+1. Disable Lock Screen. Preferences -> Lock Screen -> disable "Require Password" after 5.
+2. Disable Screen Saver.
+3. Enable Auto-Login. Users & Groups -> Login Options -> Automatic login -> admin.
+4. Allow SSH. Sharing -> Remote Login
+5. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
+6. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
 
-Please see [`Tart.md`](Tart.md) for details on how to build Tart VMs.
+Shutdown macOS.
+
+## Building Base Image
+
+```bash
+packer build templates/base.pkr.hcl
+```
+
+## Building Xcode Images
+
+```bash
+packer build -var xcode_version="13.3.1" templates/xcode.pkr.hcl
+```
