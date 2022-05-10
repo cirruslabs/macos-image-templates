@@ -33,34 +33,7 @@ build {
       "brew update",
       "brew upgrade",
       "brew install curl wget unzip zip ca-certificates",
-    ]
-  }
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "curl -s \"https://get.sdkman.io\" | bash",
-      "source $HOME/.sdkman/bin/sdkman-init.sh",
-      "sdk version",
-      "curl --version",
-      "echo 'sdkman_auto_answer=true' >> ~/.sdkman/etc/config",
-      "echo 'sdkman_auto_complete=false' >> ~/.sdkman/etc/config",
-      "echo 'sdkman_selfupdate_enable=false' >> ~/.sdkman/etc/config",
-      "sdk install java 8.0.332-zulu || sdk install java 8.0.332-zulu",
-      "echo \"source $HOME/.sdkman/bin/sdkman-init.sh\" >> ~/.zprofile",
-    ]
-  }
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "brew install --cask android-sdk android-ndk",
-      "echo \"export ANDROID_SDK_ROOT=/usr/local/share/android-sdk\" >> ~/.zprofile",
-      "echo \"export ANDROID_NDK_HOME=/usr/local/share/android-ndk\" >> ~/.zprofile",
-      "source ~/.zprofile",
-      "sdkmanager --update",
-      "yes | sdkmanager --licenses",
-      "sdkmanager tools platform-tools emulator",
-      "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.2\"",
-      "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.zprofile",
+      "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
   }
   provisioner "shell" {
