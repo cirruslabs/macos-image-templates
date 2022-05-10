@@ -2,7 +2,7 @@
 
 Repository with Packer templates to build VMs to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
 
-* `macos-monterey-vanilla` image has only `brew` pre-installed
+* `macos-monterey-vanilla` image nothing pre-installed
 * `macos-monterey-base` image has only `brew` pre-installed
 * `macos-monterey-xcode:N` image is based of `macos-monterey-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
 
