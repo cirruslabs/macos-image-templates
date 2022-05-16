@@ -71,7 +71,6 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install libimobiledevice ideviceinstaller ios-deploy fastlane",
-      "brew install blackhole-2ch",
       "sudo gem update",
       "sudo gem install cocoapods",
       "sudo gem uninstall --ignore-dependencies ffi && sudo gem install ffi -- --enable-libffi-alloc"
