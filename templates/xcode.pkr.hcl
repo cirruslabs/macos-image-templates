@@ -9,7 +9,7 @@ packer {
 
 variable "xcode_version" {
   type =  string
-  default = "13.3.1"
+  default = "13.4"
 }
 
 source "tart-cli" "tart" {

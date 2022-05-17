@@ -40,5 +40,5 @@ packer build templates/base.pkr.hcl
 ## Building Xcode Images
 
 ```bash
-packer build -var xcode_version="13.3.1" templates/xcode.pkr.hcl
+packer build -var xcode_version="13.4" templates/xcode.pkr.hcl
 ```
