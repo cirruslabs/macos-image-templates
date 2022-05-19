@@ -43,11 +43,11 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install ruby ruby-build rbenv",
-      "rbenv install $(rbenv install -l | grep -v - | tail -1)",
-      "rbenv global $(rbenv install -l | grep -v - | tail -1)",
+      "brew install rbenv",
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "source ~/.zprofile",
+      "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+      "rbenv global $(rbenv install -l | grep -v - | tail -1)",
       "sudo gem install bundler",
     ]
   }
