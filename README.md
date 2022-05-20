@@ -26,8 +26,10 @@ tart run monterey-vanilla
 2. Disable Screen Saver.
 3. Enable Auto-Login. Users & Groups -> Login Options -> Automatic login -> admin.
 4. Allow SSH. Sharing -> Remote Login
-5. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
-6. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
+5. Power -> Turn display off -> Never & Prevent from sleeping
+6. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
+7. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
+8. Optionally disable SIP. Run `tart run --recovery monterey-vanilla` -> Options -> Utilities menu -> Terminal -> `csrutil disable`.
 
 Shutdown macOS.
 
