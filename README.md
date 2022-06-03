@@ -22,14 +22,32 @@ Start the VM and use UI to change some settings:
 tart run monterey-vanilla
 ```
 
-1. Disable Lock Screen. Preferences -> Lock Screen -> disable "Require Password" after 5.
-2. Disable Screen Saver.
+1. Allow SSH. Sharing -> Remote Login
+1a. Check `Allow full disk access for remote users`
+2. Disable Screen Saver. Desktop & Screen Saver -> Screen Saver
 3. Enable Auto-Login. Users & Groups -> Login Options -> Automatic login -> admin.
-4. Allow SSH. Sharing -> Remote Login
-5. Power -> Turn display off -> Never & Prevent from sleeping
-6. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
-7. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
-8. Optionally disable SIP. Run `tart run --recovery monterey-vanilla` -> Options -> Utilities menu -> Terminal -> `csrutil disable`.
+4. Optionally disable SIP. Run `tart run --recovery monterey-vanilla` -> Options -> Utilities menu -> Terminal -> `csrutil disable`.
+
+From this point you can either use the scripted `initial_install.sh` or you can follow the manual steps below (that do the same as the script)
+
+The script assumes that your admin username is `admin`, change as necessary
+
+It will ask you to enter your password a few times (unavoidable)
+
+To use the script, from your local machine:
+
+```console
+scp scripts/initial_install.sh admin@$(tart ip monterey-vanilla):
+ssh admin@$(tart ip monterey-vanilla)
+./initial_install.sh
+```
+
+Optional: do the work in `initial_install.sh` manually:
+
+1. Disable Lock Screen. Preferences -> Security  & Privacy -> disable "Require Password" after 5.
+3. Power -> Turn display off -> Never & Prevent from sleeping
+4. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
+5. Run `sudo visudo` in Terminal, find `%admin ALL=(ALL) ALL` add `admin ALL=(ALL) NOPASSWD: ALL` to allow sudo without a password.
 
 Shutdown macOS.
 
