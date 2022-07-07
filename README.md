@@ -1,6 +1,6 @@
 ## macOS Packer Templates for Cirrus CI
 
-Repository with Packer templates to build VMs to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
+Repository with Packer templates to build [Tart VMs](https://github.com/cirruslabs/tart) to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
 
 * `macos-monterey-vanilla` image nothing pre-installed
 * `macos-monterey-base` image has only `brew` pre-installed
