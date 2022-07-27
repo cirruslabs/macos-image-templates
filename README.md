@@ -2,9 +2,9 @@
 
 Repository with Packer templates to build [Tart VMs](https://github.com/cirruslabs/tart) to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
 
-* `macos-monterey-vanilla` image nothing pre-installed
-* `macos-monterey-base` image has only `brew` pre-installed
-* `macos-monterey-xcode:N` image is based of `macos-monterey-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
+* `macos-{monterey,ventura}-vanilla` image nothing pre-installed
+* `macos-{monterey,ventura}-base` image has only `brew` pre-installed
+* `macos-{monterey,ventura}-xcode:N` image is based of `macos-monterey-base` and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
 
 See a full list of VMs available on Cirrus CI [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
@@ -42,5 +42,5 @@ packer build templates/base.pkr.hcl
 ## Building Xcode Images
 
 ```bash
-packer build -var xcode_version="13.4.1" templates/xcode.pkr.hcl
+packer build -var xcode_version="14-beta-4" templates/xcode.pkr.hcl
 ```

@@ -7,9 +7,14 @@ packer {
   }
 }
 
+variable "macos_version" {
+  type =  string
+  default = "ventura"
+}
+
 source "tart-cli" "tart" {
-  vm_base_name = "monterey-vanilla"
-  vm_name      = "monterey-base"
+  vm_base_name = "${var.macos_version}-vanilla"
+  vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 30

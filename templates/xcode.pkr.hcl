@@ -7,14 +7,19 @@ packer {
   }
 }
 
+variable "macos_version" {
+  type =  string
+  default = "ventura"
+}
+
 variable "xcode_version" {
   type =  string
-  default = "13.4.1"
+  default = "14-beta-4"
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "monterey-base"
-  vm_name      = "monterey-xcode:${var.xcode_version}"
+  vm_base_name = "${var.macos_version}-base"
+  vm_name      = "${var.macos_version}-xcode:${var.xcode_version}"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 70
