@@ -41,6 +41,23 @@ build {
       "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
   }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew install --cask homebrew/cask-versions/temurin8",
+      "brew install android-sdk android-ndk",
+      "echo \"export ANDROID_HOME=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
+      "echo \"export ANDROID_SDK_ROOT=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
+      "echo \"export ANDROID_NDK_HOME=/opt/homebrew/share/android-ndk\" >> ~/.zprofile",
+      "source ~/.zprofile",
+      "sdkmanager --update",
+      "yes | sdkmanager --licenses",
+      "sdkmanager tools platform-tools emulator",
+      "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.2\" \"cmdline-tools;latest\"",
+      "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.zprofile"
+    ]
+  }
   provisioner "shell" {
     inline = [
       "echo 'export PATH=/usr/local/bin/:$PATH' >> ~/.zprofile",
@@ -53,7 +70,7 @@ build {
       "sudo mv xcodes /usr/local/bin/xcodes",
       "xcodes version",
       "wget --quiet https://storage.googleapis.com/xcodes-cache/Xcode_${var.xcode_version}.xip",
-      "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
+      "xcodes install ${var.xcode_version} --path $PWD/Xcode_${var.xcode_version}.xip",
       "sudo rm -rf ~/.Trash/*",
       "xcodes select ${var.xcode_version}",
       "sudo xcodebuild -runFirstLaunch",
@@ -68,6 +85,7 @@ build {
       "git clone https://github.com/flutter/flutter.git $FLUTTER_HOME",
       "cd $FLUTTER_HOME",
       "git checkout stable",
+      "flutter doctor --android-licenses",
       "flutter doctor",
       "flutter precache",
     ]
@@ -79,6 +97,13 @@ build {
       "sudo gem update",
       "sudo gem install cocoapods",
       "sudo gem uninstall --ignore-dependencies ffi && sudo gem install ffi -- --enable-libffi-alloc"
+    ]
+  }
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew doctor",
+      "flutter doctor"
     ]
   }
 }
