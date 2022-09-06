@@ -12,6 +12,11 @@ variable "macos_version" {
   default = "ventura"
 }
 
+variable "gha_version" {
+  type =  string
+  default = "2.296.1"
+}
+
 source "tart-cli" "tart" {
   vm_base_name = "${var.macos_version}-vanilla"
   vm_name      = "${var.macos_version}-base"
@@ -30,6 +35,15 @@ build {
     inline = [
       "echo 'Disabling spotlight...'",
       "sudo mdutil -a -i off",
+    ]
+  }
+  provisioner "shell" {
+    inline = [
+      "cd $HOME",
+      "mkdir actions-runner && cd actions-runner",
+      "curl -O -L https://github.com/actions/runner/releases/download/v${var.gha_version}/actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+      "tar xzf ./actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz",
     ]
   }
   provisioner "shell" {
