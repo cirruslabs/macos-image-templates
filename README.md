@@ -27,6 +27,7 @@ tart run ventura-vanilla
 3. Allow SSH. General -> Sharing -> Remote Login & Screen Sharing
 4. Display -> Advanced -> Prevent from sleeping
 5. Open Safari. Preferences -> Advanced -> Show Developer menu. Develop -> Allow Remote Automation.
+6. Disable SIP. Run `tart run --recovery ventura-vanilla` -> Options -> Utilities menu -> Terminal -> `csrutil disable`.
 7. Enable passwordless `sudo`:
     1. Run `sudo visudo /private/etc/sudoers.d/admin-passwordless` in Terminal.
     2. Add `admin ALL = (ALL) NOPASSWD: ALL` to allow `sudo` without a password.
