@@ -32,8 +32,7 @@ tart run ventura-vanilla
     1. Run `sudo visudo /private/etc/sudoers.d/admin-passwordless` in Terminal.
     2. Add `admin ALL = (ALL) NOPASSWD: ALL` to allow `sudo` without a password.
     3. `:wq` to write the file and quit.
-    4. `sudo visudo -c` to verify your new file parsed OK.
-    5. `sudo` some command to verify no password is needed.
+    4. `sudo` some command to verify no password is needed.
 
 Shutdown macOS.
 
