@@ -48,7 +48,7 @@ build {
   }
   provisioner "shell" {
     inline = [
-      "yes '' | /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
+      "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
       "echo \"export LANG=en_US.UTF-8\" >> ~/.zprofile",
       "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile",
       "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.zprofile",
