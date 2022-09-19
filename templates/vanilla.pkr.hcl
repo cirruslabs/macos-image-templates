@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    tart = {
+      version = ">= 0.5.0"
+      source  = "github.com/cirruslabs/tart"
+    }
+  }
+}
+
 variable "macos_version" {
   type =  string
   default = "ventura"
