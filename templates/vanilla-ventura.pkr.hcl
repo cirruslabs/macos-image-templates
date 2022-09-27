@@ -8,8 +8,8 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "latest"
-  vm_name      = "monterey-vanilla"
+  from_ipsw    = "https://updates.cdn-apple.com/2022SummerSeed/fullrestores/012-70113/6F1F08B7-9A1B-48A9-93DB-55EE21121C87/UniversalMac_13.0_22A5352e_Restore.ipsw"
+  vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 40
@@ -48,7 +48,7 @@ source "tart-cli" "tart" {
     # Select Your Time Zone
     "<wait10s><tab>UTC<enter><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Analytics
-    "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Screen Time
     "<wait10s><tab><spacebar>",
     # Siri
@@ -60,9 +60,15 @@ source "tart-cli" "tart" {
     # Now that the installation is done, open "System Preferences"
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Preferences<enter>",
     # Navigate to "Sharing"
-    "<wait10s>sharing<enter>",
-    # Enable Remote Login
-    "<wait10s><tab><tab><tab><down><down><down><down><spacebar><tab><tab><spacebar>",
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><right><down><down>sharing<enter>",
+    # Navigate to "Remote Login" and enable it
+    "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
+    # Navigate to "Remote Login" once more and open its settings
+    "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
+    # Enable "Full Disk Access"
+    "<wait10s><tab><spacebar>",
+    # Click "Done"
+    "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Disable Voice Over
     "<leftAltOn><f5><leftAltOff>",
   ]
