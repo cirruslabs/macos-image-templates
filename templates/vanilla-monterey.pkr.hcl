@@ -70,4 +70,11 @@ source "tart-cli" "tart" {
 
 build {
   sources = ["source.tart-cli.tart"]
+
+  provisioner "shell" {
+    inline = [
+      // Enable passwordless sudo
+      "echo admin | sudo -S sh -c \"echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
+    ]
+  }
 }
