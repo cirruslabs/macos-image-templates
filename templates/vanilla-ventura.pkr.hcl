@@ -10,7 +10,7 @@ packer {
 source "tart-cli" "tart" {
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
-  from_ipsw    = "https://updates.cdn-apple.com/2022SummerSeed/fullrestores/012-70113/6F1F08B7-9A1B-48A9-93DB-55EE21121C87/UniversalMac_13.0_22A5352e_Restore.ipsw"
+  from_ipsw = "https://updates.cdn-apple.com/2022SummerSeed/fullrestores/012-83054/16ECAA12-3A1B-4663-B49B-B1563ECD4314/UniversalMac_13.0_22A5365d_Restore.ipsw"
   vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
@@ -59,14 +59,14 @@ source "tart-cli" "tart" {
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Enable Voice Over
     "<wait10s><leftAltOn><f5><leftAltOff><wait5s>v",
-    # Now that the installation is done, open "System Preferences"
-    "<wait10s><leftAltOn><spacebar><leftAltOff>System Preferences<enter>",
+    # Now that the installation is done, open "System Settings"
+    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
     # Navigate to "Sharing"
-    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><right><down><down>sharing<enter>",
+    "<wait10s><leftAltOn>f<leftAltOff>sharing<enter>",
     # Navigate to "Remote Login" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
-    # Navigate to "Remote Login" once more and open its settings
-    "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
+    "<wait10s><tab><tab><tab><tab><tab><tab><tab><spacebar>",
+    # Open "Remote Login" details
+    "<wait10s><tab><spacebar>",
     # Enable "Full Disk Access"
     "<wait10s><tab><spacebar>",
     # Click "Done"
