@@ -10,7 +10,7 @@ packer {
 source "tart-cli" "tart" {
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
-  from_ipsw = "https://updates.cdn-apple.com/2022SummerSeed/fullrestores/012-83054/16ECAA12-3A1B-4663-B49B-B1563ECD4314/UniversalMac_13.0_22A5365d_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2022SummerSeed/fullrestores/012-83054/16ECAA12-3A1B-4663-B49B-B1563ECD4314/UniversalMac_13.0_22A5365d_Restore.ipsw"
   vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
