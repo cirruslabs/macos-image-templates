@@ -22,7 +22,7 @@ source "tart-cli" "tart" {
     # Language
     "<wait30s><enter>",
     # Select Your Country and Region
-    "<wait10s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
     # Written and Spoken Languages
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Accessibility
