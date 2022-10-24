@@ -14,7 +14,7 @@ variable "macos_version" {
 
 variable "xcode_version" {
   type =  string
-  default = "14-beta-4"
+  default = "14.1-RC"
 }
 
 source "tart-cli" "tart" {
@@ -22,7 +22,7 @@ source "tart-cli" "tart" {
   vm_name      = "${var.macos_version}-xcode:${var.xcode_version}"
   cpu_count    = 4
   memory_gb    = 8
-  disk_size_gb = 70
+  disk_size_gb = 80
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "120s"
@@ -70,7 +70,7 @@ build {
       "sudo mv xcodes /usr/local/bin/xcodes",
       "xcodes version",
       "wget --quiet https://storage.googleapis.com/xcodes-cache/Xcode_${var.xcode_version}.xip",
-      "xcodes install ${var.xcode_version} --path $PWD/Xcode_${var.xcode_version}.xip",
+      "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
       "sudo rm -rf ~/.Trash/*",
       "xcodes select ${var.xcode_version}",
       "sudo xcodebuild -runFirstLaunch",

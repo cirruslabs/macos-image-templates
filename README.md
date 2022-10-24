@@ -19,7 +19,7 @@ packer build templates/vanilla-monterey.pkr.hcl
 To build `macos-ventura-vanilla`:
 
 ```
-packer build templates/vanilla-ventura.pkr.hcl
+packer build --verbose templates/vanilla-ventura.pkr.hcl
 ```
 
 Optionally, SIP can be disabled for each image by running the following commands:
@@ -38,5 +38,5 @@ packer build templates/base.pkr.hcl
 ## Building Xcode Image
 
 ```bash
-packer build -var xcode_version="14-beta-5" templates/xcode.pkr.hcl
+packer build templates/xcode.pkr.hcl
 ```

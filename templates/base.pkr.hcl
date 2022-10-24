@@ -18,7 +18,7 @@ variable "gha_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "${var.macos_version}-vanilla:latest"
+  vm_base_name = "${var.macos_version}-vanilla"
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
