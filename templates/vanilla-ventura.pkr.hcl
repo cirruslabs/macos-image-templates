@@ -63,8 +63,10 @@ source "tart-cli" "tart" {
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
     # Navigate to "Sharing"
     "<wait10s><leftAltOn>f<leftAltOff>sharing<enter>",
+    # Navigate to "Screen Sharing" and enable it
+    "<wait10s><tab><down><spacebar>",
     # Navigate to "Remote Login" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><tab><tab><spacebar>",
+    "<wait10s><tab><tab><tab><tab><tab><tab><spacebar>",
     # Open "Remote Login" details
     "<wait10s><tab><spacebar>",
     # Enable "Full Disk Access"
