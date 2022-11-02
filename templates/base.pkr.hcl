@@ -14,7 +14,7 @@ variable "macos_version" {
 
 variable "gha_version" {
   type =  string
-  default = "2.298.2"
+  default = "2.299.0"
 }
 
 source "tart-cli" "tart" {
