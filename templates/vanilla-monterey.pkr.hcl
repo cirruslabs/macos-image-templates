@@ -63,8 +63,10 @@ source "tart-cli" "tart" {
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Preferences<enter>",
     # Navigate to "Sharing"
     "<wait10s>sharing<enter>",
+    # Enable Screen Sharing
+    "<wait10s><tab><tab><tab><tab><spacebar>",
     # Enable Remote Login
-    "<wait10s><tab><tab><tab><down><down><down><down><spacebar><tab><tab><spacebar>",
+    "<wait10s><down><down><down><down><spacebar><tab><tab><spacebar>",
     # Disable Voice Over
     "<leftAltOn><f5><leftAltOff>",
   ]
