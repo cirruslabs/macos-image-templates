@@ -68,10 +68,10 @@ build {
       "source ~/.zprofile",
       "brew install robotsandpencils/made/xcodes aria2",
       "xcodes version",
-      "xcodes install 14.1",
+      "xcodes install 14.1 --experimental-unxip",
       "xcodes select 14.1",
       "sudo xcodebuild -runFirstLaunch",
-      "xcodes install 13.1.0",
+      "xcodes install 13.1.0 --experimental-unxip",
       "xcodes select 13.1.0",
       "sudo xcodebuild -runFirstLaunch"
     ]

@@ -40,4 +40,5 @@ packer build -var macos_version=ventura templates/monoxer-base.pkr.hcl
 
 ```bash
 packer build templates/monterey-monoxer.pkr.hcl
+packer build templates/ventura-monoxer.pkr.hcl
 ```
