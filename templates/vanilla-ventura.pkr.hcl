@@ -22,7 +22,7 @@ source "tart-cli" "tart" {
     # hello, hola, bonjour, etc.
     "<wait60s><spacebar>",
     # Language
-    "<wait30s><enter>",
+    "<wait30s>english<enter>",
     # Select Your Country and Region
     "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
     # Written and Spoken Languages
