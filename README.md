@@ -36,8 +36,8 @@ packer build -var macos_version=monterey templates/monoxer-base.pkr.hcl
 packer build -var macos_version=ventura templates/monoxer-base.pkr.hcl
 ```
 
-## Building Xcode Image
+## Building Monoxer Image
 
 ```bash
-packer build templates/xcode.pkr.hcl
+packer build templates/monterey-monoxer.pkr.hcl
 ```
