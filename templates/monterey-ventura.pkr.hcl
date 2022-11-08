@@ -8,8 +8,8 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "monterey-vanilla"
-  vm_name      = "monterey-monoxer"
+  vm_base_name = "ventura-vanilla"
+  vm_name      = "ventura-monoxer"
   cpu_count    = 3
   memory_gb    = 14
   disk_size_gb = 100
@@ -70,9 +70,6 @@ build {
       "xcodes version",
       "xcodes install 14.1",
       "xcodes select 14.1",
-      "sudo xcodebuild -runFirstLaunch",
-      "xcodes install 13.1.0",
-      "xcodes select 13.1.0",
       "sudo xcodebuild -runFirstLaunch"
     ]
   }
