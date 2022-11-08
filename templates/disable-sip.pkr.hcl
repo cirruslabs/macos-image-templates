@@ -16,7 +16,7 @@ source "tart-cli" "tart" {
   recovery     = true
   cpu_count    = 4
   memory_gb    = 8
-  disk_size_gb = 50
+  disk_size_gb = 100
   communicator = "none"
   boot_command = [
     # Skip over "Macintosh" and select "Options"
