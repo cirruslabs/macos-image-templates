@@ -29,13 +29,6 @@ packer build -var vm_name=monterey-vanilla templates/disable-sip.pkr.hcl
 packer build -var vm_name=ventura-vanilla templates/disable-sip.pkr.hcl
 ```
 
-## Building Base Image
-
-```bash
-packer build -var macos_version=monterey templates/monoxer-base.pkr.hcl
-packer build -var macos_version=ventura templates/monoxer-base.pkr.hcl
-```
-
 ## Building Monoxer Image
 
 ```bash
