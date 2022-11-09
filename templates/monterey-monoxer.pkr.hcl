@@ -31,6 +31,7 @@ build {
       "echo 'Disabling spotlight...'",
       "sudo mdutil -a -i off",
       "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1",
+      "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
   }
 
@@ -40,7 +41,7 @@ build {
       "mkdir actions-runner && cd actions-runner",
       "curl -O -L https://github.com/actions/runner/releases/download/v${var.gha_version}/actions-runner-osx-arm64-${var.gha_version}.tar.gz",
       "tar xzf ./actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz"
     ]
   }
 
@@ -53,13 +54,13 @@ build {
       "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.zprofile",
       "source ~/.zprofile",
       "brew --version",
-      "brew update",
+      "brew update"
     ]
   }
 
   provisioner "shell" {
     inline = [
-      "sudo safaridriver --enable",
+      "sudo safaridriver --enable"
     ]
   }
 
