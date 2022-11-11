@@ -67,7 +67,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install robotsandpencils/made/xcodes aria2",
+      "brew install xcodes aria2",
       "xcodes version",
       "xcodes install 14.1 --experimental-unxip",
       "xcodes select 14.1",
