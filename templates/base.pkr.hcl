@@ -57,6 +57,7 @@ build {
       "brew --version",
       "brew update",
       "brew install wget cmake gcc git-lfs",
+      "git lfs install",
     ]
   }
   provisioner "shell" {
