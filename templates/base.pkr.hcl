@@ -56,7 +56,7 @@ build {
       "source ~/.zprofile",
       "brew --version",
       "brew update",
-      "brew install wget cmake gcc git-lfs",
+      "brew install wget cmake gcc git-lfs jq",
       "git lfs install",
     ]
   }
