@@ -73,7 +73,8 @@ build {
       "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
       "sudo rm -rf ~/.Trash/*",
       "xcodes select ${var.xcode_version}",
-      "sudo xcodebuild -runFirstLaunch",
+      "xcodebuild -downloadAllPlatforms",
+      "xcodebuild -runFirstLaunch",
     ]
   }
   provisioner "shell" {
