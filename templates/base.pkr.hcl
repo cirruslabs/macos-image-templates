@@ -22,7 +22,7 @@ source "tart-cli" "tart" {
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
-  disk_size_gb = 40
+  disk_size_gb = 50
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "120s"
@@ -66,9 +66,9 @@ build {
       "brew install rbenv",
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "source ~/.zprofile",
-      "rbenv install 3.0.4",
-      "rbenv global 3.0.4",
-      "sudo gem install bundler",
+      "rbenv install 3.0.5",
+      "rbenv global 3.0.5",
+      "gem install bundler",
     ]
   }
   provisioner "shell" {

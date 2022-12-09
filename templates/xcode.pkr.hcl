@@ -14,7 +14,7 @@ variable "macos_version" {
 
 variable "xcode_version" {
   type =  string
-  default = "14.1"
+  default = "14.2-RC"
 }
 
 source "tart-cli" "tart" {
