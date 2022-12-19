@@ -35,11 +35,11 @@ packer build -var vm_name=ventura-vanilla templates/disable-sip.pkr.hcl
 ## Building Base Image
 
 ```bash
-packer build templates/base.pkr.hcl
+packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
 ```
 
 ## Building Xcode Image
 
 ```bash
-packer build templates/xcode.pkr.hcl
+packer build -var-file="variables.pkrvars.hcl" templates/xcode.pkr.hcl
 ```

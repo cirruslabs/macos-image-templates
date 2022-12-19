@@ -9,12 +9,14 @@ packer {
 
 variable "macos_version" {
   type =  string
-  default = "ventura"
 }
 
 variable "xcode_version" {
   type =  string
-  default = "14.2-RC"
+}
+
+variable "gha_version" {
+  type =  string
 }
 
 source "tart-cli" "tart" {
@@ -23,6 +25,7 @@ source "tart-cli" "tart" {
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 90
+  headless     = true
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "120s"
@@ -30,6 +33,18 @@ source "tart-cli" "tart" {
 
 build {
   sources = ["source.tart-cli.tart"]
+
+  // re-install the actions runner
+  provisioner "shell" {
+    inline = [
+      "cd $HOME",
+      "rm -rf actions-runner",
+      "mkdir actions-runner && cd actions-runner",
+      "curl -O -L https://github.com/actions/runner/releases/download/v${var.gha_version}/actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+      "tar xzf ./actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz",
+    ]
+  }
 
   provisioner "shell" {
     inline = [

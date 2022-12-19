@@ -9,12 +9,10 @@ packer {
 
 variable "macos_version" {
   type =  string
-  default = "ventura"
 }
 
 variable "gha_version" {
   type =  string
-  default = "2.300.0"
 }
 
 source "tart-cli" "tart" {
