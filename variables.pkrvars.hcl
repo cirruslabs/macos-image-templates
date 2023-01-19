@@ -1,3 +1,3 @@
 macos_version = "ventura"
-gha_version   = "2.300.2"
+gha_version   = "2.301.1"
 xcode_version = "14.2"
