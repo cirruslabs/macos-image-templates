@@ -44,7 +44,7 @@ source "tart-cli" "tart" {
     # Create a Computer Account
     "<wait10s>admin<tab><tab>admin<tab>admin<tab><tab><tab><spacebar>",
     # Enable Location Services
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait60s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you don't want to use Location Services?
     "<wait10s><tab><spacebar>",
     # Select Your Time Zone
