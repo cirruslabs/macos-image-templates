@@ -11,7 +11,7 @@ source "tart-cli" "tart" {
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
   from_ipsw    = "https://updates.cdn-apple.com/2022FallFCS/fullrestores/012-93802/A7270B0F-05F8-43D1-A9AD-40EF5699E82C/UniversalMac_13.0.1_22A400_Restore.ipsw"
-  vm_name      = "vanilla-ventura"
+  vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 40
