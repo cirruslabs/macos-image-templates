@@ -62,6 +62,7 @@ build {
       "source ~/.zprofile",
       "brew install openjdk@11",
       "echo \"export PATH=/opt/homebrew/opt/openjdk@11/bin:$PATH\" >> ~/.zprofile",
+      "source ~/.zprofile",
       "brew install android-sdk android-ndk",
       "echo \"export ANDROID_HOME=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
       "echo \"export ANDROID_SDK_ROOT=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
