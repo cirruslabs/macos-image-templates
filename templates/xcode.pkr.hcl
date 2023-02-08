@@ -19,6 +19,11 @@ variable "gha_version" {
   type =  string
 }
 
+variable "android_sdk_tools_version" {
+  type =  string
+  default = "9477386" # https://developer.android.com/studio/#command-tools
+}
+
 source "tart-cli" "tart" {
   vm_base_name = "${var.macos_version}-base"
   vm_name      = "${var.macos_version}-xcode:${var.xcode_version}"
@@ -60,19 +65,18 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install openjdk@11",
-      "echo \"export PATH=/opt/homebrew/opt/openjdk@11/bin:$PATH\" >> ~/.zprofile",
+      "brew install homebrew/cask-versions/temurin11",
+      "echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.zprofile",
+      "echo 'export ANDROID_SDK_ROOT=$ANDROID_HOME' >> ~/.zprofile",
+      "echo 'export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator' >> ~/.zprofile",
       "source ~/.zprofile",
-      "brew install android-sdk android-ndk",
-      "echo \"export ANDROID_HOME=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
-      "echo \"export ANDROID_SDK_ROOT=/opt/homebrew/share/android-sdk\" >> ~/.zprofile",
-      "echo \"export ANDROID_NDK_HOME=/opt/homebrew/share/android-ndk\" >> ~/.zprofile",
-      "source ~/.zprofile",
-      "sdkmanager --update",
+      "wget -q https://dl.google.com/android/repository/commandlinetools-mac-${var.android_sdk_tools_version}_latest.zip -O android-sdk-tools.zip",
+      "mkdir -p $ANDROID_HOME/cmdline-tools/",
+      "unzip -q android-sdk-tools.zip -d $ANDROID_HOME/cmdline-tools/",
+      "rm android-sdk-tools.zip",
+      "mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest",
       "yes | sdkmanager --licenses",
-      "sdkmanager tools platform-tools emulator",
-      "yes | sdkmanager \"platforms;android-33\" \"build-tools;33.0.1\" \"cmdline-tools;latest\"",
-      "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.zprofile"
+      "yes | sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;33.0.1' 'ndk;25.1.8937393'"
     ]
   }
   provisioner "shell" {
