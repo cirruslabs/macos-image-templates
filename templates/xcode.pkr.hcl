@@ -70,7 +70,7 @@ build {
       "sdkmanager --update",
       "yes | sdkmanager --licenses",
       "sdkmanager tools platform-tools emulator",
-      "yes | sdkmanager \"platforms;android-30\" \"build-tools;30.0.2\" \"cmdline-tools;latest\"",
+      "yes | sdkmanager \"platforms;android-33\" \"build-tools;33.0.1\" \"cmdline-tools;latest\"",
       "echo 'export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH' >> ~/.zprofile"
     ]
   }
