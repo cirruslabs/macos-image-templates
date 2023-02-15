@@ -16,7 +16,7 @@ variable "gha_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "${var.macos_version}-vanilla"
+  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:13.2"
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
@@ -35,6 +35,22 @@ build {
       "sudo mdutil -a -i off",
     ]
   }
+
+  # setup DNS
+  provisioner "shell" {
+    inline = [
+      "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1",
+    ]
+  }
+
+  # Create a symlink for bash compatibility
+  provisioner "shell" {
+    inline = [
+      "touch ~/.zprofile",
+      "ln -s ~/.zprofile ~/.profile",
+    ]
+  }
+
   provisioner "shell" {
     inline = [
       "cd $HOME",
@@ -72,7 +88,6 @@ build {
   provisioner "shell" {
     inline = [
       "sudo safaridriver --enable",
-      "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1",
     ]
   }
 }
