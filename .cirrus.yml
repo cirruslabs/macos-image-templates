@@ -1,4 +1,26 @@
 task:
+  name: "Update Base Image"
+  only_if: $CIRRUS_CRON != ""
+  persistent_worker:
+    labels:
+      name: dev-mini
+  env:
+    TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
+    TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
+  update_script: brew update && brew upgrade
+  info_script:
+    - tart --version
+    - packer --version
+  build_script:
+    - packer init templates/base.pkr.hcl
+    - packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
+  push_script:
+    - tart push ventura-base ghcr.io/cirruslabs/macos-ventura-base:latest
+  always:
+    cleanup_script:
+      - tart delete ventura-base
+
+task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
   persistent_worker:
