@@ -38,7 +38,7 @@ task:
     - tart clone ghcr.io/cirruslabs/macos-ventura-base:latest ventura-base
   build_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var-file="variables.pkrvars.hcl" templates/xcode.pkr.hcl
+    - packer build -var-file="variables.pkrvars.hcl" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
   push_script:
     - tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
   always:
