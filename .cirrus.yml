@@ -1,0 +1,47 @@
+task:
+  name: "Update Base Image"
+  only_if: $CIRRUS_CRON != ""
+  persistent_worker:
+    labels:
+      name: dev-mini
+  env:
+    TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
+    TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
+  update_script: brew update && brew upgrade
+  info_script:
+    - tart --version
+    - packer --version
+  build_script:
+    - packer init templates/base.pkr.hcl
+    - packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
+  push_script:
+    - tart push ventura-base ghcr.io/cirruslabs/macos-ventura-base:latest
+  always:
+    cleanup_script:
+      - tart delete ventura-base
+
+task:
+  name: "Release Xcode $CIRRUS_TAG"
+  only_if: $CIRRUS_TAG != ""
+  persistent_worker:
+    labels:
+      name: dev-mini
+  env:
+    TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
+    TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
+  update_script: brew update && brew upgrade
+  info_script:
+    - tart --version
+    - packer --version
+  pull_base_script:
+    - tart pull ghcr.io/cirruslabs/macos-ventura-base:latest
+    - tart clone ghcr.io/cirruslabs/macos-ventura-base:latest ventura-base
+  build_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var-file="variables.pkrvars.hcl" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
+  push_script:
+    - tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  always:
+    cleanup_script:
+      - tart delete ventura-base || true
+      - tart delete ventura-xcode:$CIRRUS_TAG || true
