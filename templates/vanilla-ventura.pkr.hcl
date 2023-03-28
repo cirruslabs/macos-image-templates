@@ -10,7 +10,7 @@ packer {
 source "tart-cli" "tart" {
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
-  from_ipsw    = "https://updates.cdn-apple.com/2023WinterFCS/fullrestores/032-48346/EFF99C1E-C408-4E7A-A448-12E1468AF06C/UniversalMac_13.2.1_22D68_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2023WinterSeed/fullrestores/002-75537/8250FA0E-0962-46D6-8A90-57A390B9FFD7/UniversalMac_13.3_22E252_Restore.ipsw"
   vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
@@ -88,7 +88,7 @@ build {
   provisioner "shell" {
     inline = [
       // Enable passwordless sudo
-      "echo admin | sudo -S sh -c \"echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
+      "echo admin | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
       // Enable auto-login
       //
       // See https://github.com/xfreebird/kcpassword for details.
