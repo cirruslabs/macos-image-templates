@@ -70,7 +70,7 @@ build {
       "source ~/.zprofile",
       "brew --version",
       "brew update",
-      "brew install wget cmake gcc git-lfs jq gh",
+      "brew install wget cmake gcc git-lfs jq gh gitlab-runner",
       "git lfs install",
     ]
   }
