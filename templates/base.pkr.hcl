@@ -77,12 +77,26 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
+      "brew install libyaml", # https://github.com/rbenv/ruby-build/discussions/2118
       "brew install rbenv",
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "source ~/.zprofile",
-      "rbenv install 3.0.5",
-      "rbenv global 3.0.5",
+      "rbenv install 2.7.8", // latest 2.x.x before EOL
+      "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+      "rbenv global $(rbenv install -l | grep -v - | tail -1)",
       "gem install bundler",
+    ]
+  }
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew install nvm",
+      "mkdir ~/.nvm",
+      "echo \"export NVM_DIR=\"$HOME/.nvm\"\" >> ~/.zprofile",
+      "echo \"[ -s \"/opt/homebrew/opt/nvm/nvm.sh\" ] && \\. \"/opt/homebrew/opt/nvm/nvm.sh\"\" >> ~/.zprofile",
+      "source ~/.zprofile",
+      "nvm install lts/*",
+      "nvm use --lts",
     ]
   }
   provisioner "shell" {
