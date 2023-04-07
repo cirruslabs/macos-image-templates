@@ -16,7 +16,7 @@ variable "gha_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:13.3"
+  vm_base_name = "${var.macos_version}-vanilla"
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
@@ -29,8 +29,17 @@ source "tart-cli" "tart" {
 build {
   sources = ["source.tart-cli.tart"]
 
+  provisioner "file" {
+    source      = "data/limit.maxfiles.plist"
+    destination = "~/limit.maxfiles.plist"
+  }
+
   provisioner "shell" {
     inline = [
+      "echo 'Configuring maxfiles...'",
+      "sudo mv ~/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist",
+      "sudo chown root:wheel /Library/LaunchDaemons/limit.maxfiles.plist",
+      "sudo chmod 0644 /Library/LaunchDaemons/limit.maxfiles.plist",
       "echo 'Disabling spotlight...'",
       "sudo mdutil -a -i off",
     ]
