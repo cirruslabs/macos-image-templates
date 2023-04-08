@@ -102,7 +102,11 @@ build {
       "brew install nvm",
       "mkdir ~/.nvm",
       "echo \"export NVM_DIR=\"$HOME/.nvm\"\" >> ~/.zprofile",
-      "echo \"[ -s \"/opt/homebrew/opt/nvm/nvm.sh\" ] && \\. \"/opt/homebrew/opt/nvm/nvm.sh\"\" >> ~/.zprofile",
+      "echo \"[ -s \"/opt/homebrew/opt/nvm/nvm.sh\" ] && zsh /opt/homebrew/opt/nvm/nvm.sh\" >> ~/.zprofile",
+    ]
+  }
+  provisioner "shell" {
+    inline = [
       "source ~/.zprofile",
       "nvm install lts/*",
       "nvm use --lts",
