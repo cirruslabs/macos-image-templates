@@ -16,7 +16,7 @@ variable "gha_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:13.3"
+  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:13.3.1"
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
@@ -29,8 +29,17 @@ source "tart-cli" "tart" {
 build {
   sources = ["source.tart-cli.tart"]
 
+  provisioner "file" {
+    source      = "data/limit.maxfiles.plist"
+    destination = "~/limit.maxfiles.plist"
+  }
+
   provisioner "shell" {
     inline = [
+      "echo 'Configuring maxfiles...'",
+      "sudo mv ~/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist",
+      "sudo chown root:wheel /Library/LaunchDaemons/limit.maxfiles.plist",
+      "sudo chmod 0644 /Library/LaunchDaemons/limit.maxfiles.plist",
       "echo 'Disabling spotlight...'",
       "sudo mdutil -a -i off",
     ]
@@ -77,12 +86,27 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
+      "brew install libyaml", # https://github.com/rbenv/ruby-build/discussions/2118
       "brew install rbenv",
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "source ~/.zprofile",
-      "rbenv install 3.0.5",
-      "rbenv global 3.0.5",
+      "rbenv install 2.7.8", // latest 2.x.x before EOL
+      "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+      "rbenv global $(rbenv install -l | grep -v - | tail -1)",
       "gem install bundler",
+    ]
+  }
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew install nvm",
+      "mkdir ~/.nvm",
+      "echo \"export NVM_DIR=\"$HOME/.nvm\"\" >> ~/.zprofile",
+      "echo \"[ -s \"/opt/homebrew/opt/nvm/nvm.sh\" ] && \\. \"/opt/homebrew/opt/nvm/nvm.sh\"\" >> ~/.zprofile",
+      "source ~/.zprofile",
+      "nvm install lts/*",
+      "nvm use --lts",
+      "npm install --global yarn",
     ]
   }
   provisioner "shell" {
