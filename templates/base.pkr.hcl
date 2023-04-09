@@ -101,8 +101,8 @@ build {
       "source ~/.zprofile",
       "brew install nvm",
       "mkdir ~/.nvm",
-      "echo \"export NVM_DIR=\"$HOME/.nvm\"\" >> ~/.zprofile",
-      "echo \"[ -s \"/opt/homebrew/opt/nvm/nvm.sh\" ] && zsh /opt/homebrew/opt/nvm/nvm.sh\" >> ~/.zprofile",
+      "echo 'export NVM_DIR=$HOME/.nvm' >> ~/.zprofile",
+      "echo 'source $(brew --prefix nvm)/nvm.sh' >> ~/.zprofile",
     ]
   }
   provisioner "shell" {
