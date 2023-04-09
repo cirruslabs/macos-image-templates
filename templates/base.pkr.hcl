@@ -99,10 +99,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install nvm",
-      "mkdir ~/.nvm",
-      "echo 'export NVM_DIR=$HOME/.nvm' >> ~/.zprofile",
-      "echo 'source $(brew --prefix nvm)/nvm.sh' >> ~/.zprofile",
+      "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash",
     ]
   }
   provisioner "shell" {
