@@ -99,15 +99,9 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash",
-    ]
-  }
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "nvm install lts/*",
-      "nvm use --lts",
-      "npm install --global yarn",
+      "brew install node",
+      "node --version",
+      "yarn --version",
     ]
   }
   provisioner "shell" {
