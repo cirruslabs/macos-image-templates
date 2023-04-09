@@ -101,6 +101,7 @@ build {
       "source ~/.zprofile",
       "brew install node",
       "node --version",
+      "npm install --global yarn",
       "yarn --version",
     ]
   }
