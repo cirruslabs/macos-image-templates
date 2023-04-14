@@ -148,8 +148,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "flutter doctor",
-      "brew doctor"
+      "flutter doctor"
     ]
   }
 }
