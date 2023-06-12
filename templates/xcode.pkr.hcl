@@ -127,7 +127,9 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install graphicsmagick",
+      "brew install imagemagick",
       "brew install wix/brew/applesimutils",
+      "curl 'https://awscli.amazonaws.com/AWSCLIV2.pkg' -o 'AWSCLIV2.pkg' && sudo installer -pkg AWSCLIV2.pkg -target /"
     ]
   }
 
