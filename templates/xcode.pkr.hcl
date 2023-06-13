@@ -126,8 +126,8 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install graphicsmagick",
-      "brew install wix/brew/applesimutils",
+      "brew install graphicsmagick imagemagick",
+      "brew install wix/brew/applesimutils"
     ]
   }
 
