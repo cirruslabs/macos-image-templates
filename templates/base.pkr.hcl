@@ -8,11 +8,11 @@ packer {
 }
 
 variable "macos_version" {
-  type =  string
+  type = string
 }
 
 variable "gha_version" {
-  type =  string
+  type = string
 }
 
 source "tart-cli" "tart" {
@@ -110,7 +110,7 @@ build {
       "sudo safaridriver --enable",
     ]
   }
-    provisioner "shell" {
+  provisioner "shell" {
     inline = [
       "brew install awscli"
     ]
