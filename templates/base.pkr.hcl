@@ -110,4 +110,9 @@ build {
       "sudo safaridriver --enable",
     ]
   }
+    provisioner "shell" {
+    inline = [
+      "brew install awscli"
+    ]
+  }
 }
