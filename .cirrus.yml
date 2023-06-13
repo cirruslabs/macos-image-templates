@@ -39,8 +39,14 @@ task:
   build_script:
     - packer init templates/xcode.pkr.hcl
     - packer build -var-file="variables.pkrvars.hcl" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
-  push_script:
-    - tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  push_script: |
+    if [[ $string == *"beta"* ]]
+    then
+      tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG
+    else
+      tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    fi
+    -
   always:
     cleanup_script:
       - tart delete ventura-base || true
