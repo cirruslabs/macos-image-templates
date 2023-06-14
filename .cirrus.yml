@@ -46,7 +46,6 @@ task:
     else
       tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
     fi
-    -
   always:
     cleanup_script:
       - tart delete ventura-base || true
