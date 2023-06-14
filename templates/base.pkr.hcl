@@ -112,6 +112,7 @@ build {
   }
   provisioner "shell" {
     inline = [
+      "source ~/.zprofile",
       "brew install awscli"
     ]
   }
