@@ -65,7 +65,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install homebrew/cask-versions/temurin11",
+      "brew install homebrew/cask-versions/temurin17",
       "echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.zprofile",
       "echo 'export ANDROID_SDK_ROOT=$ANDROID_HOME' >> ~/.zprofile",
       "echo 'export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator' >> ~/.zprofile",
@@ -76,7 +76,7 @@ build {
       "rm android-sdk-tools.zip",
       "mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest",
       "yes | sdkmanager --licenses",
-      "yes | sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;33.0.1' 'ndk;25.1.8937393'"
+      "yes | sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;34.0.0' 'ndk;25.2.9519653'"
     ]
   }
   provisioner "shell" {
