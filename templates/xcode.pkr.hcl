@@ -8,19 +8,19 @@ packer {
 }
 
 variable "macos_version" {
-  type =  string
+  type = string
 }
 
 variable "xcode_version" {
-  type =  string
+  type = string
 }
 
 variable "gha_version" {
-  type =  string
+  type = string
 }
 
 variable "android_sdk_tools_version" {
-  type =  string
+  type    = string
   default = "9477386" # https://developer.android.com/studio/#command-tools
 }
 
@@ -138,13 +138,15 @@ build {
       "sudo security delete-certificate -Z FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64 /Library/Keychains/System.keychain",
       "curl -o add-certificate.swift https://raw.githubusercontent.com/actions/runner-images/fb3b6fd69957772c1596848e2daaec69eabca1bb/images/macos/provision/configuration/add-certificate.swift",
       "swiftc add-certificate.swift",
+      "sudo mv ./add-certificate /usr/local/bin/add-certificate",
       "curl -o AppleWWDRCAG3.cer https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer",
       "curl -o DeveloperIDG2CA.cer https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer",
-      "sudo ./add-certificate AppleWWDRCAG3.cer",
-      "sudo ./add-certificate DeveloperIDG2CA.cer",
+      "sudo add-certificate AppleWWDRCAG3.cer",
+      "sudo add-certificate DeveloperIDG2CA.cer",
       "rm add-certificate* *.cer"
     ]
   }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
