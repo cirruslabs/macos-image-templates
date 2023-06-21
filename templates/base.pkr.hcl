@@ -45,13 +45,6 @@ build {
     ]
   }
 
-  # setup DNS
-  provisioner "shell" {
-    inline = [
-      "networksetup -setdnsservers Ethernet 8.8.8.8 8.8.4.4 1.1.1.1",
-    ]
-  }
-
   # Create a symlink for bash compatibility
   provisioner "shell" {
     inline = [
