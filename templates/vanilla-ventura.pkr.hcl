@@ -96,6 +96,8 @@ build {
       "sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser admin",
       // Disable screensaver at login screen
       "sudo defaults write /Library/Preferences/com.apple.screensaver loginWindowIdleTime 0",
+      // Disable screensaver for admin user
+      "defaults -currentHost write com.apple.screensaver idleTime 0",
       // Prevent the VM from sleeping
       "sudo systemsetup -setdisplaysleep Off",
       "sudo systemsetup -setsleep Off",
