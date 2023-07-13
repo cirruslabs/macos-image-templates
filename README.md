@@ -10,23 +10,19 @@ See a full list of VMs available on Cirrus CI [here](https://github.com/orgs/cir
 
 ## Building Vanilla Image
 
-To build `macos-monterey-vanilla`:
-
-```bash
-packer build templates/vanilla-monterey.pkr.hcl
-```
-
 To build `macos-ventura-vanilla`:
 
 ```bash
 packer build templates/vanilla-ventura.pkr.hcl
 ```
 
-Optionally, SIP can be disabled for each image by running the following commands:
+To build `macos-sonoma-vanilla`:
 
 ```bash
-packer build -var vm_name=monterey-vanilla templates/disable-sip.pkr.hcl
+packer build templates/vanilla-sonoma.pkr.hcl
 ```
+
+Optionally, SIP can be disabled for each image by running the following commands:
 
 ```bash
 packer build -var vm_name=ventura-vanilla templates/disable-sip.pkr.hcl
