@@ -16,7 +16,7 @@ variable "gha_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:13.4"
+  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:latest"
   vm_name      = "${var.macos_version}-base"
   cpu_count    = 4
   memory_gb    = 8
