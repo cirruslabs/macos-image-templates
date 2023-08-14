@@ -1,5 +1,5 @@
 task:
-  name: "Update Base Image"
+  name: "Update Images"
   only_if: $CIRRUS_CRON != ""
   persistent_worker:
     labels:
@@ -11,14 +11,22 @@ task:
   info_script:
     - tart --version
     - packer --version
-  build_script:
+  env_script:
+    - echo "XCODE_VERSION=$(cat variables.pkrvars.hcl | grep xcode_version | awk '{print $(NF)}')" >> $CIRRUS_ENV
+  build_base_script:
     - packer init templates/base.pkr.hcl
     - packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
-  push_script:
+  build_xcode_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var-file="variables.pkrvars.hcl" templates/xcode.pkr.hcl
+  push_base_script:
     - tart push ventura-base ghcr.io/cirruslabs/macos-ventura-base:latest
+  push_xcode_script:
+    - tart push ventura-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-ventura-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-ventura-xcode:latest
   always:
     cleanup_script:
-      - tart delete ventura-base
+      - tart delete ventura-base || true
+      - tart delete ventura-xcode:$XCODE_VERSION || true
 
 task:
   name: "Release Xcode $CIRRUS_TAG"
