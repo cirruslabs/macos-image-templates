@@ -12,7 +12,7 @@ task:
     - tart --version
     - packer --version
   env_script:
-    - echo "XCODE_VERSION=$(cat variables.pkrvars.hcl | grep xcode_version | awk '{print $(NF)}')" >> $CIRRUS_ENV
+    - echo "XCODE_VERSION=$(cat variables.pkrvars.hcl | grep xcode_version | awk '{print $(NF)}' | tr -d '\"')" >> $CIRRUS_ENV
   build_base_script:
     - packer init templates/base.pkr.hcl
     - packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
