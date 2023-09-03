@@ -10,7 +10,7 @@ packer {
 source "tart-cli" "tart" {
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
-  from_ipsw    = "https://updates.cdn-apple.com/2023SpringFCS/fullrestores/032-84884/F97A22EE-9B5E-4FD5-94C1-B39DCEE8D80F/UniversalMac_13.4_22F66_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2023SummerFCS/fullrestores/042-25658/2D6BE8DB-5549-4F85-8C54-39FC23BABC68/UniversalMac_13.5.1_22G90_Restore.ipsw"
   vm_name      = "ventura-vanilla"
   cpu_count    = 4
   memory_gb    = 8
@@ -115,6 +115,7 @@ build {
       // Note that this only works if the user is logged-in,
       // i.e. not on login screen.
       "sysadminctl -screenLock off -password admin",
+      "defaults -currentHost write com.apple.screensaver idleTime 0"
     ]
   }
 }
