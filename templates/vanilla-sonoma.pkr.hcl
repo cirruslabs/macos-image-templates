@@ -8,12 +8,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  # Currently macOS 14 (Sonoma) can only be obtained via the following links:
-  # unauthenticated[1] and authenticated[2].
-  #
-  # [1]: https://updates.cdn-apple.com/2023SummerSeed/fullrestores/042-13887/3B4075C1-B695-49EA-82D9-4B720699D341/UniversalMac_14.0_23A5286i_Restore.ipsw
-  # [2]: https://download.developer.apple.com/WWDC_2023/macOS_14_Beta_Restore_Images/UniversalMac_14.0_23A5286i_Restore.ipsw
-  from_ipsw    = "https://updates.cdn-apple.com/2023SummerSeed/fullrestores/042-13887/3B4075C1-B695-49EA-82D9-4B720699D341/UniversalMac_14.0_23A5286i_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2023FallFCS/fullrestores/002-81996/596571C1-9856-4BB3-B5BF-B5A48F4B406E/UniversalMac_14.0_23A339_Restore.ipsw"
   vm_name      = "sonoma-vanilla"
   cpu_count    = 4
   memory_gb    = 8
