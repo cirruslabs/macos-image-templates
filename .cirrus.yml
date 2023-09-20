@@ -20,13 +20,13 @@ task:
     - packer init templates/xcode.pkr.hcl
     - packer build -var-file="variables.pkrvars.hcl" templates/xcode.pkr.hcl
   push_base_script:
-    - tart push ventura-base ghcr.io/cirruslabs/macos-ventura-base:latest
+    - tart push sonoma-base ghcr.io/cirruslabs/macos-sonoma-base:latest
   push_xcode_script:
-    - tart push ventura-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-ventura-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    - tart push sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:latest
   always:
     cleanup_script:
-      - tart delete ventura-base || true
-      - tart delete ventura-xcode:$XCODE_VERSION || true
+      - tart delete sonoma-base || true
+      - tart delete sonoma-xcode:$XCODE_VERSION || true
 
 task:
   name: "Release Xcode $CIRRUS_TAG"
@@ -42,19 +42,19 @@ task:
     - tart --version
     - packer --version
   pull_base_script:
-    - tart pull ghcr.io/cirruslabs/macos-ventura-base:latest
-    - tart clone ghcr.io/cirruslabs/macos-ventura-base:latest ventura-base
+    - tart pull ghcr.io/cirruslabs/macos-sonoma-base:latest
+    - tart clone ghcr.io/cirruslabs/macos-sonoma-base:latest sonoma-base
   build_script:
     - packer init templates/xcode.pkr.hcl
     - packer build -var-file="variables.pkrvars.hcl" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
   push_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
-      tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG
+      tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG
     else
-      tart push ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-ventura-xcode:latest
+      tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:latest
     fi
   always:
     cleanup_script:
-      - tart delete ventura-base || true
-      - tart delete ventura-xcode:$CIRRUS_TAG || true
+      - tart delete sonoma-base || true
+      - tart delete sonoma-xcode:$CIRRUS_TAG || true

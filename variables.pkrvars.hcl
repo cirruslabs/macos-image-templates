@@ -1,3 +1,3 @@
-macos_version = "ventura"
-gha_version   = "2.308.0"
-xcode_version = "14.3.1"
+macos_version = "sonoma"
+gha_version   = "2.309.0"
+xcode_version = "15"
