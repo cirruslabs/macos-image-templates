@@ -1,12 +1,12 @@
-## macOS Packer Templates for Cirrus CI
+## macOS Packer Templates for Tart
 
-Repository with Packer templates to build [Tart VMs](https://github.com/cirruslabs/tart) to use with [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
+Repository with Packer templates to build [Tart VMs](https://github.com/cirruslabs/tart) to use with [Cirrus Runners](https://tart.run/integrations/github-actions/) and [Cirrus CI](https://cirrus-ci.org/guide/macOS/).
 
 * `macos-{monterey,ventura,sonoma}-vanilla` image has nothing pre-installed
 * `macos-{monterey,ventura,sonoma}-base` image has only `brew` pre-installed
 * `macos-{monterey,ventura,sonoma}-xcode:N` image is based on `macos-{monterey,ventura}-base` image and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
 
-See a full list of VMs available on Cirrus CI [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
+See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
 ## Building Vanilla Image
 
