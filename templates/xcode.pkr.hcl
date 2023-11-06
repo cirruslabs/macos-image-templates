@@ -117,7 +117,6 @@ build {
       "source ~/.zprofile",
       "brew install libimobiledevice ideviceinstaller ios-deploy fastlane carthage",
       "sudo gem update",
-      "sudo gem install activesupport -v 7.0.8",
       "sudo gem install cocoapods",
       "sudo gem uninstall --ignore-dependencies ffi && sudo gem install ffi -- --enable-libffi-alloc"
     ]
