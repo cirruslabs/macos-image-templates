@@ -1,6 +1,7 @@
 task:
   name: "Update Images"
   only_if: $CIRRUS_CRON != ""
+  timeout_in: 3h
   persistent_worker:
     labels:
       name: dev-mini
@@ -38,6 +39,7 @@ task:
 task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
+  timeout_in: 3h
   persistent_worker:
     labels:
       name: dev-mini
