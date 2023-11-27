@@ -26,11 +26,11 @@ task:
   push_base_script:
     - tart push sonoma-base ghcr.io/cirruslabs/macos-sonoma-base:latest
   push_base_ecr_script:
-    - tart push sonoma-base public.ecr.aws/h0w9t6b1/macos:sonoma-base
+    - tart push --chunk-size=5 sonoma-base public.ecr.aws/h0w9t6b1/macos:sonoma-base
   push_xcode_script:
     - tart push sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:latest
   push_xcode_ecr_script:
-    - tart push sonoma-xcode:$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode
+    - tart push --chunk-size=5 sonoma-xcode:$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode
   always:
     cleanup_script:
       - tart delete sonoma-base || true
@@ -69,9 +69,9 @@ task:
   push_ecr_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
-      tart push sonoma-xcode:$CIRRUS_TAG public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION
+      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION
     else
-      tart push sonoma-xcode:$CIRRUS_TAG public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode
+      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/h0w9t6b1/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/h0w9t6b1/macos:sonoma-xcode
     fi
   always:
     cleanup_script:
