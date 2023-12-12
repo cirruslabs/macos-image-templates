@@ -69,9 +69,9 @@ task:
   push_ecr_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
-      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$XCODE_VERSION
+      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$CIRRUS_TAG
     else
-      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/cirruslabs/macos:sonoma-xcode
+      tart push  --chunk-size=5 sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode
     fi
   always:
     cleanup_script:
