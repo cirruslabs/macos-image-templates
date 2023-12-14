@@ -97,13 +97,15 @@ build {
       // Disable screensaver for admin user
       "defaults -currentHost write com.apple.screensaver idleTime 0",
       // Prevent the VM from sleeping
-      "sudo systemsetup -setdisplaysleep Off",
-      "sudo systemsetup -setsleep Off",
-      "sudo systemsetup -setcomputersleep Off",
+      "sudo systemsetup -setdisplaysleep Off 2>/dev/null",
+      "sudo systemsetup -setsleep Off 2>/dev/null",
+      "sudo systemsetup -setcomputersleep Off 2>/dev/null",
       // Launch Safari to populate the defaults
       "/Applications/Safari.app/Contents/MacOS/Safari &",
+      "SAFARI_PID=$!",
+      "disown",
       "sleep 30",
-      "kill -9 %1",
+      "kill -9 $SAFARI_PID",
       // Enable Safari's remote automation and "Develop" menu
       "sudo safaridriver --enable",
       "defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true",
