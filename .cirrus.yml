@@ -20,6 +20,8 @@ task:
   build_script:
     - packer init templates/vanilla-sonoma.pkr.hcl
     - packer build templates/vanilla-sonoma.pkr.hcl
+  disable_sip_script:
+    - packer build -var vm_name=sonoma-vanilla templates/disable-sip.pkr.hcl
   push_script:
     - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest
   always:
