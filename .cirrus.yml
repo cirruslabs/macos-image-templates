@@ -1,16 +1,35 @@
+persistent_worker:
+  labels:
+    name: dev-mini
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
+  TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
+  AWS_ACCESS_KEY_ID: ENCRYPTED[c187b670a17eead88c1698849376273991d09678efe37ae2f0c9738c27a2422741a71c501ef4b6a4df7bff3eca5213a9]
+  AWS_SECRET_ACCESS_KEY: ENCRYPTED[e456254a53b82e3167f2da23e24c389620cb3f7d47e4e5e7d993813bf9bb18c784d5cb8d88d19632073acc9e1f6096c9]
+
 task:
-  name: "Update Images"
+  name: "Update Vanilla Images"
+  only_if: false
+  timeout_in: 3h
+  update_script: brew update && brew upgrade
+  info_script:
+    - tart --version
+    - packer --version
+  build_script:
+    - packer init templates/vanilla-sonoma.pkr.hcl
+    - packer build templates/vanilla-sonoma.pkr.hcl
+  push_script:
+    - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest
+  always:
+    cleanup_script:
+      - tart delete sonoma-vanilla || true
+
+task:
+  name: "Update Non-Vanilla Images"
   only_if: $CIRRUS_CRON != ""
   timeout_in: 3h
-  persistent_worker:
-    labels:
-      name: dev-mini
-  env:
-    TART_REGISTRY_HOSTNAME: ghcr.io
-    TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
-    TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
-    AWS_ACCESS_KEY_ID: ENCRYPTED[c187b670a17eead88c1698849376273991d09678efe37ae2f0c9738c27a2422741a71c501ef4b6a4df7bff3eca5213a9]
-    AWS_SECRET_ACCESS_KEY: ENCRYPTED[e456254a53b82e3167f2da23e24c389620cb3f7d47e4e5e7d993813bf9bb18c784d5cb8d88d19632073acc9e1f6096c9]
   update_script: brew update && brew upgrade
   info_script:
     - tart --version
@@ -40,15 +59,6 @@ task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
   timeout_in: 3h
-  persistent_worker:
-    labels:
-      name: dev-mini
-  env:
-    TART_REGISTRY_HOSTNAME: ghcr.io
-    TART_REGISTRY_USERNAME: fkorotkov # GitHub supports only PATs
-    TART_REGISTRY_PASSWORD: ENCRYPTED[!82ed873afdf627284305afef4958c85a8f73127b09978a9786ac521559630ea6c9a5ab6e7f8315abf9ead09b6eff6eae!]
-    AWS_ACCESS_KEY_ID: ENCRYPTED[c187b670a17eead88c1698849376273991d09678efe37ae2f0c9738c27a2422741a71c501ef4b6a4df7bff3eca5213a9]
-    AWS_SECRET_ACCESS_KEY: ENCRYPTED[e456254a53b82e3167f2da23e24c389620cb3f7d47e4e5e7d993813bf9bb18c784d5cb8d88d19632073acc9e1f6096c9]
   update_script: brew update && brew upgrade
   info_script:
     - tart --version
