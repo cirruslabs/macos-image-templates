@@ -22,11 +22,8 @@ source "tart-cli" "tart" {
     # Skip over "Macintosh" and select "Options"
     # to boot into macOS Recovery
     "<wait60s><right><right><enter>",
-    # Select default language
-    "<wait10s><enter>",
     # Open Terminal
-    "<wait10s><leftCtrlOn><f2><leftCtrlOff>",
-    "<right><right><right><right><down><down><down><enter>",
+    "<wait10s><leftAltOn>T<leftAltOff>",
     # Disable SIP
     "<wait10s>csrutil disable<enter>",
     "<wait10s>y<enter>",
