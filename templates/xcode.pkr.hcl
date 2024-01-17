@@ -15,10 +15,6 @@ variable "xcode_version" {
   type = string
 }
 
-variable "gha_version" {
-  type = string
-}
-
 variable "android_sdk_tools_version" {
   type    = string
   default = "9477386" # https://developer.android.com/studio/#command-tools
@@ -39,18 +35,6 @@ source "tart-cli" "tart" {
 build {
   sources = ["source.tart-cli.tart"]
 
-  // re-install the actions runner
-  provisioner "shell" {
-    inline = [
-      "cd $HOME",
-      "rm -rf actions-runner",
-      "mkdir actions-runner && cd actions-runner",
-      "curl -O -L https://github.com/actions/runner/releases/download/v${var.gha_version}/actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-      "tar xzf ./actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-    ]
-  }
-
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -60,6 +44,11 @@ build {
       "brew install curl wget unzip zip ca-certificates",
       "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
+  }
+
+  // Re-install the GitHub Actions runner
+  provisioner "shell" {
+    script = "scripts/install-actions-runner.sh"
   }
 
   provisioner "shell" {

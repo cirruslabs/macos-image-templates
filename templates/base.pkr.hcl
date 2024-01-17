@@ -11,10 +11,6 @@ variable "macos_version" {
   type = string
 }
 
-variable "gha_version" {
-  type = string
-}
-
 source "tart-cli" "tart" {
   vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:latest"
   vm_name      = "${var.macos_version}-base"
@@ -55,15 +51,6 @@ build {
 
   provisioner "shell" {
     inline = [
-      "cd $HOME",
-      "mkdir actions-runner && cd actions-runner",
-      "curl -O -L https://github.com/actions/runner/releases/download/v${var.gha_version}/actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-      "tar xzf ./actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-      "rm actions-runner-osx-arm64-${var.gha_version}.tar.gz",
-    ]
-  }
-  provisioner "shell" {
-    inline = [
       "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
       "echo \"export LANG=en_US.UTF-8\" >> ~/.zprofile",
       "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile",
@@ -76,6 +63,12 @@ build {
       "git lfs install",
     ]
   }
+
+  // Install the GitHub Actions runner
+  provisioner "shell" {
+    script = "scripts/install-actions-runner.sh"
+  }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
