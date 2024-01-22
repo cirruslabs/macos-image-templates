@@ -11,7 +11,7 @@ env:
 
 task:
   name: "Update Vanilla Images"
-  only_if: false
+  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
   timeout_in: 3h
   update_script: brew update && brew upgrade
   info_script:
