@@ -17,7 +17,7 @@ variable "xcode_version" {
 
 variable "android_sdk_tools_version" {
   type    = string
-  default = "9477386" # https://developer.android.com/studio/#command-tools
+  default = "11076708" # https://developer.android.com/studio/#command-tools
 }
 
 source "tart-cli" "tart" {
@@ -68,20 +68,21 @@ build {
       "yes | sdkmanager 'platform-tools' 'platforms;android-33' 'build-tools;34.0.0' 'ndk;25.2.9519653'"
     ]
   }
+
+  provisioner "file" {
+    source      = pathexpand("~/Downloads/Xcode_${var.xcode_version}.xip")
+    destination = "/Users/admin/Downloads/Xcode_${var.xcode_version}.xip"
+  }
+
   provisioner "shell" {
     inline = [
       "echo 'export PATH=/usr/local/bin/:$PATH' >> ~/.zprofile",
       "source ~/.zprofile",
-      "wget --quiet https://github.com/RobotsAndPencils/xcodes/releases/latest/download/xcodes.zip",
-      "unzip xcodes.zip",
-      "rm xcodes.zip",
-      "chmod +x xcodes",
-      "sudo mkdir -p /usr/local/bin/",
-      "sudo mv xcodes /usr/local/bin/xcodes",
+      "brew install xcodesorg/made/xcodes",
       "xcodes version",
-      "wget --quiet https://storage.googleapis.com/xcodes-cache/Xcode_${var.xcode_version}.xip",
-      "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
+      "xcodes install ${var.xcode_version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${var.xcode_version}.xip",
       "sudo rm -rf ~/.Trash/*",
+      "sudo rm -rf ~/Downloads/*",
       "xcodes select ${var.xcode_version}",
       "xcodebuild -downloadAllPlatforms",
       "xcodebuild -runFirstLaunch",
