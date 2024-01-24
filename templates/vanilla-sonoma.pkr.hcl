@@ -71,12 +71,6 @@ source "tart-cli" "tart" {
     "<wait10s><tab><tab><tab><tab><tab><spacebar>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
-    # Open "Remote Login" details
-    "<wait10s><tab><spacebar>",
-    # Enable "Full Disk Access"
-    "<wait10s><tab><spacebar>",
-    # Click "Done"
-    "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Disable Voice Over
     "<leftAltOn><f5><leftAltOff>",
   ]
