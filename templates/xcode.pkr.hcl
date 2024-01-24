@@ -80,10 +80,7 @@ build {
       "source ~/.zprofile",
       "brew install xcodesorg/made/xcodes",
       "xcodes version",
-      "xcodes install ${var.xcode_version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${var.xcode_version}.xip",
-      "sudo rm -rf ~/.Trash/*",
-      "sudo rm -rf ~/Downloads/*",
-      "xcodes select ${var.xcode_version}",
+      "xcodes install ${var.xcode_version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${var.xcode_version}.xip --select --empty-trash",
       "xcodebuild -downloadAllPlatforms",
       "xcodebuild -runFirstLaunch",
     ]
