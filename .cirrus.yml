@@ -13,7 +13,9 @@ task:
   name: "Update Vanilla Images"
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
   timeout_in: 3h
-  update_script: brew update && brew upgrade
+  update_script: 
+    - brew update && brew upgrade
+    - brew install packer cirruslabs/cli/tart
   info_script:
     - tart --version
     - packer --version
