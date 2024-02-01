@@ -21,8 +21,14 @@ source "tart-cli" "tart" {
   boot_command = [
     # hello, hola, bonjour, etc.
     "<wait60s><spacebar>",
-    # Language
-    "<wait30s>english<enter>",
+    # Language: most of the times we have a list of "English"[1], "English (UK)", etc. with
+    # "English" language already selected. If we type "english", it'll cause us to switch
+    # to the "English (UK)", which is not what we want. To solve this, we switch to some other
+    # language first, e.g. "Italiano" and then switch back to "English". We'll then jump to the
+    # first entry in a list of "english"-prefixed items, which will be "English".
+    #
+    # [1]: should be named "English (US)", but oh well 🤷
+    "<wait30s>italiano<esc>english<enter>",
     # Select Your Country and Region
     "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
     # Written and Spoken Languages
