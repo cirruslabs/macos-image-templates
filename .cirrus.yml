@@ -9,16 +9,20 @@ env:
   AWS_ACCESS_KEY_ID: ENCRYPTED[c187b670a17eead88c1698849376273991d09678efe37ae2f0c9738c27a2422741a71c501ef4b6a4df7bff3eca5213a9]
   AWS_SECRET_ACCESS_KEY: ENCRYPTED[e456254a53b82e3167f2da23e24c389620cb3f7d47e4e5e7d993813bf9bb18c784d5cb8d88d19632073acc9e1f6096c9]
 
-task:
-  name: "Update Vanilla Images"
-  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
+defaults: &defaults
   timeout_in: 3h
-  update_script: 
+  update_script:
     - brew update && brew upgrade
     - brew install packer cirruslabs/cli/tart
   info_script:
     - tart --version
     - packer --version
+
+
+task:
+  name: "Update Vanilla Images"
+  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
+  <<: *defaults
   build_script:
     - packer init templates/vanilla-sonoma.pkr.hcl
     - packer build templates/vanilla-sonoma.pkr.hcl
@@ -28,45 +32,63 @@ task:
     - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest ghcr.io/cirruslabs/macos-sonoma-vanilla:14.3
   always:
     cleanup_script:
-      - tart delete sonoma-vanilla || true
+      - tart delete sonoma-vanilla
 
 task:
-  name: "Update Non-Vanilla Images"
+  name: "Update Base Images ($MACOS_VERSION)"
+  alias: update-base
+  env:
+    matrix:
+      MACOS_VERSION: sonoma
+      MACOS_VERSION: ventura
   only_if: $CIRRUS_CRON != ""
-  timeout_in: 3h
-  update_script: brew update && brew upgrade
-  info_script:
-    - tart --version
-    - packer --version
-  env_script:
-    - echo "XCODE_VERSION=$(cat variables.pkrvars.hcl | grep xcode_version | awk '{print $(NF)}' | tr -d '\"')" >> $CIRRUS_ENV
+  <<: *defaults
   build_base_script:
     - packer init templates/base.pkr.hcl
-    - packer build -var-file="variables.pkrvars.hcl" templates/base.pkr.hcl
-  build_xcode_script:
-    - packer init templates/xcode.pkr.hcl
-    - packer build -var-file="variables.pkrvars.hcl" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" templates/base.pkr.hcl
   push_base_script:
-    - tart push sonoma-base ghcr.io/cirruslabs/macos-sonoma-base:latest
-  push_xcode_script:
-    - tart push sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-sonoma-xcode:latest
-  push_base_ecr_script:
-    - tart push sonoma-base public.ecr.aws/cirruslabs/macos:sonoma-base
-  push_xcode_ecr_script:
-    - tart push sonoma-xcode:$XCODE_VERSION public.ecr.aws/cirruslabs/macos:sonoma-xcode-$XCODE_VERSION public.ecr.aws/cirruslabs/macos:sonoma-xcode
+    - tart push $MACOS_VERSION-base ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   always:
     cleanup_script:
-      - tart delete sonoma-base || true
-      - tart delete sonoma-xcode:$XCODE_VERSION || true
+      - tart delete $MACOS_VERSION-base
+
+task:
+  name: "Update Xcode Images ($MACOS_VERSION $XCODE_VERSION)"
+  depends_on: update-base
+  env:
+    matrix:
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.2
+        LATEST: true
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.1
+      - MACOS_VERSION: ventura
+        XCODE_VERSION: 14.3.1
+        LATEST: true
+      - MACOS_VERSION: ventura
+        XCODE_VERSION: 14.2
+  only_if: $CIRRUS_CRON != ""
+  <<: *defaults
+  pull_base_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+  build_xcode_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="$XCODE_VERSION" templates/xcode.pkr.hcl
+  push_script: |
+    if [[ -z "$LATEST" ]]
+    then
+      tart push "$MACOS_VERSION-base:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION
+    else
+      tart push "$MACOS_VERSION-base:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
+    fi
+  always:
+    cleanup_script:
+      - tart delete "$MACOS_VERSION-base:$XCODE_VERSION"
 
 task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
-  timeout_in: 3h
-  update_script: brew update && brew upgrade
-  info_script:
-    - tart --version
-    - packer --version
+  <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-sonoma-base:latest
     - tart clone ghcr.io/cirruslabs/macos-sonoma-base:latest sonoma-base
@@ -79,13 +101,6 @@ task:
       tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG
     else
       tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:latest
-    fi
-  push_ecr_script: |
-    if [[ $CIRRUS_TAG == *"beta"* ]]
-    then
-      tart push sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$CIRRUS_TAG
-    else
-      tart push sonoma-xcode:$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode-$CIRRUS_TAG public.ecr.aws/cirruslabs/macos:sonoma-xcode
     fi
   always:
     cleanup_script:
