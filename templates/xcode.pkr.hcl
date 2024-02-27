@@ -21,7 +21,7 @@ variable "android_sdk_tools_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "${var.macos_version}-base"
+  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-base:latest"
   vm_name      = "${var.macos_version}-xcode:${var.xcode_version}"
   cpu_count    = 4
   memory_gb    = 8
