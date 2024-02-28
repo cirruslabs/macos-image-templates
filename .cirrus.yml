@@ -45,6 +45,8 @@ task:
       MACOS_VERSION: ventura
   only_if: $CIRRUS_CRON != ""
   <<: *defaults
+  pull_vanilla_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest
   build_base_script:
     - packer init templates/base.pkr.hcl
     - packer build -var macos_version="$MACOS_VERSION" templates/base.pkr.hcl
