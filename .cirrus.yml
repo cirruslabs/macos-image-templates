@@ -1,6 +1,8 @@
 persistent_worker:
   labels:
     name: dev-mini
+  resources:
+    tart-vms: 1
 
 env:
   TART_REGISTRY_HOSTNAME: ghcr.io
@@ -12,8 +14,8 @@ env:
 defaults: &defaults
   timeout_in: 3h
   update_script:
-    - brew update && brew upgrade
-    - brew install packer cirruslabs/cli/tart
+    - brew update || true
+    - brew upgrade || true
   info_script:
     - tart --version
     - packer --version
