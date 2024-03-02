@@ -87,7 +87,7 @@ task:
     fi
   always:
     cleanup_script:
-      - tart delete "$MACOS_VERSION-base:$XCODE_VERSION"
+      - tart delete "$MACOS_VERSION-xcode:$XCODE_VERSION"
 
 task:
   name: "Release Xcode $CIRRUS_TAG"
