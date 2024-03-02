@@ -81,9 +81,9 @@ task:
   push_script: |
     if [[ -z "$LATEST" ]]
     then
-      tart push "$MACOS_VERSION-base:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION
+      tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION
     else
-      tart push "$MACOS_VERSION-base:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
+      tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
     fi
   always:
     cleanup_script:
