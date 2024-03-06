@@ -94,21 +94,23 @@ task:
 task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
+  env:
+    MACOS_VERSION: sonoma
   <<: *defaults
   pull_base_script:
-    - tart pull ghcr.io/cirruslabs/macos-sonoma-base:latest
-    - tart clone ghcr.io/cirruslabs/macos-sonoma-base:latest sonoma-base
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+    - tart clone ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest $MACOS_VERSION-base
   build_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var-file="variables.pkrvars.hcl" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
   push_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
-      tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG
+      tart push $MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$CIRRUS_TAG
     else
-      tart push sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-sonoma-xcode:latest
+      tart push $MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
     fi
   always:
     cleanup_script:
-      - tart delete sonoma-base || true
-      - tart delete sonoma-xcode:$CIRRUS_TAG || true
+      - tart delete $MACOS_VERSION-base || true
+      - tart delete $MACOS_VERSION-xcode:$CIRRUS_TAG || true
