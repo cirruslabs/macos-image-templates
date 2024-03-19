@@ -1,0 +1,6 @@
+#!/usr/bin/expect -f
+
+spawn automationmodetool enable-automationmode-without-authentication
+expect "Enter the password for user 'admin':"
+send "admin\n"
+expect "Setting up machine to allow Automation Mode without requiring user authentication... succeeded."
