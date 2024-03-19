@@ -102,4 +102,9 @@ build {
       "brew install awscli"
     ]
   }
+
+  # Enable UI automation, see https://github.com/cirruslabs/macos-image-templates/issues/136
+  provisioner "shell" {
+    script = "scripts/automationmodetool.expect"
+  }
 }
