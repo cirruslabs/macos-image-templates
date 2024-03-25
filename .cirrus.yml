@@ -73,7 +73,7 @@ task:
         LATEST: true
       - MACOS_VERSION: ventura
         XCODE_VERSION: 14.2
-  only_if: $CIRRUS_CRON != ""
+  only_if: $CIRRUS_CRON == "monthly" # Every first Saturday of a month at 14 UTC
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
@@ -92,6 +92,26 @@ task:
       - tart delete "$MACOS_VERSION-xcode:$XCODE_VERSION"
 
 task:
+  name: "Update Runner Image ($MACOS_VERSIONS)"
+  depends_on: update-base
+  env:
+    matrix:
+      - MACOS_VERSION: sonoma
+        XCODE_VERSIONS: 15.1,15.2,15.3
+  only_if: $CIRRUS_TAG != "" || $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
+  <<: *defaults
+  pull_base_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+  build_xcode_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var tag=runner -var disk_size=150 -var macos_version="$MACOS_VERSION" -var xcode_version="$XCODE_VERSIONS" templates/xcode.pkr.hcl
+  push_script: |
+    tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-$MACOS_VERSION-runner:latest
+  always:
+    cleanup_script:
+      - tart delete "$MACOS_VERSION-xcode:runner"
+
+task:
   name: "Release Xcode $CIRRUS_TAG"
   only_if: $CIRRUS_TAG != ""
   env:
@@ -99,7 +119,6 @@ task:
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
-    - tart clone ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest $MACOS_VERSION-base
   build_script:
     - packer init templates/xcode.pkr.hcl
     - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
@@ -112,5 +131,4 @@ task:
     fi
   always:
     cleanup_script:
-      - tart delete $MACOS_VERSION-base || true
       - tart delete $MACOS_VERSION-xcode:$CIRRUS_TAG || true
