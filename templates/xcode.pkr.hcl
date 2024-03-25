@@ -17,8 +17,7 @@ variable "xcode_version" {
 
 variable "tag" {
   type = string
-  // default to the last xcode_version
-  default = var.xcode_version[-1]
+  default = ""
 }
 
 variable "disk_size" {
@@ -34,7 +33,7 @@ variable "android_sdk_tools_version" {
 
 source "tart-cli" "tart" {
   vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-base:latest"
-  vm_name      = "${var.macos_version}-xcode:${var.tag}"
+  vm_name      = "${var.macos_version}-xcode:${var.tag != "" ? var.tag : var.xcode_version[-1]}"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = var.disk_size
@@ -81,11 +80,6 @@ build {
     ]
   }
 
-  provisioner "file" {
-    source      = pathexpand("~/Downloads/Xcode_${var.xcode_version}.xip")
-    destination = "/Users/admin/Downloads/Xcode_${var.xcode_version}.xip"
-  }
-
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -94,14 +88,17 @@ build {
     ]
   }
 
+  provisioner "file" {
+    sources      = [ for version in var.xcode_version : pathexpand("~/Downloads/Xcode_${version}.xip")]
+    destination = "/Users/admin/Downloads/"
+  }
+
   // iterate over all Xcode versions and install them
   // select the latest one as the default
   provisioner "shell" {
-    for_each = var.xcode_version
     inline = [
-      "xcodes install ${each.value} --experimental-unxip --path /Users/admin/Downloads/Xcode_${each.value}.xip --select --empty-trash",
-      "xcodebuild -downloadAllPlatforms",
-      "xcodebuild -runFirstLaunch",
+      for version in var.xcode_version :
+      "source ~/.zprofile && xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash && xcodebuild -downloadAllPlatforms && xcodebuild -runFirstLaunc"
     ]
   }
 
