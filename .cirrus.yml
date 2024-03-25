@@ -104,7 +104,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var tag=runner -var disk_size=150 -var macos_version="$MACOS_VERSION" -var xcode_version="$XCODE_VERSIONS" templates/xcode.pkr.hcl
+    - packer build -var tag=runner -var disk_size=150 -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
   push_script: |
     tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-$MACOS_VERSION-runner:latest
   always:
