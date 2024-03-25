@@ -22,7 +22,6 @@ variable "tag" {
 
 variable "disk_size" {
   type = number
-  // default to the last xcode_version
   default = 90
 }
 
