@@ -43,7 +43,7 @@ task:
     matrix:
       MACOS_VERSION: sonoma
       MACOS_VERSION: ventura
-  only_if: $CIRRUS_CRON != ""
+  only_if: $CIRRUS_CRON == "monthly"
   <<: *defaults
   pull_vanilla_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest
@@ -92,8 +92,7 @@ task:
       - tart delete "$MACOS_VERSION-xcode:$XCODE_VERSION"
 
 task:
-  name: "Update Runner Image ($MACOS_VERSIONS)"
-  depends_on: update-base
+  name: "Update Runner Image ($MACOS_VERSION)"
   env:
     matrix:
       - MACOS_VERSION: sonoma

@@ -88,7 +88,7 @@ build {
   }
 
   provisioner "file" {
-    sources      = [ for version in var.xcode_version : pathexpand("~/Downloads/Xcode_${version}.xip")]
+    sources      = [ for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
     destination = "/Users/admin/Downloads/"
   }
 
