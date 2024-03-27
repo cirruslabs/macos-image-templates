@@ -97,7 +97,7 @@ build {
   provisioner "shell" {
     inline = [
       for version in var.xcode_version :
-      "source ~/.zprofile && xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash && xcodebuild -downloadAllPlatforms && xcodebuild -runFirstLaunc"
+      "source ~/.zprofile && xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash && xcodebuild -downloadAllPlatforms && xcodebuild -runFirstLaunch"
     ]
   }
 
