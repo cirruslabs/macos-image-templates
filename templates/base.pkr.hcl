@@ -77,7 +77,7 @@ build {
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "source ~/.zprofile",
       "rbenv install 2.7.8", // latest 2.x.x before EOL
-      "rbenv install $(rbenv install -l | grep -v - | tail -1)",
+      "rbenv install -l | grep -v - | tail -3 | xargs -L1 rbenv install",
       "rbenv global $(rbenv install -l | grep -v - | tail -1)",
       "gem install bundler",
     ]
