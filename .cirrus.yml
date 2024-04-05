@@ -105,7 +105,7 @@ task:
     - packer init templates/xcode.pkr.hcl
     - packer build -var tag=runner -var disk_size=130 -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
   push_script: |
-    tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION ghcr.io/cirruslabs/macos-runner:latest
+    tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
   always:
     cleanup_script:
       - tart delete "$MACOS_VERSION-xcode:runner"
