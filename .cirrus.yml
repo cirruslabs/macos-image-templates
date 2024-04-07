@@ -79,7 +79,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="$XCODE_VERSION" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSION]" templates/xcode.pkr.hcl
   push_script: |
     if [[ -z "$LATEST" ]]
     then
@@ -120,7 +120,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="$CIRRUS_TAG" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[$CIRRUS_TAG]" templates/xcode.pkr.hcl
   push_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
