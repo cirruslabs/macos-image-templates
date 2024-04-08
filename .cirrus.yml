@@ -20,7 +20,6 @@ defaults: &defaults
     - tart --version
     - packer --version
 
-
 task:
   name: "Update Vanilla Images"
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
@@ -59,6 +58,7 @@ task:
 task:
   name: "Update Xcode Images ($MACOS_VERSION $XCODE_VERSION)"
   depends_on: update-base
+  only_if: $CIRRUS_CRON == "monthly" # Every first Saturday of a month at 14 UTC
   env:
     matrix:
       - MACOS_VERSION: sonoma
@@ -73,13 +73,12 @@ task:
         LATEST: true
       - MACOS_VERSION: ventura
         XCODE_VERSION: 14.2
-  only_if: $CIRRUS_CRON == "monthly" # Every first Saturday of a month at 14 UTC
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSION]" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$XCODE_VERSION\"]" templates/xcode.pkr.hcl
   push_script: |
     if [[ -z "$LATEST" ]]
     then
@@ -103,7 +102,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var tag=runner -var disk_size=130 -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
+    - packer build -var tag=runner -var disk_size=130 -var macos_version="'$MACOS_VERSION'" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
   push_script: |
     tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
   always:
@@ -120,7 +119,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[$CIRRUS_TAG]" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$CIRRUS_TAG\"]" templates/xcode.pkr.hcl
   push_script: |
     if [[ $CIRRUS_TAG == *"beta"* ]]
     then
