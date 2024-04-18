@@ -85,7 +85,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install node",
+      "brew install node@20",
       "node --version",
       "npm install --global yarn",
       "yarn --version",
