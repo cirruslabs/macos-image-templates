@@ -69,6 +69,16 @@ build {
     script = "scripts/install-actions-runner.sh"
   }
 
+  // Create a /Users/runner → /Users/admin symlink to support certain GitHub Actions
+  // like ruby/setup-ruby that hard-code the "/Users/runner/hostedtoolcache" path[1]
+  //
+  // [1]: https://github.com/ruby/setup-ruby/blob/6bd3d993c602f6b675728ebaecb2b569ff86e99b/common.js#L268
+  provisioner "shell" {
+    inline = [
+      "sudo ln -s /Users/admin /Users/runner"
+    ]
+  }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
