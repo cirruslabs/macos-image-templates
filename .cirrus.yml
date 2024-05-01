@@ -96,7 +96,7 @@ task:
     matrix:
       - MACOS_VERSION: sonoma
         XCODE_VERSIONS: 15.1,15.2,15.3
-  only_if: $CIRRUS_TAG != "" || $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
+  only_if: $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
