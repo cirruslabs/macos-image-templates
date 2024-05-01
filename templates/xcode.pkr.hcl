@@ -65,7 +65,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install homebrew/cask-versions/temurin@17",
+      "brew install openjdk@17",
       "echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.zprofile",
       "echo 'export ANDROID_SDK_ROOT=$ANDROID_HOME' >> ~/.zprofile",
       "echo 'export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator' >> ~/.zprofile",
