@@ -66,6 +66,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install openjdk@17",
+      "echo 'export PATH=\"/opt/homebrew/opt/openjdk@17/bin:$PATH\"' >> ~/.zprofile",
       "echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.zprofile",
       "echo 'export ANDROID_SDK_ROOT=$ANDROID_HOME' >> ~/.zprofile",
       "echo 'export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator' >> ~/.zprofile",
