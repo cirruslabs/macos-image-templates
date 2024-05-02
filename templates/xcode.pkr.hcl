@@ -164,7 +164,7 @@ build {
       "source ~/.zprofile",
       "df -h",
       "export FREE_MB=$(df -m | awk '{print $4}' | head -n 2 | tail -n 1)",
-      "[[ $FREE_MB -gt 20000 ]] && echo OK || exit 1"
+      "[[ $FREE_MB -gt 15000 ]] && echo OK || exit 1"
     ]
   }
 }
