@@ -52,8 +52,6 @@ build {
       "brew --version",
       "brew update",
       "brew upgrade",
-      "brew install curl wget unzip zip ca-certificates",
-      "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
   }
 
@@ -121,8 +119,10 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install libimobiledevice ideviceinstaller ios-deploy fastlane carthage",
+      "brew install xcbeautify",
       "gem update",
       "gem install cocoapods",
+      "gem install xcpretty",
       "gem uninstall --ignore-dependencies ffi && gem install ffi -- --enable-libffi-alloc"
     ]
   }
