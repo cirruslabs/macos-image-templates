@@ -59,8 +59,10 @@ build {
       "source ~/.zprofile",
       "brew --version",
       "brew update",
-      "brew install wget cmake gcc git-lfs jq gh gitlab-runner",
+      "brew install curl wget unzip zip ca-certificates cmake gcc git-lfs jq gh gitlab-runner",
+      "brew install --cask git-credential-manager",
       "git lfs install",
+      "sudo softwareupdate --install-rosetta --agree-to-license"
     ]
   }
 
@@ -96,6 +98,8 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install node@20",
+      "echo 'export PATH=\"/opt/homebrew/opt/node@20/bin:$PATH\"' >> ~/.zprofile",
+      "source ~/.zprofile",
       "node --version",
       "npm install --global yarn",
       "yarn --version",
