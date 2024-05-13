@@ -21,5 +21,5 @@ packer build -var macos_version=sonoma templates/base.pkr.hcl
 ## Building Xcode Image
 
 ```bash
-packer build -var macos_version=sonoma -var xcode_version="[15.3]" templates/xcode.pkr.hcl
+packer build -var macos_version=sonoma -var xcode_version="[15.4]" templates/xcode.pkr.hcl
 ```
