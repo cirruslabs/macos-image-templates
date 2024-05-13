@@ -60,6 +60,13 @@ build {
     script = "scripts/install-actions-runner.sh"
   }
 
+  // make sure our workaround from base is still valid
+  provisioner "shell" {
+    inline = [
+      "sudo ln -s /Users/admin /Users/runner || true"
+    ]
+  }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -158,13 +165,21 @@ build {
     ]
   }
 
-  // check there is at least 20GB of free space and fail if not
+  // check there is at least 15GB of free space and fail if not
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
       "df -h",
       "export FREE_MB=$(df -m | awk '{print $4}' | head -n 2 | tail -n 1)",
       "[[ $FREE_MB -gt 15000 ]] && echo OK || exit 1"
+    ]
+  }
+
+  // some other health checks
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "test -d /Users/runner"
     ]
   }
 }
