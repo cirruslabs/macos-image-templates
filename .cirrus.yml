@@ -62,12 +62,12 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSION: 15.3
+        XCODE_VERSION: 15.4
         LATEST: true
       - MACOS_VERSION: sonoma
-        XCODE_VERSION: 15.2
+        XCODE_VERSION: 15.3
       - MACOS_VERSION: sonoma
-        XCODE_VERSION: 15.1
+        XCODE_VERSION: 15.2
       - MACOS_VERSION: ventura
         XCODE_VERSION: 14.3.1
         LATEST: true
@@ -95,8 +95,8 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: 15.1,15.2,15.3
-  only_if: $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
+        XCODE_VERSIONS: 15.2,15.3,15.4
+  only_if: $CIRRUS_TAG != "" || $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest

@@ -24,7 +24,7 @@ monthly on the first Saturday of the month:
 
 * `ghcr.io/cirruslabs/macos-{ventura,sonoma}-base`
 * `ghcr.io/cirruslabs/macos-ventura-xcode:{latest,14.3.1,14.2}`
-* `ghcr.io/cirruslabs/macos-sonoma-xcode:{latest,15.3,15.2,15.1}`
+* `ghcr.io/cirruslabs/macos-sonoma-xcode:{latest,15.4,15.3,15.2}`
 
 Note that `ghcr.io/cirruslabs/macos-runner:sonoma` is updated every Sunday and this image is [optimised for startup](https://cirrus-runners.app/blog/2024/04/11/optimizing-startup-time-of-cirrus-runners/)
 on Cirrus Runners and Cirrus CI services.
