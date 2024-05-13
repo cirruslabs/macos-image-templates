@@ -121,4 +121,12 @@ build {
   provisioner "shell" {
     script = "scripts/automationmodetool.expect"
   }
+
+  // some other health checks
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "test -d /Users/runner"
+    ]
+  }
 }
