@@ -8,7 +8,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2024WinterFCS/fullrestores/052-77579/4569734E-120C-4F31-AD08-FC1FF825D059/UniversalMac_14.4.1_23E224_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2024SpringFCS/fullrestores/062-01897/C874907B-9F82-4109-87EB-6B3C9BF1507D/UniversalMac_14.5_23F79_Restore.ipsw"
   vm_name      = "sonoma-vanilla"
   cpu_count    = 4
   memory_gb    = 8
