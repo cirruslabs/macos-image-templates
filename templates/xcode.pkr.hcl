@@ -43,6 +43,26 @@ source "tart-cli" "tart" {
   ssh_timeout  = "120s"
 }
 
+locals {
+  xcode_install_provisioners = [
+    for version in var.xcode_version : {
+      type = "shell"
+      inline = [
+        "source ~/.zprofile",
+        "sudo xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash",
+        // get selected xcode path, strip /Contents/Developer and move to GitHub compatible locations
+        "INSTALLED_PATH=$(xcodes select -p)",
+        "CONTENTS_DIR=$(dirname $INSTALLED_PATH)",
+        "APP_DIR=$(dirname $CONTENTS_DIR)",
+        "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
+        "sudo xcode-select -s /Applications/Xcode_${version}.app",
+        "xcodebuild -downloadAllPlatforms",
+        "xcodebuild -runFirstLaunch",
+      ]
+    }
+  ]
+}
+
 build {
   sources = ["source.tart-cli.tart"]
 
@@ -101,11 +121,12 @@ build {
 
   // iterate over all Xcode versions and install them
   // select the latest one as the default
-  provisioner "shell" {
-    inline = [
-      for version in var.xcode_version :
-      "source ~/.zprofile && sudo xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash && xcodebuild -downloadAllPlatforms && xcodebuild -runFirstLaunch"
-    ]
+  dynamic "provisioner" {
+    for_each = local.xcode_install_provisioners
+    labels = ["shell"]
+    content {
+      inline = provisioner.value.inline
+    }
   }
 
   provisioner "shell" {
