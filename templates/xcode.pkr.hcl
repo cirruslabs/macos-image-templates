@@ -25,6 +25,11 @@ variable "disk_size" {
   default = 90
 }
 
+variable "disk_free_mb" {
+  type = number
+  default = 15000
+}
+
 variable "android_sdk_tools_version" {
   type    = string
   default = "11076708" # https://developer.android.com/studio/#command-tools
@@ -168,7 +173,6 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "sudo security delete-certificate -Z FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64 /Library/Keychains/System.keychain",
       "curl -o AppleWWDRCAG3.cer https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer",
       "curl -o DeveloperIDG2CA.cer https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer",
       "curl -o add-certificate.swift https://raw.githubusercontent.com/actions/runner-images/fb3b6fd69957772c1596848e2daaec69eabca1bb/images/macos/provision/configuration/add-certificate.swift",
@@ -192,7 +196,7 @@ build {
       "source ~/.zprofile",
       "df -h",
       "export FREE_MB=$(df -m | awk '{print $4}' | head -n 2 | tail -n 1)",
-      "[[ $FREE_MB -gt 15000 ]] && echo OK || exit 1"
+      "[[ $FREE_MB -gt ${var.disk_free_mb} ]] && echo OK || exit 1"
     ]
   }
 
