@@ -21,7 +21,7 @@ defaults: &defaults
     - packer --version
 
 task:
-  name: "Update Vanilla Images"
+  name: "Update Vanilla Sonoma Image"
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sonoma.pkr.hcl")
   <<: *defaults
   build_script:
@@ -30,18 +30,33 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sonoma-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest ghcr.io/cirruslabs/macos-sonoma-vanilla:14.4.1
+    - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest ghcr.io/cirruslabs/macos-sonoma-vanilla:14.5
   always:
     cleanup_script:
       - tart delete sonoma-vanilla
+
+task:
+  name: "Update Vanilla Sequoia Image"
+  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sequoia.pkr.hcl")
+  <<: *defaults
+  build_script:
+    - packer init templates/vanilla-sequoia.pkr.hcl
+    - packer build templates/vanilla-sequoia.pkr.hcl
+  disable_sip_script:
+    - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
+  push_script:
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0
+  always:
+    cleanup_script:
+      - tart delete sequoia-vanilla
 
 task:
   name: "Update Base Images ($MACOS_VERSION)"
   alias: update-base
   env:
     matrix:
+      MACOS_VERSION: sequoia
       MACOS_VERSION: sonoma
-      MACOS_VERSION: ventura
   only_if: $CIRRUS_CRON == "monthly"
   <<: *defaults
   pull_vanilla_script:
@@ -68,11 +83,6 @@ task:
         XCODE_VERSION: 15.3
       - MACOS_VERSION: sonoma
         XCODE_VERSION: 15.2
-      - MACOS_VERSION: ventura
-        XCODE_VERSION: 14.3.1
-        LATEST: true
-      - MACOS_VERSION: ventura
-        XCODE_VERSION: 14.2
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
@@ -110,9 +120,10 @@ task:
       - tart delete "$MACOS_VERSION-xcode:runner"
 
 task:
-  name: "Release Xcode $CIRRUS_TAG"
+  name: "Release Xcode $CIRRUS_TAG ($MACOS_VERSION)"
   only_if: $CIRRUS_TAG != ""
   env:
+    MACOS_VERSION: sequoia
     MACOS_VERSION: sonoma
   <<: *defaults
   pull_base_script:
