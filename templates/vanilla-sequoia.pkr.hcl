@@ -48,7 +48,7 @@ source "tart-cli" "tart" {
     # Create a Computer Account
     "<wait10s>admin<tab><tab>admin<tab>admin<tab><tab><tab><spacebar>",
     # Enable Location Services
-    "<wait30s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait120s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you don't want to use Location Services?
     "<wait10s><tab><spacebar>",
     # Select Your Time Zone
@@ -61,6 +61,8 @@ source "tart-cli" "tart" {
     "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    # Welcome to Mac
+    "<wait10s><tab><spacebar>",
     # Enable Voice Over
     "<wait10s><leftAltOn><f5><leftAltOff><wait5s>v",
     # Now that the installation is done, open "System Settings"
