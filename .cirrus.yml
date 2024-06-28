@@ -59,9 +59,6 @@ task:
   matrix:
     - env:
         MACOS_VERSION: sequoia
-      persistent_worker:
-        labels:
-          name: dev-mini-experimental
     - env:
         MACOS_VERSION: sonoma
   only_if: $CIRRUS_CRON == "monthly"
@@ -132,9 +129,6 @@ task:
   matrix:
     - env:
         MACOS_VERSION: sequoia
-      persistent_worker:
-        labels:
-          name: dev-mini-experimental
     - env:
         MACOS_VERSION: sonoma
   <<: *defaults
