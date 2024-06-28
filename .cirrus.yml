@@ -58,8 +58,6 @@ task:
   alias: update-base
   matrix:
     - env:
-        MACOS_VERSION: sequoia
-    - env:
         MACOS_VERSION: sonoma
   only_if: $CIRRUS_CRON == "monthly"
   <<: *defaults
@@ -127,8 +125,6 @@ task:
   name: "Release Xcode $CIRRUS_TAG ($MACOS_VERSION)"
   only_if: $CIRRUS_TAG != ""
   matrix:
-    - env:
-        MACOS_VERSION: sequoia
     - env:
         MACOS_VERSION: sonoma
   <<: *defaults
