@@ -37,9 +37,6 @@ task:
 
 task:
   name: "Update Vanilla Sequoia Image"
-  persistent_worker:
-    labels:
-      name: dev-mini-experimental
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sequoia.pkr.hcl")
   <<: *defaults
   build_script:
