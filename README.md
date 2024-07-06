@@ -1,6 +1,6 @@
 ## macOS Packer Templates for Tart
 
-Repository with Packer templates to build macOS [Tart](https://tart.app/) virtual machines to use with [Cirrus Runners](https://cirrus-runners.app/),
+Repository with Packer templates to build macOS [Tart](https://tart.run/) virtual machines to use with [Cirrus Runners](https://cirrus-runners.app/),
 [Cirrus CI](https://cirrus-ci.org/guide/macOS/) or [any other automation](https://tart.run/integrations/cirrus-cli/).
 
 The following image variants are currently available:
