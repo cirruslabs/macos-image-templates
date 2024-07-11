@@ -45,7 +45,7 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0 ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-beta-2
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0 ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-beta-3
   always:
     cleanup_script:
       - tart delete sequoia-vanilla
