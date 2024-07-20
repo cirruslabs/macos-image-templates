@@ -59,7 +59,7 @@ build {
       "source ~/.zprofile",
       "brew --version",
       "brew update",
-      "brew install curl wget unzip zip ca-certificates cmake gcc git-lfs jq yq gh gitlab-runner",
+      "brew install curl wget unzip zip ca-certificates cmake gcc git-lfs jq yq gh gitlab-runner xcbeautify",
       "brew install --cask git-credential-manager",
       "git lfs install",
       "sudo softwareupdate --install-rosetta --agree-to-license"
