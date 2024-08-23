@@ -37,9 +37,6 @@ task:
 
 task:
   name: "Update Vanilla Sequoia Image"
-  persistent_worker:
-    labels:
-      name: dev-mini-experimental
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sequoia.pkr.hcl")
   <<: *defaults
   build_script:
@@ -48,7 +45,7 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1 ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1-beta-2
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-beta7 ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-beta7
   always:
     cleanup_script:
       - tart delete sequoia-vanilla
