@@ -62,7 +62,7 @@ source "tart-cli" "tart" {
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Welcome to Mac
-    "<wait10s><tab><spacebar>",
+    "<wait10s><spacebar>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
