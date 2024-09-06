@@ -63,8 +63,11 @@ source "tart-cli" "tart" {
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Welcome to Mac
     "<wait10s><tab><spacebar>",
-    # Enable Voice Over
-    "<wait10s><leftAltOn><f5><leftAltOff><wait5s>v",
+    # Enable Keyboard navigation
+    # This is so that we can navigate the System Settings app using the keyboard
+    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
+    "<wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
+    "<wait10s><leftAltOn>q<leftAltOff>",
     # Now that the installation is done, open "System Settings"
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
     # Navigate to "Sharing"
@@ -75,6 +78,8 @@ source "tart-cli" "tart" {
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Disable Voice Over
     "<leftAltOn><f5><leftAltOff>",
+    # Quit System Settings
+    "<wait10s><leftAltOn>q<leftAltOff>",
   ]
 
   // A (hopefully) temporary workaround for Virtualization.Framework's
