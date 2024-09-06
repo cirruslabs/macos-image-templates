@@ -104,9 +104,7 @@ build {
       // Disable screensaver for admin user
       "defaults -currentHost write com.apple.screensaver idleTime 0",
       // Prevent the VM from sleeping
-      "sudo systemsetup -setdisplaysleep Off 2>/dev/null",
       "sudo systemsetup -setsleep Off 2>/dev/null",
-      "sudo systemsetup -setcomputersleep Off 2>/dev/null",
       // Launch Safari to populate the defaults
       "/Applications/Safari.app/Contents/MacOS/Safari &",
       "SAFARI_PID=$!",
