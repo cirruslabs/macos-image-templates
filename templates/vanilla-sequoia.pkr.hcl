@@ -76,8 +76,6 @@ source "tart-cli" "tart" {
     "<wait10s><tab><tab><tab><tab><tab><spacebar>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
-    # Disable Voice Over
-    "<leftAltOn><f5><leftAltOff>",
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
   ]
