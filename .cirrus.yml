@@ -30,7 +30,7 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sonoma-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest ghcr.io/cirruslabs/macos-sonoma-vanilla:14.6
+    - tart push sonoma-vanilla ghcr.io/cirruslabs/macos-sonoma-vanilla:latest ghcr.io/cirruslabs/macos-sonoma-vanilla:14.6.1
   always:
     cleanup_script:
       - tart delete sonoma-vanilla
@@ -45,7 +45,22 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-beta-8
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0-rc
+  always:
+    cleanup_script:
+      - tart delete sequoia-vanilla
+
+task:
+  name: "Update Vanilla Sequoia Beta Image"
+  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sequoia-beta.pkr.hcl")
+  <<: *defaults
+  build_script:
+    - packer init templates/vanilla-sequoia-beta.pkr.hcl
+    - packer build templates/vanilla-sequoia-beta.pkr.hcl
+  disable_sip_script:
+    - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
+  push_script:
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1-beta-3
   always:
     cleanup_script:
       - tart delete sequoia-vanilla
@@ -82,6 +97,8 @@ task:
         XCODE_VERSION: 15.3
       - MACOS_VERSION: sonoma
         XCODE_VERSION: 15.2
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 16
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
@@ -104,14 +121,14 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: 15.2,15.3,15.4
-  only_if: ($CIRRUS_TAG != "" && $CIRRUS_TAG !=~ '.*beta.*') || $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
+        XCODE_VERSIONS: 16,15.2,15.3,15.4
+  only_if: $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var tag=runner -var disk_size=250 -var disk_free_mb=100000 -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
+    - packer build -var tag=runner -var disk_size=300 -var disk_free_mb=100000 -var macos_version="$MACOS_VERSION" -var xcode_version="[$XCODE_VERSIONS]" templates/xcode.pkr.hcl
   push_script: |
     tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
   always:
