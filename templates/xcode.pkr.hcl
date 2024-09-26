@@ -15,6 +15,10 @@ variable "xcode_version" {
   type = list(string)
 }
 
+variable "additional_runtimes" {
+  type = list(string)
+}
+
 variable "tag" {
   type = string
   default = ""
@@ -132,6 +136,13 @@ build {
     content {
       inline = provisioner.value.inline
     }
+  }
+
+  provisioner "shell" {
+    inline = [
+      for runtime in var.additional_runtimes :
+      "source ~/.zprofile && sudo xcodes runtimes install ${runtime}"
+    ]
   }
 
   provisioner "shell" {
