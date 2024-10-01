@@ -8,6 +8,12 @@ def on_task_failed(ctx):
     rerun_task_if_issue_in_logs(ctx.payload.data.task.id, "The network connection was lost")
 
 def on_build_failed(ctx):
+  # Only send Slack notifications for failed cron builds[1]
+  #
+  # [1]: https://cirrus-ci.org/guide/writing-tasks/#cron-builds
+  if "Cron" not in ctx.payload.data.build.changeMessageTitle:
+    return
+
   resp = http.post("https://slack.com/api/chat.postMessage", headers={
     "Content-Type": "application/json",
     "Authorization": "Bearer " + env.get("SLACK_TOKEN"),
