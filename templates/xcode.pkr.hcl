@@ -176,7 +176,8 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install graphicsmagick imagemagick",
-      "brew install wix/brew/applesimutils"
+      "brew install wix/brew/applesimutils",
+      "brew install gnupg"
     ]
   }
 
