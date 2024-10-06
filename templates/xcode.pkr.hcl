@@ -17,6 +17,7 @@ variable "xcode_version" {
 
 variable "additional_runtimes" {
   type = list(string)
+  default = []
 }
 
 variable "tag" {
