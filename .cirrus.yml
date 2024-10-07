@@ -124,10 +124,8 @@ task:
     matrix:
       - MACOS_VERSION: sonoma
         XCODE_VERSIONS: 15.2,15.3,15.4,16
-        ADDITIONAL_RUNTIMES: "\"iOS 16.4\""
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "\"16.1-beta-2\",15.4,16"
-        ADDITIONAL_RUNTIMES: "\"iOS 16.4\""
   only_if: $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
   <<: *defaults
   pull_base_script:
