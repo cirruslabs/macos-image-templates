@@ -125,7 +125,7 @@ task:
       - MACOS_VERSION: sonoma
         XCODE_VERSIONS: 15.2,15.3,15.4,16
       - MACOS_VERSION: sequoia
-        XCODE_VERSIONS: "\"16.1-beta-2\",15.4,16"
+        XCODE_VERSIONS: "\"16.1-beta-3\",15.4,16"
   only_if: $CIRRUS_CRON == "weekly" # Every Sunday at 14 UTC
   <<: *defaults
   pull_base_script:
