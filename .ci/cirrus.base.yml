@@ -1,0 +1,19 @@
+task:
+  name: "Update Base Images ($MACOS_VERSION)"
+  alias: update-base
+  matrix:
+    - env:
+        MACOS_VERSION: sonoma
+    - env:
+        MACOS_VERSION: sequoia
+  <<: *defaults
+  pull_vanilla_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest
+  build_base_script:
+    - packer init templates/base.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" templates/base.pkr.hcl
+  push_base_script:
+    - tart push $MACOS_VERSION-base ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+  always:
+    cleanup_script:
+      - tart delete $MACOS_VERSION-base

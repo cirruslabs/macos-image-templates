@@ -8,7 +8,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2024SummerSeed/fullrestores/062-74506/D50AC8F9-4795-4711-9C1A-907B6EB829A2/UniversalMac_15.1_24B5035e_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2024FallSeed/fullrestores/072-00383/7EB106DF-9B03-4C2A-ACD1-997B0BFF9364/UniversalMac_15.1_24B5070a_Restore.ipsw"
   vm_name      = "sequoia-vanilla"
   cpu_count    = 4
   memory_gb    = 8

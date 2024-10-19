@@ -1,0 +1,23 @@
+task:
+  name: "Release Xcode $CIRRUS_TAG ($MACOS_VERSION)"
+  matrix:
+    - env:
+        MACOS_VERSION: sonoma
+    - env:
+        MACOS_VERSION: sequoia
+  <<: *defaults
+  pull_base_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+  build_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$CIRRUS_TAG\"]" templates/xcode.pkr.hcl
+  push_script: |
+    if [[ $CIRRUS_TAG == *"beta"* ]]
+    then
+      tart push $MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$CIRRUS_TAG
+    else
+      tart push $MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$CIRRUS_TAG ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
+    fi
+  always:
+    cleanup_script:
+      - tart delete $MACOS_VERSION-xcode:$CIRRUS_TAG || true

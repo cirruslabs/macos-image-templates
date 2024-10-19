@@ -1,0 +1,35 @@
+task:
+  name: "Update Xcode Images ($MACOS_VERSION $XCODE_VERSION)"
+  depends_on: update-base
+  env:
+    matrix:
+      - MACOS_VERSION: sequoia
+        XCODE_VERSION: 16.1-beta-3
+      - MACOS_VERSION: sequoia
+        XCODE_VERSION: 16
+        LATEST: true
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 16
+        LATEST: true
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.4
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.3
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.2
+  <<: *defaults
+  pull_base_script:
+    - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
+  build_xcode_script:
+    - packer init templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$XCODE_VERSION\"]" templates/xcode.pkr.hcl
+  push_script: |
+    if [[ -z "$LATEST" ]]
+    then
+      tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION
+    else
+      tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest
+    fi
+  always:
+    cleanup_script:
+      - tart delete "$MACOS_VERSION-xcode:$XCODE_VERSION"
