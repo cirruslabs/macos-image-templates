@@ -140,10 +140,12 @@ build {
   }
 
   provisioner "shell" {
-    inline = [
-      for runtime in var.additional_runtimes :
-      "source ~/.zprofile && sudo xcodes runtimes install ${runtime}"
-    ]
+    inline = concat(
+      ["source ~/.zprofile"],
+      [
+        for runtime in var.additional_runtimes : "sudo xcodes runtimes install ${runtime}"
+      ]
+    )
   }
 
   provisioner "shell" {
