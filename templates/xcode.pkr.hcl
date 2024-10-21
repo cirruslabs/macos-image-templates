@@ -142,7 +142,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "sudo xcodes select var.xcode_version[0]",
+      "sudo xcodes select '${var.xcode_version[0]}'",
     ]
   }
 
