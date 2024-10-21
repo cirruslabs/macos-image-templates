@@ -43,7 +43,7 @@ variable "android_sdk_tools_version" {
 source "tart-cli" "tart" {
   vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-base:latest"
   // use tag or the last element of the xcode_version list
-  vm_name      = "${var.macos_version}-xcode:${var.tag != "" ? var.tag : var.xcode_version[length(var.xcode_version) - 1]}"
+  vm_name      = "${var.macos_version}-xcode:${var.tag != "" ? var.tag : var.xcode_version[0]}"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = var.disk_size
@@ -66,7 +66,7 @@ locals {
         "APP_DIR=$(dirname $CONTENTS_DIR)",
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
         "sudo xcode-select -s /Applications/Xcode_${version}.app",
-        "xcodebuild -downloadAllPlatforms || xcodebuild -downloadAllPlatforms",
+        "xcodebuild -downloadAllPlatforms",
         "xcodebuild -runFirstLaunch",
       ]
     }
@@ -137,6 +137,13 @@ build {
     content {
       inline = provisioner.value.inline
     }
+  }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "sudo xcode select var.xcode_version[0]",
+    ]
   }
 
   provisioner "shell" {
