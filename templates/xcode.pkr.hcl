@@ -55,7 +55,7 @@ source "tart-cli" "tart" {
 
 locals {
   xcode_install_provisioners = [
-    for version in sort(var.xcode_version, true) : {
+    for version in reverse(sort(var.xcode_version)) : {
       type = "shell"
       inline = [
         "source ~/.zprofile",
