@@ -23,22 +23,7 @@ task:
   disable_sip_script:
     - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
   push_script:
-    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.0.1
-  always:
-    cleanup_script:
-      - tart delete sequoia-vanilla
-
-task:
-  name: "Update Vanilla Sequoia Beta Image"
-  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-sequoia-beta.pkr.hcl")
-  <<: *defaults
-  build_script:
-    - packer init templates/vanilla-sequoia-beta.pkr.hcl
-    - packer build templates/vanilla-sequoia-beta.pkr.hcl
-  disable_sip_script:
-    - packer build -var vm_name=sequoia-vanilla templates/disable-sip.pkr.hcl
-  push_script:
-    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1-rc ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1
+    - tart push sequoia-vanilla ghcr.io/cirruslabs/macos-sequoia-vanilla:latest ghcr.io/cirruslabs/macos-sequoia-vanilla:15.1
   always:
     cleanup_script:
       - tart delete sequoia-vanilla
