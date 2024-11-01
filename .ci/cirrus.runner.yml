@@ -3,15 +3,17 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: 16,15.4,15.3,15.2
+        XCODE_VERSIONS: "16,15.4,15.3,15.2,15.1,\"15.0.1\""
+        DISK_SIZE: 350
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "16.1,\"16.2-beta-1\",16,15.4"
+        DISK_SIZE: 300
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   init_xcode_script: packer init templates/xcode.pkr.hcl
   build_xcode_script: |
-      packer build -var tag=runner -var disk_size=300 \
+      packer build -var tag=runner -var disk_size=$DISK_SIZE \
         -var disk_free_mb=100000 \
         -var macos_version="$MACOS_VERSION" \
         -var xcode_version="[$XCODE_VERSIONS]" \
