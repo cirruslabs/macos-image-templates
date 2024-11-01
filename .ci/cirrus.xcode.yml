@@ -21,6 +21,10 @@ task:
         XCODE_VERSION: 15.3
       - MACOS_VERSION: sonoma
         XCODE_VERSION: 15.2
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.1
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.0.1
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
