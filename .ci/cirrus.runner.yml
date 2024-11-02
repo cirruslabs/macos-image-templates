@@ -1,5 +1,6 @@
 task:
   name: "Update Runner Image ($MACOS_VERSION)"
+  execution_lock: runner-image-update
   env:
     matrix:
       - MACOS_VERSION: sonoma
