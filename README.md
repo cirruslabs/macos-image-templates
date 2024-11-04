@@ -25,7 +25,7 @@ Some of the images are regularly getting rebuild in order to update the pre-inst
 monthly on the first Saturday of the month:
 
 * `ghcr.io/cirruslabs/macos-{sequoia,sonoma}-base`
-* `ghcr.io/cirruslabs/macos-runner:sonoma` which is a superset of `ghcr.io/cirruslabs/macos-sonoma-xcode:{latest,16,15.4,15.3,15.2}`
+* `ghcr.io/cirruslabs/macos-runner:sonoma` which is a superset of `ghcr.io/cirruslabs/macos-sonoma-xcode:{latest,16,15.4,15.3,15.2,15.1,15.0.1}`
 * `ghcr.io/cirruslabs/macos-runner:sequoia` which is a superset of `ghcr.io/cirruslabs/macos-sequoia-xcode:{latest,16.1,16.2-beta-1,16,15.4}`
 
 Note that `ghcr.io/cirruslabs/macos-runner:{sequoia,sonoma}` are updated every Sunday and these images are [optimised for startup](https://cirrus-runners.app/blog/2024/04/11/optimizing-startup-time-of-cirrus-runners/)
