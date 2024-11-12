@@ -229,4 +229,25 @@ build {
       "test -d /Users/runner"
     ]
   }
+
+  # Disable apsd[1][2] daemon as it causes high CPU usage after boot
+  #
+  # [1]: https://iboysoft.com/wiki/apsd-mac.html
+  # [2]: https://discussions.apple.com/thread/4459153
+  provisioner "shell" {
+    inline = [
+      "sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.apsd.plist"
+    ]
+  }
+
+  # Wait for the "update_dyld_sim_shared_cache" process[1][2] to finish
+  # to avoid wasting CPU cycles after boot
+  #
+  # [1]: https://apple.stackexchange.com/questions/412101/update-dyld-sim-shared-cache-is-taking-up-a-lot-of-memory
+  # [2]: https://stackoverflow.com/a/68394101/9316533
+  provisioner "shell" {
+    inline = [
+      "sleep 900"
+    ]
+  }
 }
