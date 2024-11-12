@@ -247,7 +247,7 @@ build {
   # [2]: https://stackoverflow.com/a/68394101/9316533
   provisioner "shell" {
     inline = [
-      "sleep 900"
+      "sleep 1800"
     ]
   }
 }
