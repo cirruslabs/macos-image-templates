@@ -37,7 +37,7 @@ variable "disk_free_mb" {
 
 variable "android_sdk_tools_version" {
   type    = string
-  default = "11076708" # https://developer.android.com/studio/#command-tools
+  default = "11076708" # https://developer.android.com/studio#command-line-tools-only
 }
 
 source "tart-cli" "tart" {
