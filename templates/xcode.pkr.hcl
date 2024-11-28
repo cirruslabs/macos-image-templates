@@ -66,7 +66,6 @@ locals {
         "APP_DIR=$(dirname $CONTENTS_DIR)",
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
         "sudo xcode-select -s /Applications/Xcode_${version}.app",
-        "xcodebuild -downloadAllPlatforms",
         "xcodebuild -runFirstLaunch",
       ]
     }
