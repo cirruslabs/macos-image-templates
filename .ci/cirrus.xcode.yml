@@ -13,8 +13,10 @@ task:
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 15.4
       - MACOS_VERSION: sonoma
-        XCODE_VERSION: 16
+        XCODE_VERSION: 16.1
         LATEST: true
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 16
       - MACOS_VERSION: sonoma
         XCODE_VERSION: 15.4
       - MACOS_VERSION: sonoma
