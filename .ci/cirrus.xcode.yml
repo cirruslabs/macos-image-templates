@@ -7,7 +7,7 @@ task:
         XCODE_VERSION: 16.1
         LATEST: true
       - MACOS_VERSION: sequoia
-        XCODE_VERSION: 16.2-beta-3
+        XCODE_VERSION: 16.2-rc
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16
       - MACOS_VERSION: sequoia
