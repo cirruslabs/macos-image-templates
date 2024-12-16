@@ -3,7 +3,7 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sequoia
-        MACOS_NUMBER: 15.1.1
+        MACOS_NUMBER: 15.2
       - MACOS_VERSION: sonoma
         MACOS_NUMBER: 14.6
       - MACOS_VERSION: ventura
