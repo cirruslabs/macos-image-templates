@@ -67,6 +67,17 @@ build {
     ]
   }
 
+  // Add GitHub to known hosts
+  // Similar to https://github.com/actions/runner-images/blob/main/images/macos/scripts/build/configure-ssh.sh
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "[[ ! -d ~/.ssh ]] && mkdir ~/.ssh 2>/dev/null",
+      "chmod 777 ~/.ssh",
+      "ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts",
+    ]
+  }
+
   // Install the GitHub Actions runner
   provisioner "shell" {
     script = "scripts/install-actions-runner.sh"
