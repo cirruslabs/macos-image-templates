@@ -56,6 +56,17 @@ build {
       "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile",
       "echo \"export HOMEBREW_NO_AUTO_UPDATE=1\" >> ~/.zprofile",
       "echo \"export HOMEBREW_NO_INSTALL_CLEANUP=1\" >> ~/.zprofile",
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      "softwareupdate --install --recommended --agree-to-license",
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
       "source ~/.zprofile",
       "brew --version",
       "brew update",
@@ -135,12 +146,19 @@ build {
     script = "scripts/automationmodetool.expect"
   }
 
+  provisioner "shell" {
+    inline = [
+      "softwareupdate --install --recommended --agree-to-license",
+    ]
+  }
+
   // some other health checks
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
       "test -d /Users/runner",
       "test -f ~/.ssh/known_hosts",
+      "brew doctor"
     ]
   }
 }
