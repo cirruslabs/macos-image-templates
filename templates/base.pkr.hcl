@@ -61,12 +61,6 @@ build {
 
   provisioner "shell" {
     inline = [
-      "softwareupdate --install --recommended --agree-to-license",
-    ]
-  }
-
-  provisioner "shell" {
-    inline = [
       "source ~/.zprofile",
       "brew --version",
       "brew update",
@@ -144,12 +138,6 @@ build {
   # Enable UI automation, see https://github.com/cirruslabs/macos-image-templates/issues/136
   provisioner "shell" {
     script = "scripts/automationmodetool.expect"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "softwareupdate --install --recommended --agree-to-license",
-    ]
   }
 
   // some other health checks
