@@ -69,6 +69,11 @@ build {
 
   // Add GitHub to known hosts
   // Similar to https://github.com/actions/runner-images/blob/main/images/macos/scripts/build/configure-ssh.sh
+  provisioner "shell" {
+    inline = [
+      "mkdir -p ~/.ssh"
+    ]
+  }
   provisioner "file" {
     source      = "data/github_known_hosts"
     destination = "~/.ssh/known_hosts"
@@ -134,7 +139,8 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "test -d /Users/runner"
+      "test -d /Users/runner",
+      "test -f ~/.ssh/known_hosts",
     ]
   }
 }
