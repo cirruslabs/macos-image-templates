@@ -16,14 +16,18 @@ def on_build_failed(ctx):
   if "Cron" not in ctx.payload.data.build.changeMessageTitle:
     return
 
-  resp = http.post("https://slack.com/api/chat.postMessage", headers={
+  resp = http.post(env.get("SLACK_WEBHOOK_URL"), headers={
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + env.get("SLACK_TOKEN"),
   }, json_body={
-    "channel": "#image-updates",
-    "text": "Build <https://cirrus-ci.com/build/{build_id}|{build_id} (\"{change_message_title}\")> failed on branch \"{branch_name}\" in repository \"{repository_name}\".".format(
-      build_id=ctx.payload.data.build.id, change_message_title=ctx.payload.data.build.changeMessageTitle,
-      branch_name=ctx.payload.data.build.branch, repository_name=ctx.payload.data.repository.name),
+    "text": "Build {build_id} (\"{change_message_title}\") failed on branch \"{branch_name}\" in repository \"{repository_name}\".".format(
+      build_id=ctx.payload.data.build.id,
+      change_message_title=ctx.payload.data.build.changeMessageTitle,
+      branch_name=ctx.payload.data.build.branch,
+      repository_name=ctx.payload.data.repository.name,
+    ),
+    "url": "https://cirrus-ci.com/build/{build_id}".format(
+      build_id=ctx.payload.data.build.id,
+    ),
   })
 
   if resp.status_code != 200:
