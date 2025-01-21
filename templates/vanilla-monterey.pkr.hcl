@@ -93,22 +93,6 @@ build {
 
   provisioner "shell" {
     inline = [
-      # Install command-line tools
-      "touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-      "softwareupdate --list | sed -n 's/.*Label: \\(Command Line Tools for Xcode-.*\\)/\\1/p' | tr '\\n' '\\0' | xargs -0 softwareupdate --install",
-      "rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-    ]
-  }
-
-  provisioner "ansible" {
-    playbook_file = "../ansible/playbook-system-updater.yml"
-
-    # scp command is only available after we install the openssh-client
-    use_sftp = true
-  }
-
-  provisioner "shell" {
-    inline = [
       // Enable passwordless sudo
       "echo admin | sudo -S sh -c \"echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
       // Enable auto-login
@@ -138,5 +122,21 @@ build {
       // i.e. not on login screen.
       "sysadminctl -screenLock off -password admin",
     ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      # Install command-line tools
+      "touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
+      "softwareupdate --list | sed -n 's/.*Label: \\(Command Line Tools for Xcode-.*\\)/\\1/p' | tr '\\n' '\\0' | xargs -0 softwareupdate --install",
+      "rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
+    ]
+  }
+
+  provisioner "ansible" {
+    playbook_file = "../ansible/playbook-system-updater.yml"
+
+    # scp command is only available after we install the openssh-client
+    use_sftp = true
   }
 }
