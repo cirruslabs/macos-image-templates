@@ -4,6 +4,10 @@ packer {
       version = ">= 1.2.0"
       source  = "github.com/cirruslabs/tart"
     }
+    ansible = {
+      version = "~> 1"
+      source = "github.com/hashicorp/ansible"
+    }
   }
 }
 
@@ -79,10 +83,20 @@ source "tart-cli" "tart" {
   // A (hopefully) temporary workaround for Virtualization.Framework's
   // installation process not fully finishing in a timely manner
   create_grace_time = "30s"
+
+  // Keep the recovery partition, otherwise it's not possible to "softwareupdate"
+  recovery_partition = "keep"
 }
 
 build {
   sources = ["source.tart-cli.tart"]
+
+  provisioner "ansible" {
+    playbook_file = "../ansible/playbook-system-updater.yml"
+
+    # scp command is only available after we install the openssh-client
+    use_sftp = true
+  }
 
   provisioner "shell" {
     inline = [

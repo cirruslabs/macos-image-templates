@@ -1,0 +1,27 @@
+- name: Perform first "softwareupdate" invocation
+  include_tasks: softwareupdate.yml
+
+# Needed after a major macOS update, otherwise things like
+# Command Line Tools won't be updated
+- name: Perform second "softwareupdate" invocation
+  include_tasks: softwareupdate.yml
+
+# This one looks weird, but unfortunately there's no other way around, because Homebrew
+# is not designed to run as root (see https://gist.github.com/irazasyed/7732946
+# for more details).
+- name: fix up /usr/local permissions for Homebrew
+  file:
+    path: /usr/local/share/man
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    recurse: yes
+  become: yes
+
+- name: Ensure that there are no more software updates available (1/2)
+  command: "softwareupdate --all --list"
+  register: check_updates_result
+
+- name: Ensure that there are no more software updates available (2/2)
+  assert:
+    that:
+      - "'No updates are available' in check_updates_result.stderr_lines"
