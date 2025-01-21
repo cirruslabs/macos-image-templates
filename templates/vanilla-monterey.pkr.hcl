@@ -135,8 +135,5 @@ build {
 
   provisioner "ansible" {
     playbook_file = "../ansible/playbook-system-updater.yml"
-
-    # scp command is only available after we install the openssh-client
-    use_sftp = true
   }
 }
