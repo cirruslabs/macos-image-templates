@@ -133,6 +133,6 @@ build {
   }
 
   provisioner "ansible" {
-    playbook_file = "../ansible/playbook-system-updater.yml"
+    playbook_file = "ansible/playbook-system-updater.yml"
   }
 }
