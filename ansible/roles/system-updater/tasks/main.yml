@@ -24,4 +24,4 @@
 - name: Ensure that there are no more software updates available (2/2)
   assert:
     that:
-      - "'No updates are available' in check_updates_result.stderr_lines"
+      - "'No new software available' in check_updates_result.stderr_lines"
