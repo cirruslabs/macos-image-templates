@@ -1,15 +1,16 @@
+env:
+  RESOLVE_VM_BASE_NAME: "ghcr.io/cirruslabs/macos-${MACOS_VERSION}-vanilla:latest"
+  RESOLVE_VM_NAME: "resolve-macos-number-task-id-${CIRRUS_TASK_ID}"
+  RESOLVE_FILE: "${RESOLVE_VM_NAME}.txt"
+
 task:
-  name: "Update Vanilla Image ($MACOS_VERSION $MACOS_NUMBER)"
+  name: "Update Vanilla Image ($MACOS_VERSION)"
   env:
     matrix:
       - MACOS_VERSION: sequoia
-        MACOS_NUMBER: 15.3
       - MACOS_VERSION: sonoma
-        MACOS_NUMBER: 14.6
       - MACOS_VERSION: ventura
-        MACOS_NUMBER: 13.6
       - MACOS_VERSION: monterey
-        MACOS_NUMBER: 12.6.1
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-$MACOS_VERSION.pkr.hcl")
   <<: *defaults
   build_script:
@@ -17,6 +18,11 @@ task:
     - packer build templates/vanilla-$MACOS_VERSION.pkr.hcl
   disable_sip_script:
     - packer build -var vm_name=$MACOS_VERSION-vanilla templates/disable-sip.pkr.hcl
+  resolve_macos_number_script:
+    - packer build -var vm_base_name=$RESOLVE_VM_BASE_NAME -var vm_name=$RESOLVE_VM_NAME -var resolve_file=$RESOLVE_FILE templates/resolve-macos-number.pkr.hcl
+    - echo "MACOS_NUMBER=$(cat $RESOLVE_FILE)" >> $CIRRUS_ENV
+    - rm $RESOLVE_FILE
+    - tart delete $RESOLVE_VM_NAME
   push_script:
     - tart push $MACOS_VERSION-vanilla ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:$MACOS_NUMBER
   always:
