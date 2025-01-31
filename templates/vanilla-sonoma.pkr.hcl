@@ -4,6 +4,10 @@ packer {
       version = ">= 1.12.0"
       source  = "github.com/cirruslabs/tart"
     }
+    ansible = {
+      version = "~> 1"
+      source = "github.com/hashicorp/ansible"
+    }
   }
 }
 
@@ -78,6 +82,9 @@ source "tart-cli" "tart" {
   // A (hopefully) temporary workaround for Virtualization.Framework's
   // installation process not fully finishing in a timely manner
   create_grace_time = "30s"
+
+  // Keep the recovery partition, otherwise it's not possible to "softwareupdate"
+  recovery_partition = "keep"
 }
 
 build {
@@ -114,5 +121,18 @@ build {
       // i.e. not on login screen.
       "sysadminctl -screenLock off -password admin",
     ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      # Install command-line tools
+      "touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
+      "softwareupdate --list | sed -n 's/.*Label: \\(Command Line Tools for Xcode-.*\\)/\\1/p' | tr '\\n' '\\0' | xargs -0 softwareupdate --install",
+      "rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
+    ]
+  }
+
+  provisioner "ansible" {
+    playbook_file = "ansible/playbook-system-updater.yml"
   }
 }

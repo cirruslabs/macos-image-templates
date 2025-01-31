@@ -1,0 +1,26 @@
+# It seems that we must always pass "--restart" command-line argument to "softwareupdate",
+# otherwise on the OS update the "softwareupdate" will be stuck at "Downloaded: macOS [...]"
+- name: install all macOS updates
+  command:
+    cmd: "softwareupdate --all --install --agree-to-license --force --restart --user admin --stdinpass"
+    stdin: "{{ ansible_password }}"
+  register: update_result
+  # Work around the following:
+  # > Data could not be sent to remote host [...].
+  # > Make sure this host can be reached over ssh:
+  # > ssh: connect to host [...] port 22: Connection refused.
+  ignore_unreachable: yes
+  # Ignore SIGTERM/SIGKILL sent "softwareupdate" process
+  # when the system reboots due to --restart
+  failed_when: update_result.rc not in [0, 9, -9, 15, -15]
+  become: yes
+
+# Wait for the connection since the previous command could restart the host
+- name: wait for connection
+  wait_for_connection:
+    # We need to wait long enough for the "softwareupdate" to initiate the reboot,
+    # otherwise it's possible that we'll interrupt the process by running
+    # the commands below on a non-restarted system.
+    delay: 60
+    timeout: 1800
+  when: "'No updates are available' not in (update_result.stderr_lines | join('\n'))"
