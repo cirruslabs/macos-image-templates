@@ -15,7 +15,7 @@
 # otherwise on the OS update the "softwareupdate" will be stuck at "Downloaded: macOS [...]"
 - name: install available update
   command:
-    cmd: "softwareupdate --install --agree-to-license --force --restart --user admin --stdinpass '{{ item.label }}'"
+    cmd: "softwareupdate --install --agree-to-license --force --restart --user admin --stdinpass {{ stdinpass }} '{{ item.label }}'"
     stdin: "{{ ansible_password }}"
   register: update_result
   # Work around the following:

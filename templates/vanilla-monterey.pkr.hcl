@@ -135,6 +135,9 @@ build {
 
   provisioner "ansible" {
     playbook_file = "ansible/playbook-system-updater.yml"
+    extra_arguments = [
+      "--extra-vars", "stdinpass=admin",
+    ]
     ansible_env_vars = [
       "ANSIBLE_TRANSPORT=paramiko",
       "ANSIBLE_HOST_KEY_CHECKING=False",
