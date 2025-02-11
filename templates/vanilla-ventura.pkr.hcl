@@ -143,5 +143,10 @@ build {
 
   provisioner "ansible" {
     playbook_file = "ansible/playbook-system-updater.yml"
+    ansible_env_vars = [
+      "ANSIBLE_TRANSPORT=paramiko",
+      "ANSIBLE_HOST_KEY_CHECKING=False",
+    ]
+    use_proxy = false
   }
 }
