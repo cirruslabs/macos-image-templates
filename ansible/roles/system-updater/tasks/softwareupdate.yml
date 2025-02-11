@@ -1,8 +1,21 @@
+- name: check for available updates
+  command:
+    cmd: "softwareupdate --all --list"
+  register: software_updates_result
+
+- name: parse available updates
+  set_fact:
+    software_updates: "{{ software_updates_result.stdout | regex_findall('\\* Label: (.*)\\n\\tTitle: (.*), Version: (.*), Size: (.*), Recommended: (.*), Action: (.*), .*') | map('zip', ['label', 'title', 'version', 'size', 'recommended', 'action']) | map('map', 'reverse') | map('community.general.dict') }}"
+
+- name: print available updates
+  debug:
+    var: software_updates
+
 # It seems that we must always pass "--restart" command-line argument to "softwareupdate",
 # otherwise on the OS update the "softwareupdate" will be stuck at "Downloaded: macOS [...]"
-- name: install all macOS updates
+- name: install available update
   command:
-    cmd: "softwareupdate --all --install --agree-to-license --force --restart --user admin --stdinpass"
+    cmd: "softwareupdate --install --agree-to-license --force --restart --user admin --stdinpass '{{ item.label }}'"
     stdin: "{{ ansible_password }}"
   register: update_result
   # Work around the following:
@@ -14,6 +27,8 @@
   # when the system reboots due to --restart
   failed_when: update_result.rc not in [0, 9, -9, 15, -15]
   become: yes
+  loop: "{{ software_updates }}"
+  when: "not item.label.startswith('macOS') or item.version.split('.')[0] == ansible_facts['distribution_version'].split('.')[0]"
 
 # Wait for the connection since the previous command could restart the host
 - name: wait for connection
@@ -23,4 +38,6 @@
     # the commands below on a non-restarted system.
     delay: 60
     timeout: 1800
-  when: "'No updates are available' not in (update_result.stderr_lines | join('\n'))"
+  when:
+    - update_result is defined
+    - not update_result.skipped

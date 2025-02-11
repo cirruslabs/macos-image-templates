@@ -17,11 +17,21 @@
     recurse: yes
   become: yes
 
-- name: Ensure that there are no more software updates available (1/2)
-  command: "softwareupdate --all --list"
-  register: check_updates_result
+- name: "ensure that there are no more software updates available: check for available updates"
+  command:
+    cmd: "softwareupdate --all --list"
+  register: software_updates_result
 
-- name: Ensure that there are no more software updates available (2/2)
-  assert:
-    that:
-      - "'No new software available' in check_updates_result.stderr"
+- name: "ensure that there are no more software updates available: parse available updates"
+  set_fact:
+    software_updates: "{{ software_updates_result.stdout | regex_findall('\\* Label: (.*)\\n\\tTitle: (.*), Version: (.*), Size: (.*), Recommended: (.*), Action: (.*), .*') | map('zip', ['label', 'title', 'version', 'size', 'recommended', 'action']) | map('map', 'reverse') | map('community.general.dict') }}"
+
+- name: "ensure that there are no more software updates available: print available updates"
+  debug:
+    var: software_updates
+
+- name: "ensure that there are no more software updates available: fail if some updates were not installed"
+  fail:
+    msg: "Found unapplied update: {{ item.label }}"
+  loop: "{{ software_updates }}"
+  when: "not item.label.startswith('macOS') or item.version.split('.')[0] == ansible_facts['distribution_version'].split('.')[0]"
