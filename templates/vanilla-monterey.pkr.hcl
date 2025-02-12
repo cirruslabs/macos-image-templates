@@ -137,8 +137,6 @@ build {
     playbook_file = "ansible/playbook-system-updater.yml"
     extra_arguments = [
       "-vvv",
-    ]
-    extra_arguments = [
       "--extra-vars", "stdinpass=admin",
     ]
     ansible_env_vars = [
