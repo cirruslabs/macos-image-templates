@@ -16,7 +16,7 @@ source "tart-cli" "tart" {
   vm_name      = "sequoia-vanilla"
   cpu_count    = 4
   memory_gb    = 8
-  disk_size_gb = 40
+  disk_size_gb = 50
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "300s"
@@ -89,7 +89,7 @@ source "tart-cli" "tart" {
   create_grace_time = "30s"
 
   // Keep the recovery partition, otherwise it's not possible to "softwareupdate"
-  recovery_partition = "keep"
+  recovery_partition = "relocate"
 }
 
 build {
@@ -137,6 +137,9 @@ build {
 
   provisioner "ansible" {
     playbook_file = "ansible/playbook-system-updater.yml"
+    extra_arguments = [
+      "-vvv",
+    ]
     ansible_env_vars = [
       "ANSIBLE_TRANSPORT=paramiko",
       "ANSIBLE_HOST_KEY_CHECKING=False",
