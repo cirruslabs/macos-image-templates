@@ -24,8 +24,10 @@
   # > ssh: connect to host [...] port 22: Connection refused.
   ignore_unreachable: yes
   # Ignore SIGTERM/SIGKILL sent "softwareupdate" process
-  # when the system reboots due to --restart
-  failed_when: update_result.rc not in [0, 9, -9, 15, -15]
+  # when the system reboots due to --restart and any other errors,
+  # since we'll check whether the update was installed in main.yml
+  # anyway.
+  ignore_errors: yes
   become: yes
   loop: "{{ software_updates }}"
   when: "not item.label.startswith('macOS') or item.version.split('.')[0] == ansible_facts['distribution_version'].split('.')[0]"
