@@ -40,6 +40,4 @@
     # the commands below on a non-restarted system.
     delay: 60
     timeout: 1800
-  when:
-    - update_result is defined
-    - not update_result.skipped
+  when: update_result is defined and not update_result.skipped | default(false)
