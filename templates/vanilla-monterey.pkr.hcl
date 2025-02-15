@@ -85,7 +85,7 @@ source "tart-cli" "tart" {
   create_grace_time = "30s"
 
   // Keep the recovery partition, otherwise it's not possible to "softwareupdate"
-  recovery_partition = "relocate"
+  recovery_partition = "keep"
 }
 
 build {

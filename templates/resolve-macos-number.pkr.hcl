@@ -34,7 +34,9 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sw_vers --productVersion > /tmp/sw-vers-product-version.txt",
+      # Use "-productVersion" instead of "--productVersion"
+      # to support old-style syntax used on macOS Monterey
+      "sw_vers -productVersion > /tmp/sw-vers-product-version.txt",
     ]
   }
 
