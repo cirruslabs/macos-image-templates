@@ -1,5 +1,4 @@
 env:
-  RESOLVE_VM_BASE_NAME: "ghcr.io/cirruslabs/macos-${MACOS_VERSION}-vanilla:latest"
   RESOLVE_VM_NAME: "resolve-macos-number-task-id-${CIRRUS_TASK_ID}"
   RESOLVE_FILE: "${RESOLVE_VM_NAME}.txt"
 
@@ -19,7 +18,7 @@ task:
   disable_sip_script:
     - packer build -var vm_name=$MACOS_VERSION-vanilla templates/disable-sip.pkr.hcl
   resolve_macos_number_script:
-    - packer build -var vm_base_name=$RESOLVE_VM_BASE_NAME -var vm_name=$RESOLVE_VM_NAME -var resolve_file=$RESOLVE_FILE templates/resolve-macos-number.pkr.hcl
+    - packer build -var vm_base_name=$MACOS_VERSION-vanilla -var vm_name=$RESOLVE_VM_NAME -var resolve_file=$RESOLVE_FILE templates/resolve-macos-number.pkr.hcl
     - echo "MACOS_NUMBER=$(cat $RESOLVE_FILE)" >> $CIRRUS_ENV
     - rm $RESOLVE_FILE
     - tart delete $RESOLVE_VM_NAME
