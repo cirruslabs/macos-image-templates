@@ -261,4 +261,27 @@ build {
       "sleep 1800"
     ]
   }
+
+  // Install setup-info-generator
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew install cirruslabs/cli/setup-info-generator"
+    ]
+  }
+
+  // Copy setup info template
+  provisioner "file" {
+    source      = "data/setup-info-template.json"
+    destination = "~/setup-info-template.json"
+  }
+
+  // Generate setup info
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "cat ~/setup-info-template.json | setup-info-generator > ~/actions-runner/.setup_info",
+      "rm ~/setup-info-template.json"
+    ]
+  }
 }
