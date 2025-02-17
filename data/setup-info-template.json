@@ -1,0 +1,40 @@
+[
+  {
+    "group": "Runner Detail",
+    "detail": [
+      {
+        "name": "OS Information",
+        "script": "echo \"macOS $(sw_vers -productVersion) ($(sw_vers -buildVersion))\""
+      },
+      {
+        "name": "Build Date",
+        "script": "date +\"%Y-%m-%d\""
+      }
+    ]
+  },
+  {
+    "group": "Software Detail",
+    "detail": [
+      {
+        "name": "Python Version",
+        "script": "python3 --version"
+      },
+      {
+        "name": "Node Version",
+        "script": "node --version"
+      },
+      {
+        "name": "Ruby Version",
+        "script": "ruby --version"
+      },
+      {
+        "name": "CocoaPods Version",
+        "script": "pod --version"
+      },
+      {
+        "name": "Fastlane Version",
+        "script": "fastlane --version"
+      }
+    ]
+  }
+]
