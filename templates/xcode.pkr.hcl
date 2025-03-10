@@ -150,7 +150,7 @@ build {
     inline = concat(
       ["source ~/.zprofile"],
       [
-        for runtime in var.additional_runtimes : "sudo xcodes runtimes install ${runtime}"
+        for runtime in var.additional_runtimes : "sudo xcodes runtimes install '${runtime}'"
       ]
     )
   }
