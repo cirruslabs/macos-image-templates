@@ -15,7 +15,7 @@ variable "xcode_version" {
   type = list(string)
 }
 
-variable "additional_runtimes" {
+variable "additional_ios_builds" {
   type = list(string)
   default = []
 }
@@ -150,7 +150,7 @@ build {
     inline = concat(
       ["source ~/.zprofile"],
       [
-        for runtime in var.additional_runtimes : "sudo xcodes runtimes install '${runtime}'"
+        for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
       ]
     )
   }
