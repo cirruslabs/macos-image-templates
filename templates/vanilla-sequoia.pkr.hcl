@@ -82,6 +82,19 @@ source "tart-cli" "tart" {
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
+    # Disable Gatekeeper (1/2)
+    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
+    "<wait10s>sudo spctl --global-disable<enter>",
+    "<wait10s><leftAltOn>q<leftAltOff>",
+    # Disable Gatekeeper (2/2)
+    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
+    "<wait10s><leftAltOn>f<leftAltOff>Privacy & Security<enter>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff>",
+    "<wait10s><down><wait1s><down><wait1s><enter>",
+    "<wait10s>admin<enter>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><wait1s><spacebar>",
+    # Quit System Settings
+    "<wait10s><leftAltOn>q<leftAltOff>",
   ]
 
   // A (hopefully) temporary workaround for Virtualization.Framework's
@@ -123,6 +136,13 @@ build {
       // Note that this only works if the user is logged-in,
       // i.e. not on login screen.
       "sysadminctl -screenLock off -password admin",
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      # Ensure that Gatekeeper is disabled
+      "spctl --status | grep -q 'assessments disabled'"
     ]
   }
 
