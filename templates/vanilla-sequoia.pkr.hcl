@@ -85,6 +85,7 @@ source "tart-cli" "tart" {
     # Disable Gatekeeper (1/2)
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
     "<wait10s>sudo spctl --global-disable<enter>",
+    "<wait10s>admin<enter>",
     "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (2/2)
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
