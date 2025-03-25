@@ -68,7 +68,7 @@ source "tart-cli" "tart" {
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Update Mac Automatically
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait10s><tab><spacebar>",
     # Welcome to Mac
     "<wait10s><spacebar>",
     # Disable Voice Over
