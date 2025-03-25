@@ -42,7 +42,7 @@ source "tart-cli" "tart" {
     # Data & Privacy
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Create a Mac Account
-    "<wait10s>admin<tab><tab>admin<tab>admin<tab><tab><spacebar><tab><tab><spacebar>",
+    "<wait10s>Managed via Tart<tab>admin<tab>admin<tab>admin<tab><tab><spacebar><tab><tab><spacebar>",
     # Enable Voice Over
     "<wait120s><leftAltOn><f5><leftAltOff>",
     # Sign In with Your Apple ID
