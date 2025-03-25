@@ -81,9 +81,9 @@ source "tart-cli" "tart" {
     # Now that the installation is done, open "System Settings"
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
     # Navigate to "Sharing"
-    "<wait10s><leftAltOn>f<leftAltOff>sharing<enter>",
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><spacebar>",
+    "<wait10s><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Quit System Settings
@@ -95,7 +95,7 @@ source "tart-cli" "tart" {
     "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (2/2)
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
-    "<wait10s><leftAltOn>f<leftAltOff>Privacy & Security<enter>",
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
     "<wait10s>admin<enter>",
