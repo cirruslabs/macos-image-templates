@@ -12,7 +12,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2025WinterFCS/fullrestores/072-08269/7CAAB9F7-E970-428D-8764-4CD7BCD105CD/UniversalMac_15.3_24D60_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2025SpringFCS/fullrestores/082-16517/AACDDC33-9683-4431-98AF-F04EF7C15EE3/UniversalMac_15.4_24E248_Restore.ipsw"
   vm_name      = "sequoia-vanilla"
   cpu_count    = 4
   memory_gb    = 8
@@ -31,28 +31,30 @@ source "tart-cli" "tart" {
     #
     # [1]: should be named "English (US)", but oh well 🤷
     "<wait30s>italiano<esc>english<enter>",
-    # Select Your Country and Region
+    # Select Your Country or Region
     "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
+    # Transfer Your Data to This Mac
+    "<wait10s><tab><tab><tab><spacebar><tab><tab><spacebar>",
     # Written and Spoken Languages
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Accessibility
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Data & Privacy
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Migration Assistant
-    "<wait10s><tab><tab><tab><spacebar>",
+    # Create a Mac Account
+    "<wait10s>Managed via Tart<tab>admin<tab>admin<tab>admin<tab><tab><spacebar><tab><tab><spacebar>",
+    # Enable Voice Over
+    "<wait120s><leftAltOn><f5><leftAltOff>",
     # Sign In with Your Apple ID
-    "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you want to skip signing in with an Apple ID?
     "<wait10s><tab><spacebar>",
     # Terms and Conditions
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # I have read and agree to the macOS Software License Agreement
     "<wait10s><tab><spacebar>",
-    # Create a Computer Account
-    "<wait10s>admin<tab><tab>admin<tab>admin<tab><tab><tab><spacebar>",
     # Enable Location Services
-    "<wait120s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you don't want to use Location Services?
     "<wait10s><tab><spacebar>",
     # Select Your Time Zone
@@ -65,8 +67,12 @@ source "tart-cli" "tart" {
     "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    # Update Mac Automatically
+    "<wait10s><tab><spacebar>",
     # Welcome to Mac
     "<wait10s><spacebar>",
+    # Disable Voice Over
+    "<leftAltOn><f5><leftAltOff>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
@@ -75,9 +81,9 @@ source "tart-cli" "tart" {
     # Now that the installation is done, open "System Settings"
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
     # Navigate to "Sharing"
-    "<wait10s><leftAltOn>f<leftAltOff>sharing<enter>",
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><spacebar>",
+    "<wait10s><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Quit System Settings
@@ -89,7 +95,7 @@ source "tart-cli" "tart" {
     "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (2/2)
     "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
-    "<wait10s><leftAltOn>f<leftAltOff>Privacy & Security<enter>",
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff><leftShiftOn><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
     "<wait10s>admin<enter>",
