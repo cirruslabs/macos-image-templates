@@ -1,12 +1,14 @@
 env:
   RESOLVE_VM_NAME: "resolve-macos-number-task-id-${CIRRUS_TASK_ID}"
   RESOLVE_FILE: "${RESOLVE_VM_NAME}.txt"
+  DISABLE_SIP_TEMPLATE: disable-sip.pkr.hcl
 
 task:
   name: "Update Vanilla Image ($MACOS_VERSION)"
   env:
     matrix:
       - MACOS_VERSION: sequoia
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sonoma
       - MACOS_VERSION: ventura
       - MACOS_VERSION: monterey
@@ -16,7 +18,7 @@ task:
     - packer init templates/vanilla-$MACOS_VERSION.pkr.hcl
     - packer build templates/vanilla-$MACOS_VERSION.pkr.hcl
   disable_sip_script:
-    - packer build -var vm_name=$MACOS_VERSION-vanilla templates/disable-sip.pkr.hcl
+    - packer build -var vm_name=$MACOS_VERSION-vanilla "templates/${DISABLE_SIP_TEMPLATE}"
   resolve_macos_number_script:
     - packer build -var vm_base_name=$MACOS_VERSION-vanilla -var vm_name=$RESOLVE_VM_NAME -var resolve_file=$RESOLVE_FILE templates/resolve-macos-number.pkr.hcl
     - echo "MACOS_NUMBER=$(cat $RESOLVE_FILE)" >> $CIRRUS_ENV
