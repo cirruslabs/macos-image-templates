@@ -166,7 +166,6 @@ build {
     for_each = var.expected_runtimes_file != "" ? [1] : []
     labels = ["file"]
     content {
-      type        = "file"
       source      = var.expected_runtimes_file
       destination = "/Users/admin/runtimes.expected.txt"
     }
