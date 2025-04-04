@@ -20,6 +20,12 @@ variable "additional_ios_builds" {
   default = []
 }
 
+variable "expected_runtimes_file" {
+  type    = string
+  default = ""
+  description = "Path to file containing expected simulator runtimes. If empty, runtime verification is skipped."
+}
+
 variable "tag" {
   type = string
   default = ""
@@ -153,6 +159,31 @@ build {
         for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
       ]
     )
+  }
+
+  // Copy expected runtimes file if provided
+  dynamic "provisioner" {
+    for_each = var.expected_runtimes_file != "" ? [1] : []
+    labels = ["file"]
+    content {
+      type        = "file"
+      source      = var.expected_runtimes_file
+      destination = "/Users/admin/runtimes.expected.txt"
+    }
+  }
+
+  // Verify simulator runtimes match expected list if file was provided
+  dynamic "provisioner" {
+    for_each = var.expected_runtimes_file != "" ? [1] : []
+    labels = ["shell"]
+    content {
+      inline = [
+        "source ~/.zprofile",
+        "xcrun simctl list runtimes > /Users/admin/runtimes.actual.txt",
+        "diff -q /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt || (echo 'Simulator runtimes do not match expected list' && cat /Users/admin/runtimes.actual.txt && exit 1)",
+        "rm /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt"
+      ]
+    }
   }
 
   provisioner "shell" {
