@@ -28,6 +28,10 @@
         "script": "ruby --version"
       },
       {
+        "name": "Bundler Version",
+        "script": "bundler --version"
+      },
+      {
         "name": "CocoaPods Version",
         "script": "pod --version"
       },
