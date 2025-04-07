@@ -157,6 +157,7 @@ build {
   }
   provisioner "shell" {
     inline = [
+      "source ~/.zprofile",
       "brew install cirruslabs/cli/tart-guest-agent",
       "sudo mv ~/tart-guest-agent.plist /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
       "sudo chown root:wheel /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
