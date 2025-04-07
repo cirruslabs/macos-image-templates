@@ -149,4 +149,20 @@ build {
       "brew doctor"
     ]
   }
+
+  // Guest agent for Tart VMs
+  provisioner "file" {
+    source      = "data/tart-guest-agent.plist"
+    destination = "~/tart-guest-agent.plist"
+  }
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "brew install cirruslabs/cli/tart-guest-agent",
+      "sudo mv ~/tart-guest-agent.plist /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
+      "sudo chown root:wheel /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
+      "sudo chmod 0644 /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
+    ]
+  }
 }
+
