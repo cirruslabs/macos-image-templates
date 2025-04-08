@@ -202,9 +202,10 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install libimobiledevice ideviceinstaller ios-deploy fastlane carthage",
+      "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
       "brew install xcbeautify",
       "gem update",
+      "gem install fastlane",
       "gem install cocoapods",
       "gem install xcpretty",
       "gem uninstall --ignore-dependencies ffi && gem install ffi -- --enable-libffi-alloc"
