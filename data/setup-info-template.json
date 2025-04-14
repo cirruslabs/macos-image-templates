@@ -16,6 +16,10 @@
     "group": "Software Detail",
     "detail": [
       {
+        "name": "Xcode Versions",
+        "script": "xcodes installed --no-color || echo \"Xcode not installed\""
+      },
+      {
         "name": "Python Version",
         "script": "python3 --version"
       },
