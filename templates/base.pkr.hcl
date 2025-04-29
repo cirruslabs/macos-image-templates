@@ -152,17 +152,28 @@ build {
 
   // Guest agent for Tart VMs
   provisioner "file" {
+    source      = "data/tart-guest-daemon.plist"
+    destination = "~/tart-guest-daemon.plist"
+  }
+  provisioner "file" {
     source      = "data/tart-guest-agent.plist"
     destination = "~/tart-guest-agent.plist"
   }
   provisioner "shell" {
     inline = [
+      # Install Tart Guest Agent
       "source ~/.zprofile",
       "brew install cirruslabs/cli/tart-guest-agent",
-      "sudo mv ~/tart-guest-agent.plist /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
-      "sudo chown root:wheel /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
-      "sudo chmod 0644 /Library/LaunchDaemons/org.cirruslabs.tart-guest-agent.plist",
+
+      # Install daemon variant of the Tart Guest Agent
+      "sudo mv ~/tart-guest-daemon.plist /Library/LaunchDaemons/org.cirruslabs.tart-guest-daemon.plist",
+      "sudo chown root:wheel /Library/LaunchDaemons/org.cirruslabs.tart-guest-daemon.plist",
+      "sudo chmod 0644 /Library/LaunchDaemons/org.cirruslabs.tart-guest-daemon.plist",
+
+      # Install agent variant of the Tart Guest Agent
+      "sudo mv ~/tart-guest-agent.plist /Library/LaunchAgents/org.cirruslabs.tart-guest-agent.plist",
+      "sudo chown root:wheel /Library/LaunchAgents/org.cirruslabs.tart-guest-agent.plist",
+      "sudo chmod 0644 /Library/LaunchAgents/org.cirruslabs.tart-guest-agent.plist",
     ]
   }
 }
-
