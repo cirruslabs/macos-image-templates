@@ -22,8 +22,8 @@
         <key>KeepAlive</key>
         <true/>
         <key>StandardOutPath</key>
-        <string>/var/log/tart-guest-agent.log</string>
+        <string>/tmp/tart-guest-agent.log</string>
         <key>StandardErrorPath</key>
-        <string>/var/log/tart-guest-agent.log</string>
+        <string>/tmp/tart-guest-agent.log</string>
     </dict>
 </plist>
