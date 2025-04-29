@@ -4,10 +4,9 @@
     <dict>
         <key>Label</key>
         <string>org.cirruslabs.tart-guest-agent</string>
-        <key>Program</key>
-        <string>/opt/homebrew/bin/tart-guest-agent</string>
         <key>ProgramArguments</key>
         <array>
+            <string>/opt/homebrew/bin/tart-guest-agent</string>
             <string>--run-vdagent</string>
         </array>
         <key>EnvironmentVariables</key>
