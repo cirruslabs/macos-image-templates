@@ -11,7 +11,7 @@ task:
         ADDITIONAL_IOS_BUILDS: "18.2"
         DISK_SIZE: 375
   <<: *defaults
-  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH || changesInclude(".ci/cirrus.runner.yml")
+  only_if: ($CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH) || changesInclude(".ci/cirrus.runner.yml")
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   init_xcode_script: packer init templates/xcode.pkr.hcl
