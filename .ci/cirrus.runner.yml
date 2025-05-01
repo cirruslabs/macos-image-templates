@@ -11,7 +11,6 @@ task:
         ADDITIONAL_IOS_BUILDS: "18.2"
         DISK_SIZE: 375
   <<: *defaults
-  only_if: ($CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH) || changesInclude(".ci/cirrus.runner.yml")
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   init_xcode_script: packer init templates/xcode.pkr.hcl
@@ -24,12 +23,10 @@ task:
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
   push_script: |
-    if [[ "$CIRRUS_BRANCH" == "$CIRRUS_DEFAULT_BRANCH" ]]; then
-      echo "On default branch, proceeding with pushing..."
-      tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
+    if [[ -z "$CIRRUS_CRON" ]]; then
+      echo "Not a cron build, skipping pushing..."
     else
-      echo "Not on default branch, skipping pushing"
-      exit 0
+      tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
     fi
   always:
     cleanup_script:
