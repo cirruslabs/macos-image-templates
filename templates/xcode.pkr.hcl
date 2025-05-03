@@ -125,6 +125,20 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
+      "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
+      "brew install xcbeautify",
+      "rbenv global 3.3.8", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
+      "gem update",
+      "gem install fastlane",
+      "gem install cocoapods",
+      "gem install xcpretty",
+      "gem uninstall --ignore-dependencies ffi && gem install ffi -- --enable-libffi-alloc"
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
       "brew install xcodesorg/made/xcodes",
       "xcodes version",
     ]
@@ -197,19 +211,6 @@ build {
       "flutter doctor --android-licenses",
       "flutter doctor",
       "flutter precache",
-    ]
-  }
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
-      "brew install xcbeautify",
-      "rbenv global 3.3.7", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
-      "gem update",
-      "gem install fastlane",
-      "gem install cocoapods",
-      "gem install xcpretty",
-      "gem uninstall --ignore-dependencies ffi && gem install ffi -- --enable-libffi-alloc"
     ]
   }
 
