@@ -23,10 +23,10 @@ task:
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
   push_script: |
-    if [[ -z "$CIRRUS_CRON" ]]; then
-      echo "Not a cron build, skipping pushing..."
-    else
+    if [[ -z "$CIRRUS_PR" ]]; then
       tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
+    else
+      echo "Skipping pushing for PR..."
     fi
   always:
     cleanup_script:

@@ -46,6 +46,7 @@ def main(ctx):
   if env.get("CIRRUS_CRON") == "monthly":
     result += fs.read(".ci/cirrus.base.yml")
     result += fs.read(".ci/cirrus.xcode.yml")
-  if env.get("CIRRUS_CRON") == "weekly" or changes_include(".ci/cirrus.runner.yml"):
+  prForRunners = env.get("CIRRUS_PR") and changes_include(".ci/cirrus.runner.yml")
+  if prForRunners:
     result += fs.read(".ci/cirrus.runner.yml")
   return result
