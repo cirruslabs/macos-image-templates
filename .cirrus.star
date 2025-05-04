@@ -1,4 +1,4 @@
-load("cirrus", "env", "http", "fs")
+load("cirrus", "env", "http", "fs", "changes_include")
 load("github.com/cirrus-modules/graphql", "rerun_task_if_issue_in_logs")
 
 
@@ -46,6 +46,6 @@ def main(ctx):
   if env.get("CIRRUS_CRON") == "monthly":
     result += fs.read(".ci/cirrus.base.yml")
     result += fs.read(".ci/cirrus.xcode.yml")
-  if env.get("CIRRUS_CRON") == "weekly":
+  if env.get("CIRRUS_CRON") == "weekly" or changes_include(".ci/cirrus.runner.yml"):
     result += fs.read(".ci/cirrus.runner.yml")
   return result

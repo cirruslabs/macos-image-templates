@@ -7,8 +7,8 @@ task:
         XCODE_VERSIONS: "16.1,16,15.4,15.3,15.2,15.1,\"15.0.1\""
         DISK_SIZE: 375
       - MACOS_VERSION: sequoia
-        XCODE_VERSIONS: "16.3,16.2,16.1,16,15.4"
-        ADDITIONAL_IOS_BUILDS: "18.2"
+        XCODE_VERSIONS: "16.3,\"16.4-beta\",16.2,16.1,16"
+        ADDITIONAL_IOS_BUILDS: "18.4,18.2"
         DISK_SIZE: 375
   <<: *defaults
   pull_base_script:
@@ -23,7 +23,11 @@ task:
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
   push_script: |
-    tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
+    if [[ -z "$CIRRUS_CRON" ]]; then
+      echo "Not a cron build, skipping pushing..."
+    else
+      tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION
+    fi
   always:
     cleanup_script:
       - tart delete "$MACOS_VERSION-xcode:runner"
