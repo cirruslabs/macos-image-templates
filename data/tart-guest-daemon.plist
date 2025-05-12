@@ -12,7 +12,7 @@
         <key>EnvironmentVariables</key>
         <dict>
             <key>PATH</key>
-            <string>/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin</string>
+            <string>/bin:/usr/bin:/usr/sbin:/usr/local/bin:/opt/homebrew/bin</string>
         </dict>
         <key>WorkingDirectory</key>
         <string>/var/empty</string>
@@ -21,8 +21,8 @@
         <key>KeepAlive</key>
         <true/>
         <key>StandardOutPath</key>
-        <string>/tmp/tart-guest-agent.log</string>
+        <string>/tmp/tart-guest-daemon.log</string>
         <key>StandardErrorPath</key>
-        <string>/tmp/tart-guest-agent.log</string>
+        <string>/tmp/tart-guest-daemon.log</string>
     </dict>
 </plist>
