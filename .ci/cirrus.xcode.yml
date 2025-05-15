@@ -4,7 +4,7 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sequoia
-        XCODE_VERSION: 16.4-beta
+        XCODE_VERSION: 16.4-rc
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16.3
         LATEST: true
