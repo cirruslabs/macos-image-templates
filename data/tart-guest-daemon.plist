@@ -7,7 +7,7 @@
         <key>ProgramArguments</key>
         <array>
             <string>/opt/homebrew/bin/tart-guest-agent</string>
-            <string>--resize-disk</string>
+            <string>--run-daemon</string>
         </array>
         <key>EnvironmentVariables</key>
         <dict>
