@@ -126,7 +126,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
-      "brew install xcbeautify",
+      "brew install xcbeautify swiftformat",
       "rbenv global 3.3.8", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
       "gem update",
       "gem install fastlane",
