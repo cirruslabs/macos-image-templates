@@ -47,6 +47,6 @@ def main(ctx):
     result += fs.read(".ci/cirrus.base.yml")
     result += fs.read(".ci/cirrus.xcode.yml")
   prForRunners = env.get("CIRRUS_PR") and changes_include(".ci/cirrus.runner.yml")
-  if prForRunners:
+  if prForRunners || env.get("CIRRUS_TAG") != None:
     result += fs.read(".ci/cirrus.runner.yml")
   return result
