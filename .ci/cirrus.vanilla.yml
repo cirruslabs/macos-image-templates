@@ -7,12 +7,14 @@ task:
   name: "Update Vanilla Image ($MACOS_VERSION)"
   env:
     matrix:
+      - MACOS_VERSION: tahoe
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sequoia
         DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sonoma
       - MACOS_VERSION: ventura
       - MACOS_VERSION: monterey
-  only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-$MACOS_VERSION.pkr.hcl")
+  only_if: changesInclude("templates/vanilla-$MACOS_VERSION.pkr.hcl")
   <<: *defaults
   build_script:
     - packer init templates/vanilla-$MACOS_VERSION.pkr.hcl
@@ -24,8 +26,12 @@ task:
     - echo "MACOS_NUMBER=$(cat $RESOLVE_FILE)" >> $CIRRUS_ENV
     - rm $RESOLVE_FILE
     - tart delete $RESOLVE_VM_NAME
-  push_script:
-    - tart push $MACOS_VERSION-vanilla ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:$MACOS_NUMBER
+  push_script: |
+    if [[ -z "$CIRRUS_PR" ]]; then
+      tart push $MACOS_VERSION-vanilla ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:$MACOS_NUMBER
+    else
+      echo "Skipping pushing for PR..."
+    fi
   always:
     cleanup_script:
       - tart delete $MACOS_VERSION-vanilla
