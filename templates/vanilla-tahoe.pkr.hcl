@@ -32,7 +32,7 @@ source "tart-cli" "tart" {
     # [1]: should be named "English (US)", but oh well 🤷
     "<wait30s>italiano<esc>english<enter>",
     # Select Your Country or Region
-    "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait30s>united<down><down><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Transfer Your Data to This Mac
     "<wait10s><tab><tab><tab><spacebar><tab><tab><spacebar>",
     # Written and Spoken Languages
@@ -40,9 +40,9 @@ source "tart-cli" "tart" {
     # Accessibility
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Data & Privacy
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait30s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Create a Mac Account
-    "<wait10s><tab><tab><tab><tab><tab><tab>TartManaged<tab>admin<tab>admin<tab>admin<tab><tab><spacebar><tab><tab><spacebar>",
+    "<wait30s><tab><tab><tab><tab><tab><tab>Tart Managed<tab>admin<tab>admin<tab>admin<tab><tab><spacebar><tab><tab><spacebar>",
     # Enable Voice Over
     "<wait120s><leftAltOn><f5><leftAltOff>",
     # Sign In with Your Apple ID
