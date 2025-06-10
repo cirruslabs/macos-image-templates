@@ -34,7 +34,7 @@ source "tart-cli" "tart" {
     # Select Your Country or Region
     "<wait30s>united<down><down><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Transfer Your Data to This Mac
-    "<wait10s><tab><tab><tab><spacebar><tab><tab><spacebar>",
+    "<wait20s><tab><tab><tab><tab><spacebar><wait5s><tab><tab><spacebar>",
     # Written and Spoken Languages
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Accessibility
@@ -53,6 +53,8 @@ source "tart-cli" "tart" {
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # I have read and agree to the macOS Software License Agreement
     "<wait10s><tab><spacebar>",
+    # Disable Voice Over
+    "<leftAltOn><f5><leftAltOff>",
     # Enable Location Services
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you don't want to use Location Services?
@@ -71,8 +73,6 @@ source "tart-cli" "tart" {
     "<wait10s><tab><spacebar>",
     # Welcome to Mac
     "<wait10s><spacebar>",
-    # Disable Voice Over
-    "<leftAltOn><f5><leftAltOff>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
