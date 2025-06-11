@@ -4,10 +4,6 @@ packer {
       version = ">= 1.12.0"
       source  = "github.com/cirruslabs/tart"
     }
-    ansible = {
-      version = "~> 1"
-      source = "github.com/hashicorp/ansible"
-    }
   }
 }
 
@@ -124,23 +120,7 @@ build {
   }
 
   provisioner "shell" {
-    inline = [
-      # Install command-line tools
-      "touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-      "softwareupdate --list | sed -n 's/.*Label: \\(Command Line Tools for Xcode-.*\\)/\\1/p' | xargs -I {} softwareupdate --install '{}'",
-      "rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-    ]
-  }
-
-  provisioner "ansible" {
-    playbook_file = "ansible/playbook-system-updater.yml"
-    extra_arguments = [
-      "-vvv",
-    ]
-    ansible_env_vars = [
-      "ANSIBLE_TRANSPORT=paramiko",
-      "ANSIBLE_HOST_KEY_CHECKING=False",
-    ]
-    use_proxy = false
+    script            = "${path.root}/scripts/update-macos.bash"
+    expect_disconnect = true
   }
 }
