@@ -13,9 +13,11 @@
         <dict>
             <key>PATH</key>
             <string>/bin:/usr/bin:/usr/sbin:/usr/local/bin:/opt/homebrew/bin</string>
+            <key>TERM</key>
+            <string>xterm-256color</string>
         </dict>
         <key>WorkingDirectory</key>
-        <string>/var/empty</string>
+        <string>/Users/admin</string>
         <key>RunAtLoad</key>
         <true/>
         <key>KeepAlive</key>
