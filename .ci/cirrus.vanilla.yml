@@ -7,12 +7,13 @@ task:
   name: "Update Vanilla Image ($MACOS_VERSION)"
   env:
     matrix:
+      - MACOS_VERSION: tahoe
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sequoia
         DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sonoma
       - MACOS_VERSION: ventura
       - MACOS_VERSION: monterey
-      - MACOS_VERSION: tahoe
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-$MACOS_VERSION.pkr.hcl")
   <<: *defaults
   build_script:
