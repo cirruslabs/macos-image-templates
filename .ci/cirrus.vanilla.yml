@@ -7,6 +7,8 @@ task:
   name: "Update Vanilla Image ($MACOS_VERSION)"
   env:
     matrix:
+      - MACOS_VERSION: tahoe
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sequoia
         DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
       - MACOS_VERSION: sonoma
