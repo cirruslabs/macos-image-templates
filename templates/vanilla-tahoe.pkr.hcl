@@ -19,7 +19,7 @@ source "tart-cli" "tart" {
   disk_size_gb = 50
   ssh_password = "admin"
   ssh_username = "admin"
-  ssh_timeout  = "300s"
+  ssh_timeout  = "180s"
   boot_command = [
     # hello, hola, bonjour, etc.
     "<wait60s><spacebar>",
