@@ -145,8 +145,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "test -d /Users/runner",
-      "test -f ~/.ssh/known_hosts",
-      "brew doctor"
+      "test -f ~/.ssh/known_hosts"
     ]
   }
 
