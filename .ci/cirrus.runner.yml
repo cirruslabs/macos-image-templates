@@ -3,16 +3,10 @@ task:
   execution_lock: runner-image-update
   env:
     matrix:
-      - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: "16.1,16,15.4,15.3,15.2,15.1,\"15.0.1\""
-        DISK_SIZE: 400
       - MACOS_VERSION: sequoia
-        XCODE_VERSIONS: "16.4,\"26-beta-1\",16.3,16.2,16.1,16"
+        XCODE_VERSIONS: "16.4,\"26-beta\",16.3,16.2,16.1,16"
         ADDITIONAL_IOS_BUILDS: "18.4,18.2,17.5"
-        DISK_SIZE: 500
-      - MACOS_VERSION: tahoe
-        XCODE_VERSIONS: "\"26-beta-1\""
-        DISK_SIZE: 150
+        DISK_SIZE: 520
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest

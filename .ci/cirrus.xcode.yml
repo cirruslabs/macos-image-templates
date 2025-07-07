@@ -4,7 +4,7 @@ task:
   env:
     matrix:
       - MACOS_VERSION: tahoe
-        XCODE_VERSION: 26-beta-1
+        XCODE_VERSION: 26-beta
         LATEST: true
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16.4
