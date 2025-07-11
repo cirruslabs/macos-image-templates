@@ -74,6 +74,7 @@ locals {
         "sudo xcode-select -s /Applications/Xcode_${version}.app",
         "xcodebuild -downloadAllPlatforms",
         "xcodebuild -runFirstLaunch",
+        "df -h",
       ]
     }
   ]
@@ -147,6 +148,13 @@ build {
   provisioner "file" {
     sources      = [ for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
     destination = "/Users/admin/Downloads/"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "df -h",
+    ]
   }
 
   // iterate over all Xcode versions and install them
