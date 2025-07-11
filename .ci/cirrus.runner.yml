@@ -10,7 +10,7 @@ task:
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "16.4,\"26-beta-3\",16.3,16.2,16.1,16"
         ADDITIONAL_IOS_BUILDS: "18.4,18.2,17.5"
-        DISK_SIZE: 600
+        DISK_SIZE: 500
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
