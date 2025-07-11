@@ -5,6 +5,7 @@ task:
     matrix:
       - MACOS_VERSION: sonoma
         XCODE_VERSIONS: "16.1,16"
+        ADDITIONAL_IOS_BUILDS: "17.5"
         DISK_SIZE: 300
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "16.4,\"26-beta-3\",16.3,16.2,16.1,16"
