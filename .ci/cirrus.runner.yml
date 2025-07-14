@@ -4,7 +4,7 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: "16.1,16"
+        XCODE_VERSIONS: "16.1,16,15.4"
         ADDITIONAL_IOS_BUILDS: "17.5"
         DISK_SIZE: 250
       - MACOS_VERSION: sequoia
