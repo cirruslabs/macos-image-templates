@@ -3,6 +3,8 @@ task:
   alias: update-base
   matrix:
     - env:
+        MACOS_VERSION: ventura
+    - env:
         MACOS_VERSION: sonoma
     - env:
         MACOS_VERSION: sequoia

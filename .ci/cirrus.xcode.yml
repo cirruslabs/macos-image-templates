@@ -4,7 +4,7 @@ task:
   env:
     matrix:
       - MACOS_VERSION: tahoe
-        XCODE_VERSION: 26-beta-5
+        XCODE_VERSION: 26-beta-6
         LATEST: true
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16.4
@@ -22,6 +22,11 @@ task:
         LATEST: true
       - MACOS_VERSION: sonoma
         XCODE_VERSION: 16
+      - MACOS_VERSION: sonoma
+        XCODE_VERSION: 15.4
+      - MACOS_VERSION: ventura
+        XCODE_VERSION: 15.4
+        LATEST: true
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest

@@ -12,7 +12,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2025SummerSeed/fullrestores/093-03417/C35F3BA3-6DCD-473C-9266-A3BF390520BE/UniversalMac_26.0_25A5327h_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2025SummerSeed/fullrestores/093-15545/4C191A6F-E63B-4A9F-8597-6B1880EE09CC/UniversalMac_26.0_25A5346a_Restore.ipsw"
   vm_name      = "tahoe-vanilla"
   cpu_count    = 4
   memory_gb    = 8
