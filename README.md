@@ -14,19 +14,11 @@ See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packa
 ## Release Cadence
 
 Once a new version of Xcode is released, we will initiate a GitHub release which will automatically build and push
-a new version of the `macos-sequoia-xcode:N`. This generally happens within 24 hours of a release.
+a new version of the `macos-sequoia-xcode:N`. This generally happens the next weekend after a release.
 Please watch this repository releases to get notified about new images.
-
-For an Xcode release which is non beta and not an RC `ghcr.io/cirruslabs/macos-runner:sequoia` image will also be updated.
 
 ## Update Cadence
 
-Some of the images are regularly getting rebuild in order to update the pre-installed packages. The following images are updated
-monthly on the first Saturday of the month:
+Some of the images are regularly getting rebuild in order to update the pre-installed packages. 
 
-* `ghcr.io/cirruslabs/macos-{sequoia,sonoma}-base`
-* `ghcr.io/cirruslabs/macos-runner:sonoma` which is a superset of `ghcr.io/cirruslabs/macos-sonoma-xcode:{latest,16.1,16,15.4,15.3,15.2,15.1,15.0.1}`
-* `ghcr.io/cirruslabs/macos-runner:sequoia` which is a superset of `ghcr.io/cirruslabs/macos-sequoia-xcode:{latest,16.3,16.2,16.1,16,15.4}`
-
-Note that `ghcr.io/cirruslabs/macos-runner:{sequoia,sonoma}` are updated every Sunday and these images are [optimised for startup](https://cirrus-runners.app/blog/2024/04/11/optimizing-startup-time-of-cirrus-runners/)
-on Cirrus Runners and Cirrus CI services.
+[This configuration file](.ci/cirrus.release.yml) defines images that are getting rebuilt monthly on the first Saturday of the month.
