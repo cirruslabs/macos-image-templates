@@ -194,6 +194,21 @@ build {
     )
   }
 
+  dynamic "provisioner" {
+    for_each = length([
+      for v in var.xcode_version :
+      v if length(regexall("^(2[6-9]|[3-9][0-9]+)", v)) > 0
+    ]) > 0 ? [1] : []
+
+    labels = ["shell"]
+    content {
+      inline = [
+        "source ~/.zprofile",
+        "xcodebuild -downloadComponent MetalToolchain",
+      ]
+    }
+  }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
