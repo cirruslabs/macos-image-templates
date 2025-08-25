@@ -20,10 +20,10 @@ variable "additional_ios_builds" {
   default = []
 }
 
-variable "additional_xcode_components" {
-  type    = bool
-  default = false
-  description = "If true, install additional components like MetalToolchain"
+variable "xcode_components" {
+  type    = list(string)
+  default = []
+  description = "Additional Xcode components to download."
 }
 
 variable "expected_runtimes_file" {
@@ -201,15 +201,12 @@ build {
   }
 
   dynamic "provisioner" {
-    for_each = var.additional_xcode_components ? [1] : []
-    labels   = ["shell"]
-
-    content {
-      inline = [
-        "source ~/.zprofile",
-        "xcodebuild -downloadComponent MetalToolchain",
+    inline = concat(
+      ["source ~/.zprofile"],
+      [
+        for component in var.xcode_components : "xcodebuild -downloadComponent ${component}"
       ]
-    }
+    )
   }
 
   provisioner "shell" {
