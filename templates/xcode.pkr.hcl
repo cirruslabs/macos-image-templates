@@ -20,6 +20,12 @@ variable "additional_ios_builds" {
   default = []
 }
 
+variable "additional_xcode_components" {
+  type    = bool
+  default = false
+  description = "If true, install additional components like MetalToolchain"
+}
+
 variable "expected_runtimes_file" {
   type    = string
   default = ""
@@ -195,12 +201,9 @@ build {
   }
 
   dynamic "provisioner" {
-    for_each = length([
-      for v in var.xcode_version :
-      v if length(regexall("^(2[6-9]|[3-9][0-9]+)", v)) > 0
-    ]) > 0 ? [1] : []
+    for_each = var.additional_xcode_components ? [1] : []
+    labels   = ["shell"]
 
-    labels = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
