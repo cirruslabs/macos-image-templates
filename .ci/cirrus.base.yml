@@ -4,18 +4,24 @@ task:
   matrix:
     - env:
         MACOS_VERSION: ventura
+        DISABLE_SIP_TEMPLATE: disable-sip.pkr.hcl
     - env:
         MACOS_VERSION: sonoma
+        DISABLE_SIP_TEMPLATE: disable-sip.pkr.hcl
     - env:
         MACOS_VERSION: sequoia
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
     - env:
         MACOS_VERSION: tahoe
+        DISABLE_SIP_TEMPLATE: disable-sip-with-username.pkr.hcl
   <<: *defaults
   pull_vanilla_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest
   build_base_script:
     - packer init templates/base.pkr.hcl
     - packer build -var macos_version="$MACOS_VERSION" templates/base.pkr.hcl
+  disable_sip_script:
+    - packer build -var vm_name=$MACOS_VERSION-base "templates/${DISABLE_SIP_TEMPLATE}"
   push_base_script:
     - tart push $MACOS_VERSION-base ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   always:
