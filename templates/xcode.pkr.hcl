@@ -200,7 +200,7 @@ build {
     )
   }
 
-  dynamic "provisioner" {
+  dynamic "shell" {
     inline = concat(
       ["source ~/.zprofile"],
       [
