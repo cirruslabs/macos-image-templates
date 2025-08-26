@@ -20,6 +20,12 @@ variable "additional_ios_builds" {
   default = []
 }
 
+variable "xcode_components" {
+  type    = list(string)
+  default = []
+  description = "Additional Xcode components to download."
+}
+
 variable "expected_runtimes_file" {
   type    = string
   default = ""
@@ -190,6 +196,15 @@ build {
       ["source ~/.zprofile"],
       [
         for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
+      ]
+    )
+  }
+
+  dynamic "shell" {
+    inline = concat(
+      ["source ~/.zprofile"],
+      [
+        for component in var.xcode_components : "xcodebuild -downloadComponent ${component}"
       ]
     )
   }
