@@ -58,13 +58,17 @@ source "tart-cli" "tart" {
     # Are you sure you don't want to use Location Services?
     "<wait10s><tab><spacebar>",
     # Select Your Time Zone
-    "<wait10s><tab><tab>UTC<enter><leftShiftOn><tab><tab><leftShiftOff><spacebar>",
+    "<wait10s><tab><tab><tab>UTC<enter><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Analytics
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Screen Time
     "<wait10s><tab><tab><spacebar>",
     # Siri
     "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
+    # You Mac is Ready for FileVault
+    "<wait10s><leftShiftOn><tab><tab><leftShiftOff><spacebar>",
+    # Mac Data Will Not Be Securely Encrypted
+    "<wait10s><tab><spacebar>",
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Update Mac Automatically
@@ -72,14 +76,14 @@ source "tart-cli" "tart" {
     # Welcome to Mac
     "<wait30s><spacebar>",
     # Disable Voice Over
-    "<leftAltOn><f5><leftAltOff>",
+    "<wait10s><leftAltOn><f5><leftAltOff>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
-    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
-    "<wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
+    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
+    "<wait10s><wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
     "<wait10s><leftAltOn>q<leftAltOff>",
     # Now that the installation is done, open "System Settings"
-    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
+    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<wait10s><enter>",
     # Navigate to "Sharing"
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
