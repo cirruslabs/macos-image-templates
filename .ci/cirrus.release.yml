@@ -3,6 +3,7 @@ task:
   matrix:
     - env:
         MACOS_VERSION: sequoia
+        XCODE_COMPONENTS: "MetalToolchain"
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
