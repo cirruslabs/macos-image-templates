@@ -5,6 +5,7 @@ task:
     matrix:
       - MACOS_VERSION: sonoma
         XCODE_VERSIONS: "16.1"
+        ADDITIONAL_IOS_BUILDS: "17.5"
         DISK_SIZE: 175
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "16.4,\"26-rc\",16.3,16.2,16.1,16"
@@ -13,7 +14,7 @@ task:
       - MACOS_VERSION: tahoe
         XCODE_VERSIONS: "\"26-rc\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
-        DISK_SIZE: 250
+        DISK_SIZE: 210
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
