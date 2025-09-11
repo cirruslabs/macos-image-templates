@@ -4,13 +4,16 @@ task:
   env:
     matrix:
       - MACOS_VERSION: sonoma
-        XCODE_VERSIONS: "16.1,16,15.4"
-        ADDITIONAL_IOS_BUILDS: "17.5"
-        DISK_SIZE: 275
+        XCODE_VERSIONS: "16.1"
+        DISK_SIZE: 175
       - MACOS_VERSION: sequoia
         XCODE_VERSIONS: "16.4,\"26-rc\",16.3,16.2,16.1,16"
         ADDITIONAL_IOS_BUILDS: "18.5,18.4,18.2,17.5"
-        DISK_SIZE: 600
+        DISK_SIZE: 400
+      - MACOS_VERSION: tahoe
+        XCODE_VERSIONS: "\"26-rc\""
+        XCODE_COMPONENTS: "MetalToolchain"
+        DISK_SIZE: 250
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
@@ -21,6 +24,7 @@ task:
         -var macos_version="$MACOS_VERSION" \
         -var xcode_version="[$XCODE_VERSIONS]" \
         -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \
+        -var xcode_components="[$XCODE_COMPONENTS]" \
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
   push_script: |
