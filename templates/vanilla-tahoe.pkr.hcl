@@ -156,25 +156,4 @@ build {
       "spctl --status | grep -q 'assessments disabled'"
     ]
   }
-
-  provisioner "shell" {
-    inline = [
-      # Install command-line tools
-      "touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-      "softwareupdate --list | sed -n 's/.*Label: \\(Command Line Tools .*\\)/\\1/p' | tr '\\n' '\\0' | xargs -0 -I {} softwareupdate --install '{}'",
-      "rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress",
-    ]
-  }
-
-  provisioner "ansible" {
-    playbook_file = "ansible/playbook-system-updater.yml"
-    extra_arguments = [
-      "-vvv",
-    ]
-    ansible_env_vars = [
-      "ANSIBLE_TRANSPORT=paramiko",
-      "ANSIBLE_HOST_KEY_CHECKING=False",
-    ]
-    use_proxy = false
-  }
 }
