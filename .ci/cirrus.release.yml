@@ -1,9 +1,10 @@
 task:
   name: "Release Xcode $CIRRUS_TAG ($MACOS_VERSION)"
-  matrix:
-    - env:
-        MACOS_VERSION: sequoia
-        XCODE_COMPONENTS: "MetalToolchain"
+  env:
+    XCODE_COMPONENTS: "MetalToolchain"
+    matrix:
+      - MACOS_VERSION: tahoe
+      - MACOS_VERSION: sequoia
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
