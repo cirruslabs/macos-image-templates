@@ -51,6 +51,7 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sleep 600",
       "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
       "echo \"export LANG=en_US.UTF-8\" >> ~/.zprofile",
       "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile",
