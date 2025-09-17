@@ -81,9 +81,9 @@ source "tart-cli" "tart" {
     # This is so that we can navigate the System Settings app using the keyboard
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
     "<wait10s><wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
-    "<wait10s><leftAltOn>q<leftAltOff>",
     # Now that the installation is done, open "System Settings"
-    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<wait10s><enter>",
+    # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
+    "<wait10s>open '/System/Applications/System Settings.app'<enter>",
     # Navigate to "Sharing"
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
@@ -93,12 +93,11 @@ source "tart-cli" "tart" {
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (1/2)
-    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<enter>",
     "<wait10s>sudo spctl --global-disable<enter>",
     "<wait10s>admin<enter>",
-    "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (2/2)
-    "<wait10s><leftAltOn><spacebar><leftAltOff>System Settings<enter>",
+    # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
+    "<wait10s>open '/System/Applications/System Settings.app'<enter>",
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
