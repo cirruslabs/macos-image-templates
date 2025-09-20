@@ -106,7 +106,7 @@ build {
       "brew install rbenv",
       "echo 'if which rbenv > /dev/null; then eval \"$(rbenv init -)\"; fi' >> ~/.zprofile",
       "brew install asdf",
-      "echo 'export PATH=\"${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH\"' >> ~/.zprofile",
+      "echo 'export PATH=\"$${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH\"' >> ~/.zprofile",
       "brew install mise",
       "source ~/.zprofile",
       "rbenv install 2.7.8", // latest 2.x.x before EOL
