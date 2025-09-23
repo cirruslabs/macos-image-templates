@@ -7,12 +7,12 @@ task:
         XCODE_VERSIONS: "16.1"
         DISK_SIZE: 190
       - MACOS_VERSION: sequoia
-        XCODE_VERSIONS: "26,16.4,16.3,16.2,16.1,16"
+        XCODE_VERSIONS: "26.0.1,16.4,16.3,16.2,16.1,16"
         ADDITIONAL_IOS_BUILDS: "18.5,18.4,18.2,17.5"
         XCODE_COMPONENTS: "\"MetalToolchain\""
         DISK_SIZE: 400
       - MACOS_VERSION: tahoe
-        XCODE_VERSIONS: "26"
+        XCODE_VERSIONS: "26.0.1"
         XCODE_COMPONENTS: "\"MetalToolchain\""
         DISK_SIZE: 210
   <<: *defaults
@@ -24,7 +24,7 @@ task:
         -var disk_free_mb=100000 \
         -var macos_version="$MACOS_VERSION" \
         -var xcode_version="[$XCODE_VERSIONS]" \
-        -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \
+        -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \Xco
         -var xcode_components="[$XCODE_COMPONENTS]" \
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
