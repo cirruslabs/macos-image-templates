@@ -24,7 +24,7 @@ task:
         -var disk_free_mb=100000 \
         -var macos_version="$MACOS_VERSION" \
         -var xcode_version="[$XCODE_VERSIONS]" \
-        -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \Xco
+        -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \
         -var xcode_components="[$XCODE_COMPONENTS]" \
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
