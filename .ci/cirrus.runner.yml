@@ -12,9 +12,9 @@ task:
         XCODE_COMPONENTS: "\"MetalToolchain\""
         DISK_SIZE: 400
       - MACOS_VERSION: tahoe
-        XCODE_VERSIONS: "\"26.0.1\""
+        XCODE_VERSIONS: "\"26.0.1\",\"26.1-beta\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
-        DISK_SIZE: 210
+        DISK_SIZE: 240
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
