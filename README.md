@@ -5,9 +5,10 @@ Repository with Packer templates to build macOS [Tart](https://tart.run/) virtua
 
 The following image variants are currently available:
 
-* `macos-{tahoe,sequoia,sonoma}-base` image has only `brew` pre-installed and the latest version of `macOS` available
-* `macos-{tahoe,sequoia,sonoma}-xcode:N` image is based on `macos-{tahoe,sequoia,sonoma}-base` image and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
-* `macos-runner:{tahoe,sequoia,sonoma}` image is a variant of `xcode:N` with several versions of `Xcode` pre-installed and [`xcodes` tool](https://github.com/XcodesOrg/xcodes) to switch between them.
+* `macos-{tahoe,sequoia,sonoma}-vanilla` — a vanilla macOS installation with helpful tweaks such as auto-login, but no additional software preinstalled
+* `macos-{tahoe,sequoia,sonoma}-base` — based on `macos-{tahoe,sequoia,sonoma}-vanilla` image, it comes with `brew` and [other useful software](https://github.com/cirruslabs/macos-image-templates/blob/main/templates/base.pkr.hcl) pre-installed, but without XCode
+* `macos-{tahoe,sequoia,sonoma}-xcode:N` — based on `macos-{tahoe,sequoia,sonoma}-base` image and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
+* `macos-runner:{tahoe,sequoia,sonoma}` — a variant of `xcode:N` with several versions of `Xcode` pre-installed and [`xcodes` tool](https://github.com/XcodesOrg/xcodes) to switch between them.
 
 See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
