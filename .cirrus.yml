@@ -13,9 +13,6 @@ env:
 
 defaults: &defaults
   timeout_in: 3h
-  update_script:
-    - brew update || true
-    - brew upgrade || true
   info_script:
     - tart --version
     - packer --version
