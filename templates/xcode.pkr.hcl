@@ -26,7 +26,7 @@ variable "xcode_components" {
   description = "Additional Xcode components to download."
 }
 
-variable "expected_info_file" {
+variable "expected_details_file" {
   type    = string
   default = ""
   description = "Path to file containing expected setup info. If empty, runtime verification is skipped."
@@ -345,23 +345,24 @@ build {
 
   // Copy expected runtimes file if provided
   dynamic "provisioner" {
-    for_each = var.expected_info_file != "" ? [1] : []
+    for_each = var.expected_details_file != "" ? [1] : []
     labels = ["file"]
     content {
-      source      = var.expected_info_file
-      destination = "/Users/admin/setup_info.expected"
+      source      = var.expected_details_file
+      destination = "/Users/admin/software_details.expected"
     }
   }
 
   // Verify simulator runtimes match expected list if file was provided
   dynamic "provisioner" {
-    for_each = var.expected_info_file != "" ? [1] : []
+    for_each = var.expected_details_file != "" ? [1] : []
     labels = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
-        "diff -q ~/actions-runner/.setup_info /Users/admin/setup_info.expected || (echo 'Expected info does not match expected' && cat ~/actions-runner/.setup_info && exit 1)",
-        "rm /Users/admin/setup_info.expected"
+        "jq '.[] | select(.group == \"Software Detail\") | .detail' ~/actions-runner/.setup_info >> ~/software_details.actual" ,
+        "diff -q ~/software_details.actual ~/software_details.expected || (echo 'Expected info does not match expected' && cat ~/software_details.actual && exit 1)",
+        "rm ~/software_details.actual ~/software_details.expected"
       ]
     }
   }

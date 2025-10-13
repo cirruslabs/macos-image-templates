@@ -26,7 +26,7 @@ task:
         -var xcode_version="[$XCODE_VERSIONS]" \
         -var additional_ios_builds="[$ADDITIONAL_IOS_BUILDS]" \
         -var xcode_components="[$XCODE_COMPONENTS]" \
-        -var expected_info_file="data/expected.$MACOS_VERSION.runtimes.txt" \
+        -var expected_details_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
   push_script: |
     if [[ -z "$CIRRUS_PR" ]]; then
