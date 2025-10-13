@@ -26,10 +26,10 @@ variable "xcode_components" {
   description = "Additional Xcode components to download."
 }
 
-variable "expected_runtimes_file" {
+variable "expected_info_file" {
   type    = string
   default = ""
-  description = "Path to file containing expected simulator runtimes. If empty, runtime verification is skipped."
+  description = "Path to file containing expected setup info. If empty, runtime verification is skipped."
 }
 
 variable "tag" {
@@ -224,30 +224,6 @@ build {
     ]
   }
 
-  // Copy expected runtimes file if provided
-  dynamic "provisioner" {
-    for_each = var.expected_runtimes_file != "" ? [1] : []
-    labels = ["file"]
-    content {
-      source      = var.expected_runtimes_file
-      destination = "/Users/admin/runtimes.expected.txt"
-    }
-  }
-
-  // Verify simulator runtimes match expected list if file was provided
-  dynamic "provisioner" {
-    for_each = var.expected_runtimes_file != "" ? [1] : []
-    labels = ["shell"]
-    content {
-      inline = [
-        "source ~/.zprofile",
-        "xcrun simctl list runtimes > /Users/admin/runtimes.actual.txt",
-        "diff -q /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt || (echo 'Simulator runtimes do not match expected list' && cat /Users/admin/runtimes.actual.txt && exit 1)",
-        "rm /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt"
-      ]
-    }
-  }
-
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -365,5 +341,28 @@ build {
       "cat ~/setup-info-template.json | setup-info-generator > ~/actions-runner/.setup_info",
       "rm ~/setup-info-template.json"
     ]
+  }
+
+  // Copy expected runtimes file if provided
+  dynamic "provisioner" {
+    for_each = var.expected_info_file != "" ? [1] : []
+    labels = ["file"]
+    content {
+      source      = var.expected_info_file
+      destination = "/Users/admin/setup_info.expected"
+    }
+  }
+
+  // Verify simulator runtimes match expected list if file was provided
+  dynamic "provisioner" {
+    for_each = var.expected_info_file != "" ? [1] : []
+    labels = ["shell"]
+    content {
+      inline = [
+        "source ~/.zprofile",
+        "diff -q ~/actions-runner/.setup_info /Users/admin/setup_info.expected || (echo 'Expected info does not match expected' && cat ~/actions-runner/.setup_info && exit 1)",
+        "rm /Users/admin/setup_info.expected"
+      ]
+    }
   }
 }
