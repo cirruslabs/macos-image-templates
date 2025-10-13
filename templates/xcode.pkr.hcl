@@ -360,7 +360,7 @@ build {
     content {
       inline = [
         "source ~/.zprofile",
-        "jq '.[] | select(.group == \"Software Detail\") | .detail' ~/actions-runner/.setup_info >> ~/software_details.actual" ,
+        "jq -r '.[] | select(.group == \"Software Detail\") | .detail' ~/actions-runner/.setup_info >> ~/software_details.actual" ,
         "diff -q ~/software_details.actual ~/software_details.expected || (echo 'Expected info does not match expected' && cat ~/software_details.actual && exit 1)",
         "rm ~/software_details.actual ~/software_details.expected"
       ]
