@@ -14,7 +14,6 @@ task:
       - MACOS_VERSION: tahoe
         XCODE_VERSIONS: "\"26.0.1\",\"26.1-beta-3\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
-        ADDITIONAL_IOS_BUILDS: "26.0"
         DISK_SIZE: 240
   <<: *defaults
   pull_base_script:

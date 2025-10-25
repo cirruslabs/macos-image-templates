@@ -1,5 +1,4 @@
 == Runtimes ==
-iOS 26.0 (26.0 - 23A343) - com.apple.CoreSimulator.SimRuntime.iOS-26-0
 iOS 26.0 (26.0.1 - 23A8464) - com.apple.CoreSimulator.SimRuntime.iOS-26-0
 iOS 26.1 (26.1 - 23B5073a) - com.apple.CoreSimulator.SimRuntime.iOS-26-1
 tvOS 26.0 (26.0 - 23J352) - com.apple.CoreSimulator.SimRuntime.tvOS-26-0
