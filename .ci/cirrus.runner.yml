@@ -12,7 +12,7 @@ task:
         XCODE_COMPONENTS: "\"MetalToolchain\""
         DISK_SIZE: 400
       - MACOS_VERSION: tahoe
-        XCODE_VERSIONS: "\"26.0.1\",\"26.1-beta-3\""
+        XCODE_VERSIONS: "\"26.0.1\",\"26.1-rc\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
         DISK_SIZE: 240
   <<: *defaults
