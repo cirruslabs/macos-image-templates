@@ -9,7 +9,6 @@ task:
       - MACOS_VERSION: tahoe
       - MACOS_VERSION: sequoia
       - MACOS_VERSION: sonoma
-      - MACOS_VERSION: ventura
       - MACOS_VERSION: monterey
   only_if: $CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH && changesInclude("templates/vanilla-$MACOS_VERSION.pkr.hcl")
   <<: *defaults

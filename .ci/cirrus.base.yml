@@ -3,9 +3,6 @@ task:
   alias: update-base
   matrix:
     - env:
-        MACOS_VERSION: ventura
-        DISABLE_SIP_TEMPLATE: disable-sip.pkr.hcl
-    - env:
         MACOS_VERSION: sonoma
         DISABLE_SIP_TEMPLATE: disable-sip.pkr.hcl
     - env:
