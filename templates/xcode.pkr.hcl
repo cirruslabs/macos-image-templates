@@ -20,6 +20,11 @@ variable "additional_ios_builds" {
   default = []
 }
 
+variable "additional_tvos_builds" {
+  type = list(string)
+  default = []
+}
+
 variable "xcode_components" {
   type    = list(string)
   default = []
@@ -196,6 +201,15 @@ build {
       ["source ~/.zprofile"],
       [
         for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
+      ]
+    )
+  }
+
+  provisioner "shell" {
+    inline = concat(
+      ["source ~/.zprofile"],
+      [
+        for runtime in var.additional_tvos_builds : "xcodebuild -downloadPlatform tvOS -buildVersion ${runtime}"
       ]
     )
   }
