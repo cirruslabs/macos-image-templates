@@ -1,9 +1,13 @@
 == Runtimes ==
 iOS 26.0 (26.0.1 - 23A8464) - com.apple.CoreSimulator.SimRuntime.iOS-26-0
 iOS 26.1 (26.1 - 23B80) - com.apple.CoreSimulator.SimRuntime.iOS-26-1
+iOS 26.2 (26.2 - 23C5027f) - com.apple.CoreSimulator.SimRuntime.iOS-26-2
 tvOS 26.0 (26.0 - 23J352) - com.apple.CoreSimulator.SimRuntime.tvOS-26-0
 tvOS 26.1 (26.1 - 23J579) - com.apple.CoreSimulator.SimRuntime.tvOS-26-1
+tvOS 26.2 (26.2 - 23K5029e) - com.apple.CoreSimulator.SimRuntime.tvOS-26-2
 watchOS 26.0 (26.0 - 23R353) - com.apple.CoreSimulator.SimRuntime.watchOS-26-0
 watchOS 26.1 (26.1 - 23S36) - com.apple.CoreSimulator.SimRuntime.watchOS-26-1
+watchOS 26.2 (26.2 - 23S5280e) - com.apple.CoreSimulator.SimRuntime.watchOS-26-2
 visionOS 26.0 (26.0 - 23M336) - com.apple.CoreSimulator.SimRuntime.xrOS-26-0
 visionOS 26.1 (26.1 - 23N47) - com.apple.CoreSimulator.SimRuntime.xrOS-26-1
+visionOS 26.2 (26.2 - 23N5279e) - com.apple.CoreSimulator.SimRuntime.xrOS-26-2
