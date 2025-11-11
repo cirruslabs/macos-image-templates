@@ -356,7 +356,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "xcrun simctl runtime dyld_shared_cache update --all",
-      "xcrun simctl list runtimes"
+      "xcrun simctl list -v",
     ]
   }
 
@@ -373,7 +373,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "xcrun simctl runtime dyld_shared_cache update --all",
-      "xcrun simctl list runtimes"
+      "xcrun simctl list -v"
     ]
     pause_before = "60s"
   }
