@@ -354,8 +354,28 @@ build {
   # [2]: https://stackoverflow.com/a/68394101/9316533
   provisioner "shell" {
     inline = [
-      "sleep 1800"
+      "source ~/.zprofile",
+      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
+      "xcrun simctl list -v",
     ]
+  }
+
+  // Restart the VM
+  provisioner "shell" {
+    inline = [
+      "sudo shutdown -r now"
+    ]
+    expect_disconnect = true
+  }
+
+  // Wait for VM to come back up and run simctl commands again
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
+      "xcrun simctl list -v"
+    ]
+    pause_before = "60s"
   }
 
   // Install setup-info-generator
