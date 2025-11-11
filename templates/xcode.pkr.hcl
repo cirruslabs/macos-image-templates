@@ -355,7 +355,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "xcrun simctl runtime dyld_shared_cache update --all",
+      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
       "xcrun simctl list -v",
     ]
   }
@@ -372,7 +372,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "xcrun simctl runtime dyld_shared_cache update --all",
+      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
       "xcrun simctl list -v"
     ]
     pause_before = "60s"
