@@ -115,6 +115,17 @@ build {
     ]
   }
 
+  # Compatibility with GitHub Actions Runner Images, where
+  # /usr/local/bin belongs to the default user. Also see [2].
+  #
+  # [1]: https://github.com/actions/runner-images/blob/6bbddd20d76d61606bea5a0133c950cc44c370d3/images/macos/scripts/build/configure-machine.sh#L96
+  # [2]: https://github.com/actions/runner-images/discussions/7607
+  provisioner "shell" {
+    inline = [
+      "sudo chown admin /usr/local/bin"
+    ]
+  }
+
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -134,17 +145,16 @@ build {
     ]
   }
 
-      provisioner "shell" {
-        inline = [
-          "source ~/.zprofile",
-          "wget -q https://github.com/XcodesOrg/xcodes/releases/latest/download/xcodes.zip -O xcodes.zip",
-          "unzip -q xcodes.zip",
-          "chmod +x xcodes",
-          "sudo mv xcodes /usr/local/bin/",
-          "rm xcodes.zip",
-          "xcodes version",
-        ]
-      }
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "wget -q https://github.com/XcodesOrg/xcodes/releases/latest/download/xcodes.zip -O xcodes.zip",
+      "unzip -q xcodes.zip",
+      "mv xcodes /usr/local/bin/",
+      "rm xcodes.zip",
+      "xcodes version",
+    ]
+  }
 
   provisioner "file" {
     sources      = [ for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
@@ -337,17 +347,6 @@ build {
   provisioner "shell" {
     inline = [
       "sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.apsd.plist"
-    ]
-  }
-
-  # Compatibility with GitHub Actions Runner Images, where
-  # /usr/local/bin belongs to the default user. Also see [2].
-  #
-  # [1]: https://github.com/actions/runner-images/blob/6bbddd20d76d61606bea5a0133c950cc44c370d3/images/macos/scripts/build/configure-machine.sh#L96
-  # [2]: https://github.com/actions/runner-images/discussions/7607
-  provisioner "shell" {
-    inline = [
-      "sudo chown admin /usr/local/bin"
     ]
   }
 
