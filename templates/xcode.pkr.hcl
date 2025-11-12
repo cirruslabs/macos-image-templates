@@ -134,13 +134,17 @@ build {
     ]
   }
 
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "brew install xcodesorg/made/xcodes",
-      "xcodes version",
-    ]
-  }
+      provisioner "shell" {
+        inline = [
+          "source ~/.zprofile",
+          "wget -q https://github.com/XcodesOrg/xcodes/releases/latest/download/xcodes.zip -O xcodes.zip",
+          "unzip -q xcodes.zip",
+          "chmod +x xcodes",
+          "sudo mv xcodes /usr/local/bin/",
+          "rm xcodes.zip",
+          "xcodes version",
+        ]
+      }
 
   provisioner "file" {
     sources      = [ for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
