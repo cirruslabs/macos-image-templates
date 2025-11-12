@@ -76,9 +76,9 @@ locals {
       type = "shell"
       inline = [
         "source ~/.zprofile",
-        "sudo xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash",
+        "sudo /usr/local/bin/xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash",
         // get selected xcode path, strip /Contents/Developer and move to GitHub compatible locations
-        "INSTALLED_PATH=$(xcodes select -p)",
+        "INSTALLED_PATH=$(/usr/local/bin/xcodes select -p)",
         "CONTENTS_DIR=$(dirname $INSTALLED_PATH)",
         "APP_DIR=$(dirname $CONTENTS_DIR)",
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
@@ -137,8 +137,12 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install xcodesorg/made/xcodes",
-      "xcodes version",
+      "wget -q https://github.com/XcodesOrg/xcodes/releases/latest/download/xcodes.zip -O xcodes.zip",
+      "unzip -q xcodes.zip",
+      "mv xcodes /usr/local/bin/",
+      "rm xcodes.zip",
+      "echo $PATH",
+      "/usr/local/bin/xcodes version",
     ]
   }
 
@@ -170,7 +174,7 @@ build {
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcodes select '${var.xcode_version[2]}'",
+        "sudo /usr/local/bin/xcodes select '${var.xcode_version[2]}'",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -182,7 +186,7 @@ build {
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcodes select '${var.xcode_version[1]}'",
+        "sudo /usr/local/bin/xcodes select '${var.xcode_version[1]}'",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -191,7 +195,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "sudo xcodes select '${var.xcode_version[0]}'",
+      "sudo /usr/local/bin/xcodes select '${var.xcode_version[0]}'",
       "xcodebuild -downloadAllPlatforms",
     ]
   }

@@ -4,9 +4,12 @@ task:
   env:
     matrix:
       - MACOS_VERSION: tahoe
-        XCODE_VERSION: "26.0.1"
+        XCODE_VERSION: "26.1.1"
         XCODE_COMPONENTS: "MetalToolchain"
         LATEST: true
+      - MACOS_VERSION: tahoe
+        XCODE_VERSION: "26.0.1"
+        XCODE_COMPONENTS: "MetalToolchain"
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16.4
         LATEST: true
