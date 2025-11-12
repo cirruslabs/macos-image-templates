@@ -152,6 +152,7 @@ build {
       "unzip -q xcodes.zip",
       "mv xcodes /usr/local/bin/",
       "rm xcodes.zip",
+      "echo $PATH",
       "xcodes version",
     ]
   }
