@@ -76,9 +76,9 @@ locals {
       type = "shell"
       inline = [
         "source ~/.zprofile",
-        "sudo /usr/local/bin/xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash",
+        "sudo xcodes install ${version} --experimental-unxip --path /Users/admin/Downloads/Xcode_${version}.xip --select --empty-trash",
         // get selected xcode path, strip /Contents/Developer and move to GitHub compatible locations
-        "INSTALLED_PATH=$(/usr/local/bin/xcodes select -p)",
+        "INSTALLED_PATH=$(xcodes select -p)",
         "CONTENTS_DIR=$(dirname $INSTALLED_PATH)",
         "APP_DIR=$(dirname $CONTENTS_DIR)",
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
@@ -115,18 +115,6 @@ build {
     ]
   }
 
-  # Compatibility with GitHub Actions Runner Images, where
-  # /usr/local/bin belongs to the default user. Also see [2].
-  #
-  # [1]: https://github.com/actions/runner-images/blob/6bbddd20d76d61606bea5a0133c950cc44c370d3/images/macos/scripts/build/configure-machine.sh#L96
-  # [2]: https://github.com/actions/runner-images/discussions/7607
-  provisioner "shell" {
-    inline = [
-      "sudo chown admin /usr/local/bin",
-      "/usr/local/bin/xcodes version",
-    ]
-  }
-
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
@@ -149,11 +137,8 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "wget -q https://github.com/XcodesOrg/xcodes/releases/latest/download/xcodes.zip -O xcodes.zip",
-      "unzip -q xcodes.zip",
-      "mv xcodes /usr/local/bin/",
-      "rm xcodes.zip",
-      "/usr/local/bin/xcodes version",
+      "brew install xcodes",
+      "xcodes version",
     ]
   }
 
@@ -185,7 +170,7 @@ build {
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo /usr/local/bin/xcodes select '${var.xcode_version[2]}'",
+        "sudo xcodes select '${var.xcode_version[2]}'",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -197,7 +182,7 @@ build {
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo /usr/local/bin/xcodes select '${var.xcode_version[1]}'",
+        "sudo xcodes select '${var.xcode_version[1]}'",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -206,7 +191,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "sudo /usr/local/bin/xcodes select '${var.xcode_version[0]}'",
+      "sudo xcodes select '${var.xcode_version[0]}'",
       "xcodebuild -downloadAllPlatforms",
     ]
   }
@@ -380,6 +365,18 @@ build {
       "xcrun simctl list -v"
     ]
     pause_before = "60s"
+  }
+
+  # Compatibility with GitHub Actions Runner Images, where
+  # /usr/local/bin belongs to the default user. Also see [2].
+  #
+  # [1]: https://github.com/actions/runner-images/blob/6bbddd20d76d61606bea5a0133c950cc44c370d3/images/macos/scripts/build/configure-machine.sh#L96
+  # [2]: https://github.com/actions/runner-images/discussions/7607
+  provisioner "shell" {
+    inline = [
+      "sudo chown admin /usr/local/bin",
+      "xcodes version",
+    ]
   }
 
   // Install setup-info-generator
