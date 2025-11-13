@@ -374,8 +374,7 @@ build {
   # [2]: https://github.com/actions/runner-images/discussions/7607
   provisioner "shell" {
     inline = [
-      "sudo chown admin /usr/local/bin",
-      "xcodes version",
+      "sudo chown admin /usr/local/bin"
     ]
   }
 
