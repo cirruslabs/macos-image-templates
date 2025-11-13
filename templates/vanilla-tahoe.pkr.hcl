@@ -65,10 +65,6 @@ source "tart-cli" "tart" {
     "<wait10s><tab><tab><spacebar>",
     # Siri
     "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # You Mac is Ready for FileVault
-    "<wait10s><leftShiftOn><tab><tab><leftShiftOff><spacebar>",
-    # Mac Data Will Not Be Securely Encrypted
-    "<wait10s><tab><spacebar>",
     # Choose Your Look
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Update Mac Automatically
