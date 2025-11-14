@@ -15,7 +15,7 @@ task:
         XCODE_VERSIONS: "\"26.1.1\",\"26.0.1\",\"26.2-beta\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
         ADDITIONAL_IOS_BUILDS: "18.6"
-        DISK_SIZE: 280
+        DISK_SIZE: 290
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
