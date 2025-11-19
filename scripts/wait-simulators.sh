@@ -10,11 +10,6 @@
 #
 set -euo pipefail
 
-# Ensure login shell paths (e.g., for Xcode command line tools) are available
-# shellcheck source=/dev/null
-source ~/.zprofile || true
-
-# wait-simulators.sh
 # Wait until `xcrun simctl list devices -v` no longer reports any devices as "unavailable".
 # Usage:
 #   wait-simulators.sh [TIMEOUT_MINUTES]
