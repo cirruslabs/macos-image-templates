@@ -37,12 +37,6 @@ variable "expected_runtimes_file" {
   description = "Path to file containing expected simulator runtimes. If empty, runtime verification is skipped."
 }
 
-variable "wait_simulators_timeout_minutes" {
-  type        = number
-  default     = 10
-  description = "Minutes to wait for simulators to become available before failing."
-}
-
 variable "tag" {
   type = string
   default = ""
@@ -112,12 +106,6 @@ build {
   // Re-install the GitHub Actions runner
   provisioner "shell" {
     script = "scripts/install-actions-runner.sh"
-  }
-
-  // Upload wait-simulators helper script
-  provisioner "file" {
-    source      = "scripts/wait-simulators.sh"
-    destination = "/Users/admin/wait-simulators.sh"
   }
 
   // make sure our workaround from base is still valid
@@ -357,30 +345,8 @@ build {
     inline = [
       "source ~/.zprofile",
       "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
-      "xcrun simctl list -v",
-      "chmod +x wait-simulators.sh",
-      "./wait-simulators.sh 60"
+      "xcrun simctl list -v"
     ]
-  }
-
-  // Restart the VM
-  provisioner "shell" {
-    inline = [
-      "sudo shutdown -r now"
-    ]
-    expect_disconnect = true
-  }
-
-  // Wait for VM to come back up and run simctl commands again
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
-      "xcrun simctl list -v",
-      "./wait-simulators.sh 60",
-      "rm wait-simulators.sh"
-    ]
-    pause_before = "60s"
   }
 
   # Compatibility with GitHub Actions Runner Images, where

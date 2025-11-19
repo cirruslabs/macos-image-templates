@@ -30,6 +30,15 @@ task:
         -var xcode_components="[$XCODE_COMPONENTS]" \
         -var expected_runtimes_file="data/expected.$MACOS_VERSION.runtimes.txt" \
         templates/xcode.pkr.hcl
+  prapare_script: |
+    if [[ -f "scripts/prepare-$MACOS_VERSION.sh" ]]; then
+      packer build -var vm_base_name="$MACOS_VERSION-xcode:runner" \
+        -var vm_name="$MACOS_VERSION-xcode:runner" \
+        -var script_path="scripts/prepare-$MACOS_VERSION.shr" \
+        templates/exex-script.pkr.hcl
+    else
+      echo "Skipping prepare script for $MACOS_VERSION"
+    fi
   push_script: |
     if [[ -z "$CIRRUS_PR" ]]; then
       tart push "$MACOS_VERSION-xcode:runner" ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION

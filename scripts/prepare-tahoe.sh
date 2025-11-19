@@ -11,18 +11,13 @@
 set -euo pipefail
 
 # Wait until `xcrun simctl list devices -v` no longer reports any devices as "unavailable".
-# Usage:
-#   wait-simulators.sh [TIMEOUT_MINUTES]
-#
-# Arguments:
-#   TIMEOUT_MINUTES  Optional. Number of minutes to wait before failing. Default: 10
 #
 # Exit codes:
 #   0 - Success: no devices are marked as unavailable within the timeout window
 #   1 - Failure: timed out waiting for devices to become available
 #   2 - Failure: prerequisites missing (e.g., xcrun not found)
 
-DEFAULT_TIMEOUT_MINUTES=10
+DEFAULT_TIMEOUT_MINUTES=60
 TIMEOUT_MINUTES=${1:-$DEFAULT_TIMEOUT_MINUTES}
 
 if ! [[ "$TIMEOUT_MINUTES" =~ ^[0-9]+$ ]]; then
