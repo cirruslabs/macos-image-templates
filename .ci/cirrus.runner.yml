@@ -33,7 +33,7 @@ task:
   finalize_script: |
     if [[ -f "scripts/finalize-$MACOS_VERSION.sh" ]]; then
       packer build -var vm_name="$MACOS_VERSION-xcode:runner" \
-        -var script_path="scripts/finalize-$MACOS_VERSION.shr" \
+        -var script_path="scripts/finalize-$MACOS_VERSION.sh" \
         templates/exex-script.pkr.hcl
     else
       echo "Skipping prepare script for $MACOS_VERSION"
