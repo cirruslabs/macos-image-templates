@@ -29,7 +29,7 @@ locals {
 }
 
 source "tart-cli" "tart" {
-  vm_name      = var.vm_name
+  vm_name      = "${var.vm_name}"
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "120s"
