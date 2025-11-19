@@ -359,7 +359,7 @@ build {
       "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
       "xcrun simctl list -v",
       "chmod +x wait-simulators.sh",
-      "./wait-simulators.sh 30"
+      "./wait-simulators.sh 60"
     ]
   }
 
@@ -377,7 +377,7 @@ build {
       "source ~/.zprofile",
       "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
       "xcrun simctl list -v",
-      "./wait-simulators.sh 30",
+      "./wait-simulators.sh 60",
       "rm wait-simulators.sh"
     ]
     pause_before = "60s"
