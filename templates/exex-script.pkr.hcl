@@ -22,12 +22,6 @@ variable "pause_before" {
   description = "How long Packer should wait before running the uploaded script."
 }
 
-locals {
-  script_filename            = basename(var.script_path)
-  script_remote_path         = "/Users/admin/${local.script_filename}"
-  script_remote_path_quoted  = jsonencode(local.script_remote_path)
-}
-
 source "tart-cli" "tart" {
   vm_name      = "${var.vm_name}"
   ssh_password = "admin"
@@ -38,19 +32,8 @@ source "tart-cli" "tart" {
 build {
   sources = ["source.tart-cli.tart"]
 
-  // Upload requested script into the admin user's home folder
-  provisioner "file" {
-    source      = var.script_path
-    destination = local.script_remote_path
-  }
-
   provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "chmod +x ${local.script_remote_path_quoted}",
-      local.script_remote_path_quoted,
-      "rm ${local.script_remote_path_quoted}"
-    ]
+    script = var.script_path
     pause_before = var.pause_before
   }
 }

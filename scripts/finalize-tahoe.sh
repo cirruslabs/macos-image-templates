@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/.zprofile
+
 # Set shell options to enable fail-fast behavior
 #
 # * -e: fail the script when an error occurs or command fails
