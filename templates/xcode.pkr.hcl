@@ -345,26 +345,8 @@ build {
     inline = [
       "source ~/.zprofile",
       "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
-      "xcrun simctl list -v",
-    ]
-  }
-
-  // Restart the VM
-  provisioner "shell" {
-    inline = [
-      "sudo shutdown -r now"
-    ]
-    expect_disconnect = true
-  }
-
-  // Wait for VM to come back up and run simctl commands again
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "xcrun simctl runtime dyld_shared_cache update --all || sleep 180",
       "xcrun simctl list -v"
     ]
-    pause_before = "60s"
   }
 
   # Compatibility with GitHub Actions Runner Images, where
