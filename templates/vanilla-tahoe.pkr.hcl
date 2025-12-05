@@ -95,7 +95,7 @@ source "tart-cli" "tart" {
     # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
     "<wait10s>open '/System/Applications/System Settings.app'<enter>",
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
-    "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><leftShiftOff>",
+    "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
     "<wait10s>admin<enter>",
     "<wait10s><leftShiftOn><tab><leftShiftOff><wait1s><spacebar>",
