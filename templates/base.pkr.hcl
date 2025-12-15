@@ -117,8 +117,8 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "brew install node@20",
-      "echo 'export PATH=\"/opt/homebrew/opt/node@20/bin:$PATH\"' >> ~/.zprofile",
+      "brew install node@24",
+      "echo 'export PATH=\"/opt/homebrew/opt/node@24/bin:$PATH\"' >> ~/.zprofile",
       "source ~/.zprofile",
       "node --version",
       "npm install --global yarn",
