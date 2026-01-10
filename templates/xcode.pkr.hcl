@@ -231,7 +231,9 @@ build {
       "source ~/.zprofile",
       "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
       "brew install xcbeautify swiftformat swiftlint swiftgen licenseplist",
-      "brew install mint tuist/tuist/tuist",
+      "brew install mint",
+      "brew tap tuist/tuist",
+      "brew install --formula tuist",
       "rbenv global 3.3.10", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
       "gem update",
       "gem install fastlane",
