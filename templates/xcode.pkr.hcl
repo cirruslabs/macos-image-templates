@@ -234,6 +234,7 @@ build {
       "brew install mint",
       "brew tap tuist/tuist",
       "brew install --formula tuist",
+      "rbenv install 3.3.10",
       "rbenv global 3.3.10", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
       "gem update",
       "gem install fastlane",
