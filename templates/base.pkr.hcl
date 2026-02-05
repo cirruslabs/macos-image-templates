@@ -65,6 +65,7 @@ build {
       "brew --version",
       "brew update",
       "brew install wget unzip zip ca-certificates cmake gcc git-lfs jq yq gh gitlab-runner",
+      "brew install buildkite/buildkite/buildkite-agent",
       "brew install equinix-labs/otel-cli/otel-cli",
       "brew install curl || true", // doesn't work on Monterey
       "brew install --cask git-credential-manager",
