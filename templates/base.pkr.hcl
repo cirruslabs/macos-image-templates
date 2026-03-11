@@ -178,4 +178,9 @@ build {
       "sudo chmod 0644 /Library/LaunchAgents/org.cirruslabs.tart-guest-agent.plist",
     ]
   }
+
+  # Update TCC.db and allow automation tools
+  provisioner "shell" {
+    script = "scripts/update-tcc-database.sh"
+  }
 }
