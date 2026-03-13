@@ -5,14 +5,14 @@ task:
     matrix:
       - MACOS_VERSION: tahoe
         XCODE_VERSION: "26.2"
-        XCODE_COMPONENTS: "MetalToolchain"
+        XCODE_COMPONENTS: "\"MetalToolchain\""
         LATEST: true
       - MACOS_VERSION: tahoe
         XCODE_VERSION: "26.1.1"
-        XCODE_COMPONENTS: "MetalToolchain"
+        XCODE_COMPONENTS: "\"MetalToolchain\""
       - MACOS_VERSION: tahoe
         XCODE_VERSION: "26.0.1"
-        XCODE_COMPONENTS: "MetalToolchain"
+        XCODE_COMPONENTS: "\"MetalToolchain\""
       - MACOS_VERSION: sequoia
         XCODE_VERSION: 16.4
         LATEST: true
@@ -36,7 +36,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
   build_xcode_script:
     - packer init templates/xcode.pkr.hcl
-    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$XCODE_VERSION\"]" -var xcode_components="[${XCODE_COMPONENTS:+\"$XCODE_COMPONENTS\"}]" templates/xcode.pkr.hcl
+    - packer build -var macos_version="$MACOS_VERSION" -var xcode_version="[\"$XCODE_VERSION\"]" -var xcode_components="[$XCODE_COMPONENTS]" templates/xcode.pkr.hcl
   push_script: |
     if [[ -z "$LATEST" ]]
     then
