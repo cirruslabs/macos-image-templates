@@ -7,13 +7,12 @@ packer {
   }
 }
 
-variable "macos_version" {
+variable "vm_name" {
   type = string
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-vanilla:latest"
-  vm_name      = "${var.macos_version}-base"
+  vm_name      = "${var.vm_name}"
   cpu_count    = 4
   memory_gb    = 8
   disk_size_gb = 50
