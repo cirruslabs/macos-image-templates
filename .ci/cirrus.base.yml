@@ -16,6 +16,7 @@ task:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest
     - tart clone ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest "$MACOS_VERSION-base"
   disable_sip_script:
+    - packer init "templates/${DISABLE_SIP_TEMPLATE}"
     - packer build -var vm_name="$MACOS_VERSION-base" "templates/${DISABLE_SIP_TEMPLATE}"
   build_base_script:
     - packer init templates/base.pkr.hcl
