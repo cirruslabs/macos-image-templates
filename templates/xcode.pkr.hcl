@@ -44,7 +44,7 @@ variable "tag" {
 
 variable "disk_size" {
   type = number
-  default = 120
+  default = 140
 }
 
 variable "disk_free_mb" {
