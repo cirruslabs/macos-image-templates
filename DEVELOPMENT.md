@@ -15,7 +15,7 @@ packer build -var vm_name=sonoma-vanilla templates/disable-sip.pkr.hcl
 ## Building Base Image
 
 ```bash
-packer build -var macos_version=sonoma templates/base.pkr.hcl
+packer build -var vm_name=sonoma-vanilla templates/base.pkr.hcl
 ```
 
 ## Building Xcode Image
