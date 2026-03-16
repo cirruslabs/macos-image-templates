@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     tart = {
-      version = ">= 1.12.0"
+      version = ">= 1.16.0"
       source  = "github.com/cirruslabs/tart"
     }
     ansible = {
@@ -33,7 +33,7 @@ source "tart-cli" "tart" {
     # [1]: should be named "English (US)", but oh well 🤷
     "<wait30s>italiano<esc>english<enter>",
     # Select Your Country or Region
-    "<wait30s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait30s><click 'Select Your Country or Region'><wait5s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
     # Transfer Your Data to This Mac
     "<wait10s><tab><tab><tab><spacebar><tab><tab><spacebar>",
     # Written and Spoken Languages
