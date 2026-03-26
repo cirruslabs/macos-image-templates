@@ -54,7 +54,7 @@ variable "disk_free_mb" {
 
 variable "android_sdk_tools_version" {
   type    = string
-  default = "11076708" # https://developer.android.com/studio#command-line-tools-only
+  default = "14742923" # https://developer.android.com/studio#command-line-tools-only
 }
 
 source "tart-cli" "tart" {
@@ -133,7 +133,7 @@ build {
       "rm android-sdk-tools.zip",
       "mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest",
       "yes | sdkmanager --licenses",
-      "yes | sdkmanager 'platform-tools' 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.2.12479018'"
+      "yes | sdkmanager 'platform-tools' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358'"
     ]
   }
 
