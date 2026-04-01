@@ -91,6 +91,8 @@ source "tart-cli" "tart" {
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
     "<wait10s><tab><tab><tab><tab><tab><spacebar>",
+    # Type in the password to allow enabling Screen Sharing
+    "<wait10s>admin<enter>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Quit System Settings
