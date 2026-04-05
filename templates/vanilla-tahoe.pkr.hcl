@@ -32,7 +32,7 @@ source "tart-cli" "tart" {
     # [1]: should be named "English (US)", but oh well 🤷
     "<wait30s>italiano<esc>english<enter>",
     # Select Your Country or Region
-    "<wait30s><click 'Select Your Country or Region'><wait5s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait60s><click 'Select Your Country or Region'><wait5s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
     # Transfer Your Data to This Mac
     "<wait10s><tab><tab><tab><spacebar><tab><tab><spacebar>",
     # Written and Spoken Languages
@@ -46,13 +46,15 @@ source "tart-cli" "tart" {
     # Enable Voice Over
     "<wait120s><leftAltOn><f5><leftAltOff>",
     # Sign In with Your Apple ID
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
+    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar><up><spacebar>",
     # Are you sure you want to skip signing in with an Apple ID?
     "<wait10s><tab><spacebar>",
     # Terms and Conditions
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # I have read and agree to the macOS Software License Agreement
     "<wait10s><tab><spacebar>",
+    # Age Range -> Adult
+    "<wait10s><tab><tab><tab><spacebar>",
     # Enable Location Services
     "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
     # Are you sure you don't want to use Location Services?
@@ -84,10 +86,13 @@ source "tart-cli" "tart" {
     # Now that the installation is done, open "System Settings"
     # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
     "<wait10s>open '/System/Applications/System Settings.app'<enter>",
+    "<wait120s>",
     # Navigate to "Sharing"
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
     # Navigate to "Screen Sharing" and enable it
     "<wait10s><tab><tab><tab><tab><tab><spacebar>",
+    # Type in the password to allow enabling Screen Sharing
+    "<wait10s>admin<enter>",
     # Navigate to "Remote Login" and enable it
     "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
     # Quit System Settings
