@@ -7,12 +7,12 @@ task:
         ADDITIONAL_IOS_BUILDS: "18.5,18.4,18.2,17.5"
         ADDITIONAL_TVOS_BUILDS: "17.5"
         XCODE_COMPONENTS: "\"MetalToolchain\""
-        DISK_SIZE: 400
+        DISK_SIZE: 380
       - MACOS_VERSION: tahoe
         XCODE_VERSIONS: "\"26.4\",\"26.5-beta\",\"26.3\",\"26.2\",\"26.1.1\",\"26.0.1\""
         XCODE_COMPONENTS: "\"MetalToolchain\""
         ADDITIONAL_IOS_BUILDS: "18.6"
-        DISK_SIZE: 300
+        DISK_SIZE: 330
   <<: *defaults
   pull_base_script:
     - tart pull ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest
