@@ -1,7 +1,7 @@
 ## macOS Packer Templates for Tart
 
-Repository with Packer templates to build macOS [Tart](https://tart.run/) virtual machines to use with [Cirrus Runners](https://cirrus-runners.app/),
-[Cirrus CI](https://cirrus-ci.org/guide/macOS/) or [any other automation](https://tart.run/integrations/cirrus-cli/).
+Repository with Packer templates to build macOS [Tart](https://tart.run/) virtual machines to use with self-hosted
+GitHub Actions runners, [Cirrus Runners](https://cirrus-runners.app/) or [any other automation](https://tart.run/integrations/cirrus-cli/).
 
 The following image variants are currently available:
 
@@ -22,4 +22,4 @@ Please watch this repository releases to get notified about new images.
 
 Some of the images are regularly getting rebuild in order to update the pre-installed packages. 
 
-[This configuration file](.ci/cirrus.release.yml) defines images that are getting rebuilt monthly on the first Saturday of the month.
+[This workflow](.github/workflows/monthly.yml) defines images that are getting rebuilt monthly on the first Saturday of the month.

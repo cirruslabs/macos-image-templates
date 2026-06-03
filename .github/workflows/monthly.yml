@@ -1,0 +1,203 @@
+name: Monthly Images
+
+on:
+  schedule:
+    - cron: "0 8 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: tart-image-builds
+  cancel-in-progress: false
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: ${{ github.actor }}
+  TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  should-run:
+    name: Check Monthly Cadence
+    runs-on: [self-hosted, macOS, ARM64]
+    outputs:
+      build: ${{ steps.cadence.outputs.build }}
+    steps:
+      - name: Check first Saturday
+        id: cadence
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          build=false
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            build=true
+          else
+            day="$(date -u +%d)"
+            if (( 10#$day <= 7 )); then
+              build=true
+            fi
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          if [[ "$build" != "true" ]]; then
+            echo "Not the first Saturday of the month; skipping image rebuilds."
+          fi
+
+  update-base:
+    name: Update Base Images (${{ matrix.macos_version }})
+    needs: should-run
+    if: needs.should-run.outputs.build == 'true'
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: sonoma
+            disable_sip_template: disable-sip.pkr.hcl
+          - macos_version: sequoia
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+          - macos_version: tahoe
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+    env:
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      DISABLE_SIP_TEMPLATE: ${{ matrix.disable_sip_template }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tool versions
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull vanilla image
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest"
+          tart clone "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest" "$MACOS_VERSION-base"
+
+      - name: Disable SIP
+        run: |
+          packer init "templates/$DISABLE_SIP_TEMPLATE"
+          packer build -var "vm_name=$MACOS_VERSION-base" "templates/$DISABLE_SIP_TEMPLATE"
+
+      - name: Build base image
+        run: |
+          packer init templates/base.pkr.hcl
+          packer build -var "vm_name=$MACOS_VERSION-base" templates/base.pkr.hcl
+
+      - name: Push base image
+        run: |
+          tart push "$MACOS_VERSION-base" "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          tart delete "$MACOS_VERSION-base" || true
+
+  update-xcode:
+    name: Update Xcode Images (${{ matrix.macos_version }} ${{ matrix.xcode_version }})
+    needs:
+      - should-run
+      - update-base
+    if: needs.should-run.outputs.build == 'true'
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: tahoe
+            xcode_version: "26.2"
+            xcode_components: '"MetalToolchain"'
+            latest: true
+          - macos_version: tahoe
+            xcode_version: "26.1.1"
+            xcode_components: '"MetalToolchain"'
+            latest: false
+          - macos_version: tahoe
+            xcode_version: "26.0.1"
+            xcode_components: '"MetalToolchain"'
+            latest: false
+          - macos_version: sequoia
+            xcode_version: "16.4"
+            xcode_components: ""
+            latest: true
+          - macos_version: sequoia
+            xcode_version: "16.3"
+            xcode_components: ""
+            latest: false
+          - macos_version: sequoia
+            xcode_version: "16.2"
+            xcode_components: ""
+            latest: false
+          - macos_version: sequoia
+            xcode_version: "16.1"
+            xcode_components: ""
+            latest: false
+          - macos_version: sequoia
+            xcode_version: "16"
+            xcode_components: ""
+            latest: false
+          - macos_version: sonoma
+            xcode_version: "16.1"
+            xcode_components: ""
+            latest: true
+          - macos_version: sonoma
+            xcode_version: "16"
+            xcode_components: ""
+            latest: false
+          - macos_version: sonoma
+            xcode_version: "15.4"
+            xcode_components: ""
+            latest: false
+    env:
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      XCODE_COMPONENTS: ${{ matrix.xcode_components }}
+      XCODE_VERSION: ${{ matrix.xcode_version }}
+      LATEST: ${{ matrix.latest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tool versions
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull base image
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Build Xcode image
+        run: |
+          packer init templates/xcode.pkr.hcl
+          packer build \
+            -var "macos_version=$MACOS_VERSION" \
+            -var "xcode_version=[\"$XCODE_VERSION\"]" \
+            -var "xcode_components=[$XCODE_COMPONENTS]" \
+            templates/xcode.pkr.hcl
+
+      - name: Push Xcode image
+        run: |
+          if [[ "$LATEST" == "true" ]]; then
+            tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest"
+          else
+            tart push "$MACOS_VERSION-xcode:$XCODE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_VERSION"
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          tart delete "$MACOS_VERSION-xcode:$XCODE_VERSION" || true

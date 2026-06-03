@@ -1,0 +1,127 @@
+name: Vanilla Images
+
+on:
+  push:
+    paths:
+      - "templates/vanilla-*.pkr.hcl"
+  workflow_dispatch:
+    inputs:
+      macos_version:
+        description: "macOS vanilla image to build"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - tahoe
+          - sequoia
+          - sonoma
+          - monterey
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: tart-image-builds
+  cancel-in-progress: false
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: ${{ github.actor }}
+  TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  update-vanilla:
+    name: Update Vanilla Image (${{ matrix.macos_version }})
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' ||
+        github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      }}
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        macos_version:
+          - tahoe
+          - sequoia
+          - sonoma
+          - monterey
+    env:
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      RESOLVE_VM_NAME: resolve-macos-number-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.macos_version }}
+      RESOLVE_FILE: resolve-macos-number-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.macos_version }}.txt
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select image
+        id: select
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_MACOS_VERSION: ${{ inputs.macos_version || 'all' }}
+        run: |
+          set -euo pipefail
+
+          build=false
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            if [[ "$INPUT_MACOS_VERSION" == "all" || "$INPUT_MACOS_VERSION" == "$MACOS_VERSION" ]]; then
+              build=true
+            fi
+          else
+            if [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" > changed-files.txt
+            else
+              git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA" > changed-files.txt
+            fi
+
+            if grep -Fxq "templates/vanilla-$MACOS_VERSION.pkr.hcl" changed-files.txt; then
+              build=true
+            fi
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Tool versions
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart --version
+          packer --version
+
+      - name: Build vanilla image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init "templates/vanilla-$MACOS_VERSION.pkr.hcl"
+          packer build "templates/vanilla-$MACOS_VERSION.pkr.hcl"
+
+      - name: Resolve macOS version
+        id: resolve
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer build \
+            -var "vm_base_name=$MACOS_VERSION-vanilla" \
+            -var "vm_name=$RESOLVE_VM_NAME" \
+            -var "resolve_file=$RESOLVE_FILE" \
+            templates/resolve-macos-number.pkr.hcl
+          echo "macos_number=$(cat "$RESOLVE_FILE")" >> "$GITHUB_OUTPUT"
+          rm -f "$RESOLVE_FILE"
+
+      - name: Push vanilla image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart push "$MACOS_VERSION-vanilla" \
+            "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest" \
+            "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:${{ steps.resolve.outputs.macos_number }}"
+
+      - name: Cleanup
+        if: always() && steps.select.outputs.build == 'true'
+        run: |
+          tart delete "$MACOS_VERSION-vanilla" || true
+          tart delete "$RESOLVE_VM_NAME" || true
