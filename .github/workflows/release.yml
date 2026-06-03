@@ -1,0 +1,166 @@
+name: Release Images
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      xcode_version:
+        description: "Xcode version/tag to release"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: tart-image-builds
+  cancel-in-progress: false
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: ${{ github.actor }}
+  TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  XCODE_RELEASE_VERSION: ${{ github.event.release.tag_name || inputs.xcode_version }}
+
+jobs:
+  release-xcode:
+    name: Release Xcode ${{ github.event.release.tag_name || inputs.xcode_version }} (${{ matrix.macos_version }})
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        macos_version:
+          - tahoe
+          - sequoia
+    env:
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      XCODE_COMPONENTS: '"MetalToolchain"'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate release version
+        run: |
+          set -euo pipefail
+          if [[ -z "$XCODE_RELEASE_VERSION" ]]; then
+            echo "XCODE_RELEASE_VERSION is required."
+            exit 1
+          fi
+
+      - name: Tool versions
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull base image
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Build release image
+        run: |
+          packer init templates/xcode.pkr.hcl
+          packer build \
+            -var "macos_version=$MACOS_VERSION" \
+            -var "xcode_version=[\"$XCODE_RELEASE_VERSION\"]" \
+            -var "xcode_components=[$XCODE_COMPONENTS]" \
+            templates/xcode.pkr.hcl
+
+      - name: Push release image
+        run: |
+          if [[ "$XCODE_RELEASE_VERSION" == *beta* ]]; then
+            tart push "$MACOS_VERSION-xcode:$XCODE_RELEASE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_RELEASE_VERSION"
+          else
+            tart push "$MACOS_VERSION-xcode:$XCODE_RELEASE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:$XCODE_RELEASE_VERSION" \
+              "ghcr.io/cirruslabs/macos-$MACOS_VERSION-xcode:latest"
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          tart delete "$MACOS_VERSION-xcode:$XCODE_RELEASE_VERSION" || true
+
+  release-runner:
+    name: Update Runner Image (${{ matrix.macos_version }})
+    needs: release-xcode
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: sequoia
+            xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
+            additional_ios_builds: "18.5,18.4,18.2,17.5"
+            additional_tvos_builds: "17.5"
+            xcode_components: '"MetalToolchain"'
+            disk_size: 380
+          - macos_version: tahoe
+            xcode_versions: '"26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            additional_ios_builds: "18.6"
+            additional_tvos_builds: ""
+            xcode_components: '"MetalToolchain"'
+            disk_size: 330
+    env:
+      ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
+      ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}
+      DISK_SIZE: ${{ matrix.disk_size }}
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      XCODE_COMPONENTS: ${{ matrix.xcode_components }}
+      XCODE_VERSIONS: ${{ matrix.xcode_versions }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tool versions
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull base image
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Build runner image
+        run: |
+          packer init templates/xcode.pkr.hcl
+          packer build \
+            -var tag=runner \
+            -var "disk_size=$DISK_SIZE" \
+            -var disk_free_mb=100000 \
+            -var "macos_version=$MACOS_VERSION" \
+            -var "xcode_version=[$XCODE_VERSIONS]" \
+            -var "additional_ios_builds=[$ADDITIONAL_IOS_BUILDS]" \
+            -var "additional_tvos_builds=[$ADDITIONAL_TVOS_BUILDS]" \
+            -var "xcode_components=[$XCODE_COMPONENTS]" \
+            -var "expected_runtimes_file=data/expected.$MACOS_VERSION.runtimes.txt" \
+            templates/xcode.pkr.hcl
+
+      - name: Finalize runner image
+        run: |
+          if [[ -f "scripts/finalize-$MACOS_VERSION.sh" ]]; then
+            packer build \
+              -var "vm_name=$MACOS_VERSION-xcode:runner" \
+              -var "script_path=scripts/finalize-$MACOS_VERSION.sh" \
+              templates/exex-script.pkr.hcl
+          else
+            echo "Skipping prepare script for $MACOS_VERSION"
+          fi
+
+      - name: Push runner image
+        run: |
+          tart push "$MACOS_VERSION-xcode:runner" "ghcr.io/cirruslabs/macos-runner:$MACOS_VERSION"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          tart delete "$MACOS_VERSION-xcode:runner" || true
