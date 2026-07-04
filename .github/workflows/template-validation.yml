@@ -1,4 +1,4 @@
-name: Template Validation
+name: Template Builds
 
 on:
   pull_request:
@@ -12,6 +12,16 @@ on:
 
 permissions:
   contents: read
+  packages: read
+
+concurrency:
+  group: template-builds-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: ${{ github.actor }}
+  TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   packer-validate:
@@ -73,3 +83,238 @@ jobs:
             -var macos_version=tahoe \
             -var 'xcode_version=["26.6"]' \
             -var expected_runtimes_file=data/expected.tahoe.runtimes.txt
+
+  build-vanilla:
+    name: Build Vanilla Image (${{ matrix.macos_version }})
+    needs: packer-validate
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        macos_version:
+          - tahoe
+          - sequoia
+          - sonoma
+          - monterey
+    env:
+      MACOS_VERSION: ${{ matrix.macos_version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select image
+        id: select
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed-files.txt
+
+          build=false
+          if grep -Fxq "templates/vanilla-$MACOS_VERSION.pkr.hcl" changed-files.txt; then
+            build=true
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Tool versions
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart --version
+          packer --version
+
+      - name: Build vanilla image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init "templates/vanilla-$MACOS_VERSION.pkr.hcl"
+          packer build "templates/vanilla-$MACOS_VERSION.pkr.hcl"
+
+      - name: Cleanup
+        if: always() && steps.select.outputs.build == 'true'
+        run: |
+          tart delete "$MACOS_VERSION-vanilla" || true
+
+  build-base:
+    name: Build Base Image (${{ matrix.macos_version }})
+    needs: packer-validate
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: sonoma
+            disable_sip_template: disable-sip.pkr.hcl
+          - macos_version: sequoia
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+          - macos_version: tahoe
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+    env:
+      DISABLE_SIP_TEMPLATE: ${{ matrix.disable_sip_template }}
+      MACOS_VERSION: ${{ matrix.macos_version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select image
+        id: select
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed-files.txt
+
+          build=false
+          if grep -Eq '^(templates/base\.pkr\.hcl|templates/disable-sip.*\.pkr\.hcl|data/(github_known_hosts|limit\.maxfiles\.plist|setup-info-template\.json|tart-guest-.*\.plist)|scripts/install-actions-runner\.sh|ansible/)' changed-files.txt; then
+            build=true
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Tool versions
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull vanilla image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest"
+          tart clone "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest" "$MACOS_VERSION-base"
+
+      - name: Disable SIP
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init "templates/$DISABLE_SIP_TEMPLATE"
+          packer build -var "vm_name=$MACOS_VERSION-base" "templates/$DISABLE_SIP_TEMPLATE"
+
+      - name: Build base image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init templates/base.pkr.hcl
+          packer build -var "vm_name=$MACOS_VERSION-base" templates/base.pkr.hcl
+
+      - name: Cleanup
+        if: always() && steps.select.outputs.build == 'true'
+        run: |
+          tart delete "$MACOS_VERSION-base" || true
+
+  build-runner:
+    name: Build Runner Image (${{ matrix.macos_version }})
+    needs: packer-validate
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: tahoe
+            xcode_versions: '"26.6","27.0-beta-2","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            additional_ios_builds: "18.6"
+            additional_tvos_builds: ""
+            xcode_components: '"MetalToolchain"'
+            disk_size: 430
+          - macos_version: sequoia
+            xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
+            additional_ios_builds: "18.5,18.4,18.2,17.5"
+            additional_tvos_builds: "17.5"
+            xcode_components: '"MetalToolchain"'
+            disk_size: 380
+    env:
+      ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
+      ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}
+      DISK_SIZE: ${{ matrix.disk_size }}
+      MACOS_VERSION: ${{ matrix.macos_version }}
+      XCODE_COMPONENTS: ${{ matrix.xcode_components }}
+      XCODE_VERSIONS: ${{ matrix.xcode_versions }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select image
+        id: select
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed-files.txt
+
+          build=false
+          if grep -Fxq ".github/workflows/release.yml" changed-files.txt; then
+            build=true
+          elif grep -Fxq "data/expected.$MACOS_VERSION.runtimes.txt" changed-files.txt; then
+            build=true
+          elif grep -Fxq "scripts/finalize-$MACOS_VERSION.sh" changed-files.txt; then
+            build=true
+          elif grep -Eq '^(templates/xcode\.pkr\.hcl|data/setup-info-template\.json|scripts/install-actions-runner\.sh)$' changed-files.txt; then
+            build=true
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Tool versions
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull base image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Build runner image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init templates/xcode.pkr.hcl
+          packer build \
+            -var tag=runner \
+            -var "disk_size=$DISK_SIZE" \
+            -var disk_free_mb=100000 \
+            -var "macos_version=$MACOS_VERSION" \
+            -var "xcode_version=[$XCODE_VERSIONS]" \
+            -var "additional_ios_builds=[$ADDITIONAL_IOS_BUILDS]" \
+            -var "additional_tvos_builds=[$ADDITIONAL_TVOS_BUILDS]" \
+            -var "xcode_components=[$XCODE_COMPONENTS]" \
+            -var "expected_runtimes_file=data/expected.$MACOS_VERSION.runtimes.txt" \
+            templates/xcode.pkr.hcl
+
+      - name: Finalize runner image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          if [[ -f "scripts/finalize-$MACOS_VERSION.sh" ]]; then
+            packer build \
+              -var "vm_name=$MACOS_VERSION-xcode:runner" \
+              -var "script_path=scripts/finalize-$MACOS_VERSION.sh" \
+              templates/exex-script.pkr.hcl
+          else
+            echo "Skipping prepare script for $MACOS_VERSION"
+          fi
+
+      - name: Cleanup
+        if: always() && steps.select.outputs.build == 'true'
+        run: |
+          tart delete "$MACOS_VERSION-xcode:runner" || true
