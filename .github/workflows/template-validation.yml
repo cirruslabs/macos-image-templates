@@ -232,7 +232,7 @@ jobs:
       matrix:
         include:
           - macos_version: tahoe
-            xcode_versions: '"26.6","27.0-beta-2","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"26.6","27-beta-2","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
@@ -328,7 +328,7 @@ jobs:
 
             candidate=""
             case "$version" in
-              27.0-beta-2)
+              27-beta-2)
                 candidate="$HOME/XcodesCache/Xcode_27_beta_2.xip"
                 ;;
               27-beta)
