@@ -26,6 +26,10 @@ jobs:
       - name: Setup Packer
         uses: hashicorp/setup-packer@v3
 
+      - name: Install validation dependencies
+        run: |
+          brew install ansible
+
       - name: Prepare validation inputs
         run: |
           mkdir -p "$HOME/XcodesCache"
