@@ -232,9 +232,9 @@ build {
       "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
       "brew install xcbeautify swiftformat swiftlint swiftgen licenseplist",
       "brew install mint",
-      "brew update",
-      "brew tap tuist/tuist",
-      "brew install --formula tuist",
+      "git clone --depth 1 https://github.com/tuist/homebrew-tuist.git \"$(brew --repository)/Library/Taps/tuist/homebrew-tuist\"",
+      "rm -rf \"$(brew --repository)/Library/Taps/tuist/homebrew-tuist/Casks\"",
+      "brew install --formula tuist/tuist/tuist",
       "rbenv install 3.3.10",
       "rbenv global 3.3.10", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
       "gem update",
