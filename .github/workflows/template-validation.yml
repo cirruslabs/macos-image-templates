@@ -19,6 +19,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  HOMEBREW_NO_AUTO_UPDATE: 1
+  HOMEBREW_NO_INSTALL_CLEANUP: 1
   PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TART_REGISTRY_HOSTNAME: ghcr.io
   TART_REGISTRY_USERNAME: ${{ github.actor }}
@@ -311,7 +315,16 @@ jobs:
             fi
 
             echo "Downloading Xcode $version"
-            xcodes download "$version" --directory "$HOME/XcodesCache"
+            if [[ -z "${FASTLANE_SESSION:-}" ]]; then
+              echo "::error::Missing $target and FASTLANE_SESSION is not configured. Pre-cache the Xcode archive on the runner or add Apple Developer auth secrets."
+              exit 1
+            fi
+
+            download_args=(download "$version" --directory "$HOME/XcodesCache" --use-fastlane-auth)
+            if [[ -n "${FASTLANE_USER:-}" ]]; then
+              download_args+=(--fastlane-user "$FASTLANE_USER")
+            fi
+            xcodes "${download_args[@]}"
 
             candidate=""
             case "$version" in
