@@ -19,6 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TART_REGISTRY_HOSTNAME: ghcr.io
   TART_REGISTRY_USERNAME: ${{ github.actor }}
   TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
