@@ -287,6 +287,52 @@ jobs:
         run: |
           tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
 
+      - name: Prepare Xcode archives
+        if: steps.select.outputs.build == 'true'
+        run: |
+          set -euo pipefail
+
+          source ~/.zprofile || true
+
+          if ! command -v xcodes >/dev/null; then
+            brew install xcodes
+          fi
+
+          mkdir -p "$HOME/XcodesCache"
+          IFS=',' read -ra versions <<< "$XCODE_VERSIONS"
+
+          for raw_version in "${versions[@]}"; do
+            version="${raw_version//\"/}"
+            target="$HOME/XcodesCache/Xcode_${version}.xip"
+
+            if [[ -f "$target" ]]; then
+              echo "Using cached Xcode $version at $target"
+              continue
+            fi
+
+            echo "Downloading Xcode $version"
+            xcodes download "$version" --directory "$HOME/XcodesCache"
+
+            candidate=""
+            case "$version" in
+              27.0-beta-2)
+                candidate="$HOME/XcodesCache/Xcode_27_beta_2.xip"
+                ;;
+              27-beta)
+                candidate="$HOME/XcodesCache/Xcode_27_beta.xip"
+                ;;
+              *)
+                candidate="$(find "$HOME/XcodesCache" -maxdepth 1 -type f -name "Xcode_${version}*.xip" -print -quit)"
+                ;;
+            esac
+
+            if [[ -n "$candidate" && -f "$candidate" && "$candidate" != "$target" ]]; then
+              mv "$candidate" "$target"
+            fi
+
+            test -f "$target"
+          done
+
       - name: Build runner image
         if: steps.select.outputs.build == 'true'
         run: |
