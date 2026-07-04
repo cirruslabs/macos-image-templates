@@ -108,7 +108,7 @@ jobs:
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
-            disk_size: 430
+            disk_size: 520
     env:
       ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
       ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}
