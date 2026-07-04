@@ -232,6 +232,7 @@ build {
       "brew install libimobiledevice ideviceinstaller ios-deploy carthage",
       "brew install xcbeautify swiftformat swiftlint swiftgen licenseplist",
       "brew install mint",
+      "brew update",
       "brew tap tuist/tuist",
       "brew install --formula tuist",
       "rbenv install 3.3.10",
