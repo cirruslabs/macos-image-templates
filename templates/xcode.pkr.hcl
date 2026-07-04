@@ -16,39 +16,39 @@ variable "xcode_version" {
 }
 
 variable "additional_ios_builds" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "additional_tvos_builds" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "xcode_components" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
   description = "Additional Xcode components to download."
 }
 
 variable "expected_runtimes_file" {
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Path to file containing expected simulator runtimes. If empty, runtime verification is skipped."
 }
 
 variable "tag" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "disk_size" {
-  type = number
+  type    = number
   default = 140
 }
 
 variable "disk_free_mb" {
-  type = number
+  type    = number
   default = 15000
 }
 
@@ -146,7 +146,7 @@ build {
   }
 
   provisioner "file" {
-    sources      = [ for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
+    sources     = [for version in var.xcode_version : pathexpand("~/XcodesCache/Xcode_${version}.xip")]
     destination = "/Users/admin/Downloads/"
   }
 
@@ -161,7 +161,7 @@ build {
   // select the latest one as the default
   dynamic "provisioner" {
     for_each = local.xcode_install_provisioners
-    labels = ["shell"]
+    labels   = ["shell"]
     content {
       inline = provisioner.value.inline
     }
@@ -169,11 +169,11 @@ build {
 
   dynamic "provisioner" {
     for_each = length(var.xcode_version) > 2 ? [2] : []
-    labels = ["shell"]
+    labels   = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcodes select '${var.xcode_version[2]}'",
+        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[2]}.app/Contents/Developer",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -181,11 +181,11 @@ build {
 
   dynamic "provisioner" {
     for_each = length(var.xcode_version) > 1 ? [1] : []
-    labels = ["shell"]
+    labels   = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcodes select '${var.xcode_version[1]}'",
+        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[1]}.app/Contents/Developer",
         "xcodebuild -downloadAllPlatforms",
       ]
     }
@@ -194,7 +194,7 @@ build {
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "sudo xcodes select '${var.xcode_version[0]}'",
+      "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[0]}.app/Contents/Developer",
       "xcodebuild -downloadAllPlatforms",
     ]
   }
@@ -247,7 +247,7 @@ build {
   // Copy expected runtimes file if provided
   dynamic "provisioner" {
     for_each = var.expected_runtimes_file != "" ? [1] : []
-    labels = ["file"]
+    labels   = ["file"]
     content {
       source      = var.expected_runtimes_file
       destination = "/Users/admin/runtimes.expected.txt"
@@ -257,7 +257,7 @@ build {
   // Verify simulator runtimes match expected list if file was provided
   dynamic "provisioner" {
     for_each = var.expected_runtimes_file != "" ? [1] : []
-    labels = ["shell"]
+    labels   = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
