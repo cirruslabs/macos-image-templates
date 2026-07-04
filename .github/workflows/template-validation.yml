@@ -1,0 +1,71 @@
+name: Template Validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/monthly.yml"
+      - ".github/workflows/release.yml"
+      - ".github/workflows/template-validation.yml"
+      - "data/**"
+      - "scripts/**"
+      - "templates/**"
+
+permissions:
+  contents: read
+
+jobs:
+  packer-validate:
+    name: Packer Validate
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@v3
+
+      - name: Prepare validation inputs
+        run: |
+          mkdir -p "$HOME/XcodesCache"
+          touch "$HOME/XcodesCache/Xcode_26.6.xip"
+
+      - name: Validate templates
+        run: |
+          set -euo pipefail
+
+          validate() {
+            local template="$1"
+            shift
+
+            packer init "$template"
+            packer validate "$@" "$template"
+          }
+
+          for template in templates/vanilla-*.pkr.hcl; do
+            validate "$template"
+          done
+
+          validate templates/base.pkr.hcl \
+            -var vm_name=template-validation-base
+
+          validate templates/disable-sip.pkr.hcl \
+            -var vm_name=template-validation-disable-sip
+
+          validate templates/disable-sip-with-username.pkr.hcl \
+            -var vm_name=template-validation-disable-sip-user
+
+          validate templates/exex-script.pkr.hcl \
+            -var vm_name=template-validation-exec \
+            -var script_path=scripts/finalize-tahoe.sh
+
+          validate templates/resolve-macos-number.pkr.hcl \
+            -var vm_base_name=template-validation-base \
+            -var vm_name=template-validation-resolve \
+            -var resolve_file=macos-version.txt
+
+          validate templates/xcode.pkr.hcl \
+            -var macos_version=tahoe \
+            -var 'xcode_version=["26.6"]' \
+            -var expected_runtimes_file=data/expected.tahoe.runtimes.txt
