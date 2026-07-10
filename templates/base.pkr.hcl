@@ -122,6 +122,9 @@ build {
       "source ~/.zprofile",
       "node --version",
       "npm install --global yarn pnpm",
+      "echo 'export PNPM_HOME=\"$HOME/Library/pnpm\"' >> ~/.zprofile",
+      "echo 'export PATH=\"$PNPM_HOME:$PATH\"' >> ~/.zprofile",
+      "source ~/.zprofile",
       "yarn --version",
       "pnpm --version",
     ]
