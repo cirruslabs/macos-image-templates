@@ -123,6 +123,8 @@ build {
       "node --version",
       "npm install --global yarn",
       "yarn --version",
+      "npm install --global pnpm",
+      "pnpm --version",
     ]
   }
   provisioner "shell" {
