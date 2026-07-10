@@ -121,9 +121,8 @@ build {
       "echo 'export PATH=\"/opt/homebrew/opt/node@24/bin:$PATH\"' >> ~/.zprofile",
       "source ~/.zprofile",
       "node --version",
-      "npm install --global yarn",
+      "npm install --global yarn pnpm",
       "yarn --version",
-      "npm install --global pnpm",
       "pnpm --version",
     ]
   }
