@@ -235,8 +235,8 @@ build {
       "git clone --depth 1 https://github.com/tuist/homebrew-tuist.git \"$(brew --repository)/Library/Taps/tuist/homebrew-tuist\"",
       "rm -rf \"$(brew --repository)/Library/Taps/tuist/homebrew-tuist/Casks\"",
       "tuist_version=$(ruby -ne 'if $_ =~ %r{/download/([^/]+)/}; puts $1; exit; end' \"$(brew --repository)/Library/Taps/tuist/homebrew-tuist/Aliases/tuist\") && brew trust --formula \"tuist/tuist/tuist@$tuist_version\" && brew install --formula \"tuist/tuist/tuist@$tuist_version\"",
-      "rbenv install 3.3.10",
-      "rbenv global 3.3.10", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
+      "rbenv install --verbose 3.3.12",
+      "rbenv global 3.3.12", # fastlane conflicts with 3.4.0+ https://github.com/fastlane/fastlane/issues/29527
       "gem update",
       "gem install fastlane",
       "gem install cocoapods",
