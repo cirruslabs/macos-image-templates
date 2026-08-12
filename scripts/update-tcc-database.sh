@@ -13,7 +13,10 @@ source ~/.zprofile
 set -euo pipefail
 
 update_tcc_database() {
-  sudo sqlite3 "$1" <<-'EOF'
+  local tart_guest_agent_path
+  tart_guest_agent_path="$(realpath /opt/homebrew/bin/tart-guest-agent)"
+
+  sudo sqlite3 "$1" <<-EOF
 	INSERT OR REPLACE
 	INTO access (
 	  service,
@@ -40,11 +43,13 @@ update_tcc_database() {
 	-- Direct Python invocation
 	('kTCCServiceAccessibility', 0, 'org.python.python', 2, 0, 1, NULL, 'UNUSED'),
 	('kTCCServiceScreenCapture', 0, 'org.python.python', 2, 0, 1, NULL, 'UNUSED'),
+	('kTCCServiceMicrophone', 0, 'org.python.python', 2, 0, 1, NULL, 'UNUSED'),
 	('kTCCServicePostEvent', 0, 'org.python.python', 2, 0, 1, NULL, 'UNUSED'),
 	-- Commands invoked through the Tart Guest Agent
-	('kTCCServiceAccessibility', 1, '/opt/homebrew/bin/tart-guest-agent', 2, 0, 1, NULL, 'UNUSED'),
-	('kTCCServiceScreenCapture', 1, '/opt/homebrew/bin/tart-guest-agent', 2, 0, 1, NULL, 'UNUSED'),
-	('kTCCServicePostEvent', 1, '/opt/homebrew/bin/tart-guest-agent', 2, 0, 1, NULL, 'UNUSED');
+	('kTCCServiceAccessibility', 1, '${tart_guest_agent_path}', 2, 0, 1, NULL, 'UNUSED'),
+	('kTCCServiceScreenCapture', 1, '${tart_guest_agent_path}', 2, 0, 1, NULL, 'UNUSED'),
+	('kTCCServiceMicrophone', 1, '${tart_guest_agent_path}', 2, 0, 1, NULL, 'UNUSED'),
+	('kTCCServicePostEvent', 1, '${tart_guest_agent_path}', 2, 0, 1, NULL, 'UNUSED');
 	EOF
 }
 
