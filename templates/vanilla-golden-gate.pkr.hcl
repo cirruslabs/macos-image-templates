@@ -20,93 +20,31 @@ source "tart-cli" "tart" {
   ssh_password = "admin"
   ssh_username = "admin"
   ssh_timeout  = "180s"
+  // Requires Tart 2.33.0+ and macOS 27+ on both the host and guest VM
+  run_extra_args = [
+    "--provisioning-opts=${join(",", [
+      "fullName=Managed via Tart",
+      "username=admin",
+      "password=admin",
+      "logsInAutomatically=true",
+      "enablesRemoteLogin=true",
+    ])}",
+  ]
   boot_command = [
-    # hello, hola, bonjour, etc.
-    "<wait60s><spacebar>",
-    # Language: most of the times we have a list of "English"[1], "English (UK)", etc. with
-    # "English" language already selected. If we type "english", it'll cause us to switch
-    # to the "English (UK)", which is not what we want. To solve this, we switch to some other
-    # language first, e.g. "Italiano" and then switch back to "English". We'll then jump to the
-    # first entry in a list of "english"-prefixed items, which will be "English".
-    #
-    # [1]: should be named "English (US)", but oh well 🤷
-    "<wait30s>italiano<esc>english<enter>",
-    # Select Your Country or Region
-    "<wait60s><click 'Select Your Country or Region'><wait5s>united states<leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Transfer Your Data to This Mac
-    "<wait30s><tab><tab><tab><spacebar><tab><tab><spacebar>",
-    # Written and Spoken Languages
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Accessibility
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Data & Privacy
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Create a Mac Account
-    "<wait10s><tab><tab><tab><tab><tab><tab>Managed via Tart<tab>admin<tab>admin<tab>admin<tab><tab><tab><spacebar>",
-    # Enable Voice Over
-    "<wait120s><leftAltOn><f5><leftAltOff>",
-    # Sign In to Your Apple Account
-    #
-    # We choose "Other Sign-In Options" → "Sign in Later in Settings" here.
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar><up><spacebar>",
-    # Are you sure you want to skip signing in with an Apple Account?
-    "<wait10s><tab><spacebar>",
-    # Terms and Conditions
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # I have read and agree to the macOS Software License Agreement
-    "<wait10s><tab><spacebar>",
-    # Age Range -> Adult
-    "<wait10s><tab><tab><tab><spacebar>",
-    # Choose Your Look
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Enable Location Services
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Are you sure you don't want to use Location Services?
-    "<wait10s><tab><spacebar>",
-    # Select Your Time Zone
-    "<wait10s><tab><tab><tab>UTC<enter><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Analytics
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Screen Time
-    "<wait10s><tab><tab><spacebar>",
-    # Siri
-    "<wait10s><tab><spacebar><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # You Mac is Ready for FileVault
-    "<wait10s><leftShiftOn><tab><tab><leftShiftOff><spacebar>",
-    # Mac Data Will Not Be Securely Encrypted
-    "<wait10s><tab><spacebar>",
-    # Update Mac Automatically
-    "<wait10s><tab><tab><spacebar>",
-    # Liquid Glass
-    "<wait10s><leftShiftOn><tab><leftShiftOff><spacebar>",
-    # Welcome to Mac
-    "<wait30s><spacebar>",
-    # Disable Voice Over
-    "<wait10s><leftAltOn><f5><leftAltOff>",
+    # Wait for first-boot provisioning to finish automatic login
+    "<wait120s>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
     "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
     "<wait10s><wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
-    # Now that the installation is done, open "System Settings"
-    # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
-    "<wait10s>open '/System/Applications/System Settings.app'<enter>",
-    "<wait120s>",
-    # Navigate to "Sharing"
-    "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><leftShiftOff><spacebar>",
-    # Navigate to "Screen Sharing" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><spacebar>",
-    # Type in the password to allow enabling Screen Sharing
-    "<wait10s>admin<enter>",
-    # Navigate to "Remote Login" and enable it
-    "<wait10s><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><tab><spacebar>",
-    # Quit System Settings
-    "<wait10s><leftAltOn>q<leftAltOff>",
     # Disable Gatekeeper (1/2)
     "<wait10s>sudo spctl --global-disable<enter>",
     "<wait10s>admin<enter>",
     # Disable Gatekeeper (2/2)
     # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
     "<wait10s>open '/System/Applications/System Settings.app'<enter>",
+    # Wait for System Settings to fully open before navigating with the keyboard
+    "<wait120s>",
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
@@ -131,11 +69,10 @@ build {
     inline = [
       // Enable passwordless sudo
       "echo admin | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
-      // Enable auto-login
-      //
-      // See https://github.com/xfreebird/kcpassword for details.
-      "echo '00000000: 1ced 3f4a bcbc ba2c caca 4e82' | sudo xxd -r - /etc/kcpassword",
-      "sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser admin",
+      // Enable Screen Sharing for "tart run --vnc"
+      "sudo launchctl enable system/com.apple.screensharing",
+      // Use the same timezone as the previous Setup Assistant flow
+      "sudo systemsetup -settimezone GMT 2>/dev/null",
       // Disable screensaver at login screen
       "sudo defaults write /Library/Preferences/com.apple.screensaver loginWindowIdleTime 0",
       // Disable screensaver for admin user
@@ -161,7 +98,9 @@ build {
   provisioner "shell" {
     inline = [
       # Ensure that Gatekeeper is disabled
-      "spctl --status | grep -q 'assessments disabled'"
+      "spctl --status | grep -q 'assessments disabled'",
+      # Ensure that FileVault remains disabled by default
+      "sudo fdesetup status | grep -q 'FileVault is Off'",
     ]
   }
 }
