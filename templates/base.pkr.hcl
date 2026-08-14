@@ -121,8 +121,12 @@ build {
       "echo 'export PATH=\"/opt/homebrew/opt/node@24/bin:$PATH\"' >> ~/.zprofile",
       "source ~/.zprofile",
       "node --version",
-      "npm install --global yarn",
+      "npm install --global yarn pnpm",
+      "echo 'export PNPM_HOME=\"$HOME/Library/pnpm\"' >> ~/.zprofile",
+      "echo 'export PATH=\"$PNPM_HOME:$PATH\"' >> ~/.zprofile",
+      "source ~/.zprofile",
       "yarn --version",
+      "pnpm --version",
     ]
   }
   provisioner "shell" {
