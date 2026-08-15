@@ -168,7 +168,7 @@ build {
     inline = [
       # Install Tart Guest Agent
       "source ~/.zprofile",
-      "brew install cirruslabs/cli/tart-guest-agent",
+      "brew install openai/tools/tart-guest-agent",
 
       # Install daemon variant of the Tart Guest Agent
       "sudo mv ~/tart-guest-daemon.plist /Library/LaunchDaemons/org.cirruslabs.tart-guest-daemon.plist",
