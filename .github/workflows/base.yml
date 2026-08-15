@@ -1,0 +1,119 @@
+name: Base Images
+
+on:
+  push:
+    paths:
+      - ".github/workflows/base.yml"
+      - "data/github_known_hosts"
+      - "data/limit.maxfiles.plist"
+      - "data/tart-guest-*.plist"
+      - "scripts/automationmodetool.expect"
+      - "scripts/install-actions-runner.sh"
+      - "scripts/update-tcc-database.sh"
+      - "templates/base.pkr.hcl"
+      - "templates/disable-sip*.pkr.hcl"
+  workflow_dispatch:
+    inputs:
+      macos_version:
+        description: "macOS base image to build"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - golden-gate
+          - tahoe
+          - sequoia
+          - sonoma
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: tart-image-builds
+  cancel-in-progress: false
+
+env:
+  TART_REGISTRY_HOSTNAME: ghcr.io
+  TART_REGISTRY_USERNAME: ${{ github.actor }}
+  TART_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  update-base:
+    name: Update Base Image (${{ matrix.macos_version }})
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' ||
+        github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+      }}
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - macos_version: sonoma
+            disable_sip_template: disable-sip.pkr.hcl
+          - macos_version: sequoia
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+          - macos_version: tahoe
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+          - macos_version: golden-gate
+            disable_sip_template: disable-sip-with-username.pkr.hcl
+    env:
+      DISABLE_SIP_TEMPLATE: ${{ matrix.disable_sip_template }}
+      MACOS_VERSION: ${{ matrix.macos_version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select image
+        id: select
+        env:
+          INPUT_MACOS_VERSION: ${{ inputs.macos_version || 'all' }}
+        run: |
+          set -euo pipefail
+
+          build=false
+          if [[ "$INPUT_MACOS_VERSION" == "all" || "$INPUT_MACOS_VERSION" == "$MACOS_VERSION" ]]; then
+            build=true
+          fi
+
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Tool versions
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart --version
+          packer --version
+
+      - name: Pull vanilla image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart pull "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest"
+          tart clone "ghcr.io/cirruslabs/macos-$MACOS_VERSION-vanilla:latest" "$MACOS_VERSION-base"
+
+      - name: Disable SIP
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init "templates/$DISABLE_SIP_TEMPLATE"
+          packer build -var "vm_name=$MACOS_VERSION-base" "templates/$DISABLE_SIP_TEMPLATE"
+
+      - name: Build base image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          packer init templates/base.pkr.hcl
+          packer build -var "vm_name=$MACOS_VERSION-base" templates/base.pkr.hcl
+
+      - name: Push base image
+        if: steps.select.outputs.build == 'true'
+        run: |
+          tart push "$MACOS_VERSION-base" "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest"
+
+      - name: Cleanup
+        if: always() && steps.select.outputs.build == 'true'
+        run: |
+          tart delete "$MACOS_VERSION-base" || true
