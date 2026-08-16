@@ -21,9 +21,10 @@ Configuration is read once, when each process loads the library:
 | `TART_METAL_MAX_THREADGROUP_MEMORY` | Memory floor in bytes; defaults to 65536. |
 | `TART_METAL_RECOMMENDED_WORKING_SET_SIZE` | Optional working-set floor in bytes; unchanged when unset. |
 
-The old `LUME_METAL_*` names are not recognized. See the repository's
-[Metal capabilities instructions](../../README.md#metal-capabilities) for image
-defaults, per-command overrides, host setup, and rollback.
+The old `LUME_METAL_*` names are not recognized. Base images install the library
+without enabling it for the guest agent or other processes. See the repository's
+[Metal capabilities instructions](../../README.md#metal-capabilities) for
+explicit per-command activation and host setup.
 
 From the repository root, run `bash scripts/test-tart-metal-capabilities.sh` to
 build and test without installing anything on the host. The installer accepts

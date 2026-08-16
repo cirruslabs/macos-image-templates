@@ -15,13 +15,9 @@ See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packa
 ## Metal capabilities
 
 Base images include the experimental [Tart Metal shim](data/tart-metal-capabilities),
-based on [the Lume team's work](https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md). The guest agent enables
-`/usr/local/lib/TartMetalCapabilities.dylib` with Apple family 9 (`1009`) and
-64 KiB of threadgroup memory. Commands inherit these defaults automatically:
-
-```shell
-tart exec my-vm /path/to/workload
-```
+based on [the Lume team's work](https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md).
+It is installed at `/usr/local/lib/TartMetalCapabilities.dylib` but is not
+enabled by default, including for the guest agent or `tart exec`.
 
 Before starting the VM, enable unrestricted virtual-GPU features on the host
 as the user running Tart:
@@ -30,22 +26,20 @@ as the user running Tart:
 defaults write com.apple.gpusw.ParavirtualizedGraphics ForceUnrestrictedDeviceFeatureLevel -bool true
 ```
 
-Restart an already-running VM after changing that preference. To override the
-family for one command:
+Restart an already-running VM after changing that preference. To enable the
+shim for one command with Apple family 9 and 64 KiB of threadgroup memory:
 
 ```shell
 tart exec my-vm /usr/bin/env \
   DYLD_INSERT_LIBRARIES=/usr/local/lib/TartMetalCapabilities.dylib \
-  TART_METAL_APPLE_FAMILY_MAX=1008 \
+  TART_METAL_APPLE_FAMILY_MAX=1009 \
   /path/to/workload
 ```
 
-Use `TART_METAL_APPLE_FAMILY_MAX=0` for stock capabilities. The explicit dylib
-path handles launchers that strip inherited `DYLD_*` variables; it is not needed
-for direct commands. Each new process gets its own settings. To disable injection
-entirely, remove the Metal environment entries from both guest-agent launchd
-plists and reboot the guest. Protected executables may reject injection, and
-GPU support depends on the host, guest, and workload.
+Omit these environment variables to run normally. Each opted-in process gets
+its own settings; `TART_METAL_APPLE_FAMILY_MAX=0` disables the capability
+override. Protected executables may reject injection, and GPU support depends
+on the host, guest, and workload.
 
 ## Release Cadence
 

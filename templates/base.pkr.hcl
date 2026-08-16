@@ -155,7 +155,7 @@ build {
     ]
   }
 
-  // Install the process-scoped Metal shim before enabling the guest agent.
+  // Install the process-scoped Metal shim for opt-in workloads.
   provisioner "shell" {
     inline = ["mkdir -p ~/tart-metal-capabilities-src"]
   }
