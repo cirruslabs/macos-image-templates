@@ -11,6 +11,12 @@
         </array>
         <key>EnvironmentVariables</key>
         <dict>
+            <key>DYLD_INSERT_LIBRARIES</key>
+            <string>/usr/local/lib/TartMetalCapabilities.dylib</string>
+            <key>TART_METAL_APPLE_FAMILY_MAX</key>
+            <string>1009</string>
+            <key>TART_METAL_MAX_THREADGROUP_MEMORY</key>
+            <string>65536</string>
             <key>PATH</key>
             <string>/bin:/usr/bin:/usr/sbin:/usr/local/bin:/opt/homebrew/bin</string>
             <key>TERM</key>
