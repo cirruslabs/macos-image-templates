@@ -14,27 +14,24 @@ See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packa
 
 ## Metal capabilities
 
-Base images install a universal `TartMetalCapabilities.dylib` in `/usr/local/lib`.
-It is built from the [vendored shim](data/tart-metal-capabilities), adapted from
-Cua's MIT-licensed implementation. Its original license is installed in
-`/usr/local/share/licenses/tart-metal-capabilities`.
-Both Tart guest-agent launchd jobs enable it for themselves and their child
-processes, including commands started with `tart exec`. Other login-session
-processes keep their normal environment.
+Base images include the experimental [Tart Metal shim](data/tart-metal-capabilities),
+based on [the Lume team's work](https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md). The guest agent enables
+`/usr/local/lib/TartMetalCapabilities.dylib` with Apple family 9 (`1009`) and
+64 KiB of threadgroup memory. Commands inherit these defaults automatically:
 
-The default profile uses `TART_METAL_APPLE_FAMILY_MAX=1009` and
-`TART_METAL_MAX_THREADGROUP_MEMORY=65536`. This is experimental and depends on
-the host GPU, macOS versions, and workload; it is not physical GPU passthrough.
-The host user running Tart must separately enable the unrestricted virtual-GPU
-feature level while the VM is stopped:
+```shell
+tart exec my-vm /path/to/workload
+```
+
+Before starting the VM, enable unrestricted virtual-GPU features on the host
+as the user running Tart:
 
 ```shell
 defaults write com.apple.gpusw.ParavirtualizedGraphics ForceUnrestrictedDeviceFeatureLevel -bool true
 ```
 
-Start the VM again after changing that preference. Each new process reads its
-own configuration, so a command can override the default without restarting the
-guest agent or affecting another command:
+Restart an already-running VM after changing that preference. To override the
+family for one command:
 
 ```shell
 tart exec my-vm /usr/bin/env \
@@ -43,14 +40,12 @@ tart exec my-vm /usr/bin/env \
   /path/to/workload
 ```
 
-Set `TART_METAL_APPLE_FAMILY_MAX=0` for stock capabilities. Setting the dylib path
-explicitly keeps the override working through launcher programs that strip
-inherited `DYLD_*` variables. The configuration is fixed when the workload
-starts; changing an already-running process's environment does not reconfigure it.
-To disable injection completely, remove the three Metal environment entries
-from the guest's `org.cirruslabs.tart-guest-agent` and
-`org.cirruslabs.tart-guest-daemon` launchd plists and reboot the guest.
-Protected or hardened executables may reject or remove library injection.
+Use `TART_METAL_APPLE_FAMILY_MAX=0` for stock capabilities. The explicit dylib
+path handles launchers that strip inherited `DYLD_*` variables; it is not needed
+for direct commands. Each new process gets its own settings. To disable injection
+entirely, remove the Metal environment entries from both guest-agent launchd
+plists and reboot the guest. Protected executables may reject injection, and
+GPU support depends on the host, guest, and workload.
 
 ## Release Cadence
 
