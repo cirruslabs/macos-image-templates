@@ -17,7 +17,10 @@ xcrun clang \
   -mmacosx-version-min=12.0 -framework Foundation -framework Metal \
   "$source_dir/Sources/TartMetalCapabilities.m" -o "$work_dir/TartMetalCapabilities.dylib"
 codesign --force --sign - "$work_dir/TartMetalCapabilities.dylib"
-lipo "$work_dir/TartMetalCapabilities.dylib" -verify_arch arm64 arm64e x86_64
+# Xcode 27's lipo rejects multiple architectures in one -verify_arch call.
+for architecture in arm64 arm64e x86_64; do
+  lipo "$work_dir/TartMetalCapabilities.dylib" -verify_arch "$architecture"
+done
 codesign --verify --strict "$work_dir/TartMetalCapabilities.dylib"
 
 # DESTDIR allows the exact installer to be exercised without modifying the host.
