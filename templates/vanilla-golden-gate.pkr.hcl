@@ -12,7 +12,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2026SummerSeed/fullrestores/140-55718/5809AFC6-1923-4590-AAFC-904A0283E659/UniversalMac_27.0_26A5388g_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2026SummerSeed/7b1c2bd9-7617-426d-92e5-ef204407ffaa/UniversalMac_27.0_26A5416b_Restore.ipsw"
   vm_name      = "golden-gate-vanilla"
   cpu_count    = 4
   memory_gb    = 8
