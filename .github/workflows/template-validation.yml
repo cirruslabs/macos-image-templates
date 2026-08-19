@@ -51,6 +51,11 @@ jobs:
           bash -n scripts/install-tart-metal-capabilities.sh scripts/test-tart-metal-capabilities.sh
           bash scripts/test-tart-metal-capabilities.sh
 
+      - name: Validate TCC database provisioning
+        run: |
+          bash -n scripts/update-tcc-database.sh scripts/test-update-tcc-database.sh
+          bash scripts/test-update-tcc-database.sh
+
       - name: Prepare validation inputs
         run: |
           mkdir -p "$HOME/XcodesCache"
