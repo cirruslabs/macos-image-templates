@@ -155,6 +155,22 @@ build {
     ]
   }
 
+  // Install the process-scoped Metal shim for opt-in workloads.
+  provisioner "shell" {
+    inline = ["mkdir -p ~/tart-metal-capabilities-src"]
+  }
+  provisioner "file" {
+    source      = "data/tart-metal-capabilities/"
+    destination = "~/tart-metal-capabilities-src/"
+  }
+  provisioner "shell" {
+    environment_vars = ["TART_METAL_SOURCE_DIR=/Users/admin/tart-metal-capabilities-src"]
+    script           = "scripts/install-tart-metal-capabilities.sh"
+  }
+  provisioner "shell" {
+    inline = ["rm -rf ~/tart-metal-capabilities-src"]
+  }
+
   // Guest agent for Tart VMs
   provisioner "file" {
     source      = "data/tart-guest-daemon.plist"

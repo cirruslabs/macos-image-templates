@@ -46,6 +46,16 @@ jobs:
         run: |
           brew install ansible
 
+      - name: Validate Tart Metal capabilities
+        run: |
+          bash -n scripts/install-tart-metal-capabilities.sh scripts/test-tart-metal-capabilities.sh
+          bash scripts/test-tart-metal-capabilities.sh
+
+      - name: Validate TCC database provisioning
+        run: |
+          bash -n scripts/update-tcc-database.sh scripts/test-update-tcc-database.sh
+          bash scripts/test-update-tcc-database.sh
+
       - name: Prepare validation inputs
         run: |
           mkdir -p "$HOME/XcodesCache"
@@ -189,7 +199,7 @@ jobs:
           git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed-files.txt
 
           build=false
-          if grep -Eq '^(\.github/workflows/base\.yml|templates/base\.pkr\.hcl|templates/disable-sip.*\.pkr\.hcl|data/(github_known_hosts|limit\.maxfiles\.plist|setup-info-template\.json|tart-guest-.*\.plist)|scripts/(automationmodetool\.expect|(install-actions-runner|update-tcc-database)\.sh)|ansible/)' changed-files.txt; then
+          if grep -Eq '^(\.github/workflows/base\.yml|templates/base\.pkr\.hcl|templates/disable-sip.*\.pkr\.hcl|data/(github_known_hosts|limit\.maxfiles\.plist|setup-info-template\.json|tart-guest-.*\.plist|tart-metal-capabilities/)|scripts/(automationmodetool\.expect|(install-actions-runner|install-tart-metal-capabilities|update-tcc-database)\.sh)|ansible/)' changed-files.txt; then
             build=true
           fi
 

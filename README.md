@@ -12,6 +12,35 @@ The following image variants are currently available:
 
 See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
+## Metal capabilities
+
+Base images include the experimental [Tart Metal shim](data/tart-metal-capabilities),
+based on [the Lume team's work](https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md).
+It is installed at `/usr/local/lib/TartMetalCapabilities.dylib` but is not
+enabled by default, including for the guest agent or `tart exec`.
+
+Before starting the VM, enable unrestricted virtual-GPU features on the host
+as the user running Tart:
+
+```shell
+defaults write com.apple.gpusw.ParavirtualizedGraphics ForceUnrestrictedDeviceFeatureLevel -bool true
+```
+
+Restart an already-running VM after changing that preference. To enable the
+shim for one command with Apple family 9 and 64 KiB of threadgroup memory:
+
+```shell
+tart exec my-vm /usr/bin/env \
+  DYLD_INSERT_LIBRARIES=/usr/local/lib/TartMetalCapabilities.dylib \
+  TART_METAL_APPLE_FAMILY_MAX=1009 \
+  /path/to/workload
+```
+
+Omit these environment variables to run normally. Each opted-in process gets
+its own settings; `TART_METAL_APPLE_FAMILY_MAX=0` disables the capability
+override. Protected executables may reject injection, and GPU support depends
+on the host, guest, and workload.
+
 ## Release Cadence
 
 Once a new version of Xcode is released, we will initiate a GitHub release which will automatically build and push
