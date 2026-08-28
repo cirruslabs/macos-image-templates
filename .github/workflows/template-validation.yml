@@ -60,6 +60,7 @@ jobs:
         run: |
           mkdir -p "$HOME/XcodesCache"
           touch "$HOME/XcodesCache/Xcode_26.6.xip"
+          touch "$HOME/XcodesCache/Xcode_27-beta-6.xip"
 
       - name: Validate templates
         run: |
@@ -99,6 +100,11 @@ jobs:
             -var macos_version=tahoe \
             -var 'xcode_version=["26.6"]' \
             -var expected_runtimes_file=data/expected.tahoe.runtimes.txt
+
+          validate templates/xcode.pkr.hcl \
+            -var macos_version=tahoe \
+            -var 'xcode_version=["27-beta-6"]' \
+            -var 'xcode_components=["MetalToolchain"]'
 
   build-vanilla:
     name: Build Vanilla Image (${{ matrix.macos_version }})
@@ -246,7 +252,7 @@ jobs:
       matrix:
         include:
           - macos_version: tahoe
-            xcode_versions: '"26.6","27-beta-2","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"26.6","27-beta-6","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
@@ -342,8 +348,8 @@ jobs:
 
             candidate=""
             case "$version" in
-              27-beta-2)
-                candidate="$HOME/XcodesCache/Xcode_27_beta_2.xip"
+              27-beta-6)
+                candidate="$HOME/XcodesCache/Xcode_27_beta_6.xip"
                 ;;
               27-beta)
                 candidate="$HOME/XcodesCache/Xcode_27_beta.xip"
