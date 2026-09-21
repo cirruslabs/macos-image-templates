@@ -53,6 +53,8 @@ source "tart-cli" "tart" {
     "<wait10s><leftShiftOn><tab><leftShiftOff><wait1s><spacebar>",
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
+    # Refocus Terminal after quitting System Settings
+    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
     # Sharing is no longer listed in the View menu on Golden Gate
     "<wait10s>open 'x-apple.systempreferences:com.apple.Sharing-Settings.extension'<enter>",
     # Enable Screen Sharing through the UI to grant the required TCC permissions
@@ -106,6 +108,8 @@ build {
     inline = [
       # Ensure that Gatekeeper is disabled
       "spctl --status | grep -q 'assessments disabled'",
+      # Ensure that Screen Sharing was enabled
+      "sudo launchctl print system/com.apple.screensharing > /dev/null",
       # Ensure that FileVault remains disabled by default
       "sudo fdesetup status | grep -q 'FileVault is Off'",
     ]
