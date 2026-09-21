@@ -79,6 +79,12 @@ jobs:
             validate "$template"
           done
 
+          validate templates/xcode.pkr.hcl \
+            -var macos_version=golden-gate \
+            -var 'xcode_version=["27"]' \
+            -var 'xcode_components=["MetalToolchain"]' \
+            -var expected_runtimes_file=data/expected.golden-gate.runtimes.txt
+
           validate templates/base.pkr.hcl \
             -var vm_name=template-validation-base
 
@@ -269,6 +275,12 @@ jobs:
             additional_tvos_builds: "17.5"
             xcode_components: '"MetalToolchain"'
             disk_size: 380
+          - macos_version: golden-gate
+            xcode_versions: '"27"'
+            additional_ios_builds: ""
+            additional_tvos_builds: ""
+            xcode_components: '"MetalToolchain"'
+            disk_size: 240
     env:
       ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
       ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}

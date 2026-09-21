@@ -58,6 +58,8 @@ jobs:
       max-parallel: 1
       matrix:
         include:
+          - macos_version: golden-gate
+            disable_sip_template: disable-sip-with-username.pkr.hcl
           - macos_version: sonoma
             disable_sip_template: disable-sip.pkr.hcl
           - macos_version: sequoia
@@ -162,6 +164,10 @@ jobs:
             xcode_version: "15.4"
             xcode_components: ""
             latest: false
+          - macos_version: golden-gate
+            xcode_version: "27"
+            xcode_components: '"MetalToolchain"'
+            latest: true
     env:
       MACOS_VERSION: ${{ matrix.macos_version }}
       XCODE_COMPONENTS: ${{ matrix.xcode_components }}
