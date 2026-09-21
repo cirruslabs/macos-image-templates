@@ -34,7 +34,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        # Xcode 27 requires macOS Tahoe 26.4 or later.
+        # Xcode 27 requires macOS Tahoe 26.6 or later.
         macos_version: >-
           ${{ startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
               && fromJSON('["tahoe"]')
@@ -107,7 +107,7 @@ jobs:
             xcode_components: '"MetalToolchain"'
             disk_size: 380
           - macos_version: tahoe
-            xcode_versions: '"26.6","27-beta-6","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"27","26.6","27-beta-6","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'

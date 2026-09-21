@@ -115,9 +115,13 @@ jobs:
       matrix:
         include:
           - macos_version: tahoe
-            xcode_version: "26.2"
+            xcode_version: "27"
             xcode_components: '"MetalToolchain"'
             latest: true
+          - macos_version: tahoe
+            xcode_version: "26.2"
+            xcode_components: '"MetalToolchain"'
+            latest: false
           - macos_version: tahoe
             xcode_version: "26.1.1"
             xcode_components: '"MetalToolchain"'
