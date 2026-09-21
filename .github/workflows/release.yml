@@ -34,10 +34,10 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        # Xcode 27 requires macOS Tahoe 26.4 or later.
+        # Xcode 27 requires macOS Tahoe 26.6 or later.
         macos_version: >-
           ${{ startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
-              && fromJSON('["tahoe"]')
+              && fromJSON('["tahoe", "golden-gate"]')
               || fromJSON('["tahoe", "sequoia"]') }}
     env:
       MACOS_VERSION: ${{ matrix.macos_version }}
@@ -100,6 +100,12 @@ jobs:
       max-parallel: 1
       matrix:
         include:
+          - macos_version: golden-gate
+            xcode_versions: '"27"'
+            additional_ios_builds: ""
+            additional_tvos_builds: ""
+            xcode_components: '"MetalToolchain"'
+            disk_size: 240
           - macos_version: sequoia
             xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
             additional_ios_builds: "18.5,18.4,18.2,17.5"

@@ -7,8 +7,8 @@ The following image variants are currently available:
 
 * `macos-{golden-gate,tahoe,sequoia,sonoma}-vanilla` — a vanilla macOS installation with helpful tweaks such as auto-login, but no additional software preinstalled
 * `macos-{golden-gate,tahoe,sequoia,sonoma}-base` — based on `macos-{golden-gate,tahoe,sequoia,sonoma}-vanilla` image, it comes with `brew` and [other useful software](https://github.com/cirruslabs/macos-image-templates/blob/main/templates/base.pkr.hcl) pre-installed, but without Xcode
-* `macos-{tahoe,sequoia,sonoma}-xcode:N` — based on `macos-{tahoe,sequoia,sonoma}-base` image and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
-* `macos-runner:{tahoe,sequoia,sonoma}` — a variant of `xcode:N` with several versions of `Xcode` pre-installed and [`xcodes` tool](https://github.com/XcodesOrg/xcodes) to switch between them.
+* `macos-{golden-gate,tahoe,sequoia,sonoma}-xcode:N` — based on `macos-{golden-gate,tahoe,sequoia,sonoma}-base` image and has `Xcode N` with [`Flutter`](https://flutter.dev/) pre-installed
+* `macos-runner:{golden-gate,tahoe,sequoia,sonoma}` — a variant of `xcode:N` with one or more versions of `Xcode` pre-installed and [`xcodes` tool](https://github.com/XcodesOrg/xcodes) to switch between them.
 
 See a full list of VMs available [here](https://github.com/orgs/cirruslabs/packages?tab=packages&q=macos-).
 
@@ -44,7 +44,7 @@ on the host, guest, and workload.
 ## Release Cadence
 
 Once a new version of Xcode is released, we will initiate a GitHub release which will automatically build and push
-a new version of the `macos-{tahoe,sequoia}-xcode:N`. This generally happens the next weekend after a release.
+a new version of the `macos-{golden-gate,tahoe,sequoia}-xcode:N` images on supported macOS versions. This generally happens the next weekend after a release.
 Please watch this repository releases to get notified about new images.
 
 ## Update Cadence
