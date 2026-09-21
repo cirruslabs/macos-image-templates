@@ -41,22 +41,24 @@ source "tart-cli" "tart" {
     # Disable Gatekeeper (1/2)
     "<wait10s>sudo spctl --global-disable<enter>",
     "<wait10s>admin<enter>",
+    # Disable Gatekeeper (2/2)
     # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
     "<wait10s>open '/System/Applications/System Settings.app'<enter>",
     # Wait for System Settings to fully open before navigating with the keyboard
     "<wait120s>",
-    # Navigate to "Sharing"
-    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
-    # Enable Screen Sharing through the UI to grant the required TCC permissions
-    "<wait10s><tab><tab><tab><tab><tab><spacebar>",
-    # Type in the password to allow enabling Screen Sharing
-    "<wait10s>admin<enter>",
-    # Disable Gatekeeper (2/2)
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
     "<wait10s>admin<enter>",
     "<wait10s><leftShiftOn><tab><leftShiftOff><wait1s><spacebar>",
+    # Quit System Settings
+    "<wait10s><leftAltOn>q<leftAltOff>",
+    # Sharing is no longer listed in the View menu on Golden Gate
+    "<wait10s>open 'x-apple.systempreferences:com.apple.Sharing-Settings.extension'<enter>",
+    # Enable Screen Sharing through the UI to grant the required TCC permissions
+    "<wait10s><tab><tab><tab><tab><tab><tab><spacebar>",
+    # Type in the password to allow enabling Screen Sharing
+    "<wait10s>admin<enter>",
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
   ]
