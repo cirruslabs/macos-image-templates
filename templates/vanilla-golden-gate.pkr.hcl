@@ -41,11 +41,17 @@ source "tart-cli" "tart" {
     # Disable Gatekeeper (1/2)
     "<wait10s>sudo spctl --global-disable<enter>",
     "<wait10s>admin<enter>",
-    # Disable Gatekeeper (2/2)
     # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
     "<wait10s>open '/System/Applications/System Settings.app'<enter>",
     # Wait for System Settings to fully open before navigating with the keyboard
     "<wait120s>",
+    # Navigate to "Sharing"
+    "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Sharing<enter>",
+    # Enable Screen Sharing through the UI to grant the required TCC permissions
+    "<wait10s><tab><tab><tab><tab><tab><spacebar>",
+    # Type in the password to allow enabling Screen Sharing
+    "<wait10s>admin<enter>",
+    # Disable Gatekeeper (2/2)
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
     "<wait10s><leftShiftOn><tab><tab><tab><tab><tab><tab><leftShiftOff>",
     "<wait10s><down><wait1s><down><wait1s><enter>",
@@ -70,8 +76,6 @@ build {
     inline = [
       // Enable passwordless sudo
       "echo admin | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo 'admin ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/admin-nopasswd\"",
-      // Enable Screen Sharing for "tart run --vnc"
-      "sudo launchctl enable system/com.apple.screensharing",
       // Use the same timezone as the previous Setup Assistant flow
       "sudo systemsetup -settimezone GMT 2>/dev/null",
       // Disable screensaver at login screen
