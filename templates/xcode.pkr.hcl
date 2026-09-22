@@ -191,14 +191,7 @@ build {
     }
   }
 
-  provisioner "shell" {
-    inline = [
-      "source ~/.zprofile",
-      "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[0]}.app/Contents/Developer",
-      "xcodebuild -downloadAllPlatforms",
-    ]
-  }
-
+  // Download legacy iOS runtimes before selecting the newest Xcode.
   provisioner "shell" {
     inline = concat(
       ["source ~/.zprofile"],
@@ -206,6 +199,14 @@ build {
         for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
       ]
     )
+  }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[0]}.app/Contents/Developer",
+      "xcodebuild -downloadAllPlatforms",
+    ]
   }
 
   provisioner "shell" {
