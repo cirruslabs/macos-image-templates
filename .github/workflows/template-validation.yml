@@ -337,6 +337,7 @@ jobs:
 
       - name: Prepare Xcode archives
         if: steps.select.outputs.build == 'true'
+        timeout-minutes: 30
         run: |
           set -euo pipefail
 
@@ -347,6 +348,8 @@ jobs:
           fi
 
           mkdir -p "$HOME/XcodesCache"
+          download_dir="$(mktemp -d "$HOME/XcodesCache/.download.XXXXXX")"
+          trap 'rm -rf "$download_dir"' EXIT
           IFS=',' read -ra versions <<< "$XCODE_VERSIONS"
 
           for raw_version in "${versions[@]}"; do
@@ -359,38 +362,22 @@ jobs:
             fi
 
             echo "Downloading Xcode $version"
-            if [[ -z "${FASTLANE_SESSION:-}" ]]; then
-              echo "::error::Missing $target and FASTLANE_SESSION is not configured. Pre-cache the Xcode archive on the runner or add Apple Developer auth secrets."
+            download_args=(download "$version" --directory "$download_dir")
+            if [[ -n "${FASTLANE_SESSION:-}" ]]; then
+              download_args+=(--use-fastlane-auth)
+            elif [[ -n "${FASTLANE_USER:-}" ]]; then
+              # An explicit user reads a cookie file instead of FASTLANE_SESSION.
+              download_args+=(--use-fastlane-auth --fastlane-user "$FASTLANE_USER")
+            fi
+            xcodes "${download_args[@]}" < /dev/null
+
+            archives=("$download_dir"/*.xip)
+            if [[ ${#archives[@]} -ne 1 || ! -f "${archives[0]}" ]]; then
+              echo "::error::Expected exactly one downloaded Xcode archive for $version."
               exit 1
             fi
 
-            download_args=(download "$version" --directory "$HOME/XcodesCache" --use-fastlane-auth)
-            if [[ -n "${FASTLANE_USER:-}" ]]; then
-              download_args+=(--fastlane-user "$FASTLANE_USER")
-            fi
-            xcodes "${download_args[@]}"
-
-            candidate=""
-            case "$version" in
-              27)
-                candidate="$HOME/XcodesCache/Xcode_27.0.xip"
-                ;;
-              27-beta-6)
-                candidate="$HOME/XcodesCache/Xcode_27_beta_6.xip"
-                ;;
-              27-beta)
-                candidate="$HOME/XcodesCache/Xcode_27_beta.xip"
-                ;;
-              *)
-                candidate="$(find "$HOME/XcodesCache" -maxdepth 1 -type f -name "Xcode_${version}*.xip" -print -quit)"
-                ;;
-            esac
-
-            if [[ -n "$candidate" && -f "$candidate" && "$candidate" != "$target" ]]; then
-              mv "$candidate" "$target"
-            fi
-
-            test -f "$target"
+            mv "${archives[0]}" "$target"
           done
 
       - name: Build runner image
