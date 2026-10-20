@@ -8,6 +8,7 @@ iOS 26.5 (26.5 - 23F77) - com.apple.CoreSimulator.SimRuntime.iOS-26-5
 iOS 27.0 (27.0 - 24A5355p) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
 iOS 27.0 (27.0 - 24A5423a) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
 iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
+iOS 27.1 (27.1 - 24A94425) - com.apple.CoreSimulator.SimRuntime.iOS-27-1
 tvOS 26.5 (26.5 - 23L470) - com.apple.CoreSimulator.SimRuntime.tvOS-26-5
 tvOS 27.0 (27.0 - 24J5356a) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
 tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
