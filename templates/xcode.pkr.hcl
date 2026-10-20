@@ -58,12 +58,12 @@ variable "android_sdk_tools_version" {
 }
 
 source "tart-cli" "tart" {
-  vm_base_name = "ghcr.io/cirruslabs/macos-${var.macos_version}-base:latest"
+  // The workflow sizes the VM before boot; only the guest daemon resizes APFS.
+  recovery_partition = "keep"
   // use tag or the last element of the xcode_version list
   vm_name      = "${var.macos_version}-xcode:${var.tag != "" ? var.tag : var.xcode_version[0]}"
   cpu_count    = 4
   memory_gb    = 8
-  disk_size_gb = var.disk_size
   headless     = true
   ssh_password = "admin"
   ssh_username = "admin"
@@ -95,7 +95,15 @@ build {
   sources = ["source.tart-cli.tart"]
 
   provisioner "shell" {
+    // Allow 6 GB for boot/recovery partitions and metadata; Tart uses decimal GB.
     inline = [
+      "minimum_kb=${floor((var.disk_size - 6) * 1000000000 / 1024)}",
+      "for ((attempt = 0; attempt < 60; attempt++)); do",
+      "  size_kb=$(df -k /System/Volumes/Data | awk 'NR == 2 {print $2}')",
+      "  [[ $size_kb -ge $minimum_kb ]] && break",
+      "  sleep 2",
+      "done",
+      "[[ $size_kb -ge $minimum_kb ]] || { echo 'APFS did not expand to ${var.disk_size} GB within 120 seconds.' >&2; exit 1; }",
       "source ~/.zprofile",
       "brew --version",
       "brew update",

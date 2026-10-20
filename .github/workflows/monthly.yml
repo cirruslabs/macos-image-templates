@@ -197,6 +197,8 @@ jobs:
 
       - name: Build Xcode image
         run: |
+          tart clone "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest" "$MACOS_VERSION-xcode:$XCODE_VERSION"
+          tart set "$MACOS_VERSION-xcode:$XCODE_VERSION" --disk-size 140
           packer init templates/xcode.pkr.hcl
           packer build \
             -var "macos_version=$MACOS_VERSION" \
