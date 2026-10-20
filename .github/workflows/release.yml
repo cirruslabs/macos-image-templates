@@ -101,7 +101,7 @@ jobs:
       matrix:
         include:
           - macos_version: golden-gate
-            xcode_versions: '"27"'
+            xcode_versions: '"27.1","27"'
             additional_ios_builds: ""
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
@@ -113,7 +113,7 @@ jobs:
             xcode_components: '"MetalToolchain"'
             disk_size: 380
           - macos_version: tahoe
-            xcode_versions: '"27","26.6","27-beta-6","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"27.1","26.6","27-beta-6","27","26.5","27-beta","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
