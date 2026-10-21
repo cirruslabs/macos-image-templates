@@ -383,6 +383,8 @@ jobs:
       - name: Build runner image
         if: steps.select.outputs.build == 'true'
         run: |
+          tart clone "ghcr.io/cirruslabs/macos-$MACOS_VERSION-base:latest" "$MACOS_VERSION-xcode:runner"
+          tart set "$MACOS_VERSION-xcode:runner" --disk-size "$DISK_SIZE"
           packer init templates/xcode.pkr.hcl
           packer build \
             -var tag=runner \
