@@ -12,7 +12,7 @@ packer {
 }
 
 source "tart-cli" "tart" {
-  from_ipsw    = "https://updates.cdn-apple.com/2026FallFCS/afcfc88e-bbe6-44bf-a5da-07c56eebc06c/UniversalMac_27.0_26A428_Restore.ipsw"
+  from_ipsw    = "https://updates.cdn-apple.com/2026FallFCS/c9671975-52db-4fb5-9af2-00217169ba8d/UniversalMac_27.2_26B123_Restore.ipsw"
   vm_name      = "golden-gate-vanilla"
   cpu_count    = 4
   memory_gb    = 8
@@ -36,14 +36,15 @@ source "tart-cli" "tart" {
     "<wait120s>",
     # Enable Keyboard navigation
     # This is so that we can navigate the System Settings app using the keyboard
-    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
+    # Open Terminal by path so first boot does not depend on Spotlight.
+    "<wait10s><leftAltOn><leftShiftOn>g<leftShiftOff><leftAltOff><wait5s>/System/Applications/Utilities/Terminal.app<enter><wait5s><leftAltOn>o<leftAltOff>",
     "<wait10s><wait10s>defaults write NSGlobalDomain AppleKeyboardUIMode -int 3<enter>",
     # Disable Gatekeeper (1/2)
     "<wait10s>sudo spctl --global-disable<enter>",
     "<wait10s>admin<enter>",
     # Disable Gatekeeper (2/2)
-    # On Tahoe opening System Settings through Spotlight is not very reliable, sometimes opens System information
-    "<wait10s>open '/System/Applications/System Settings.app'<enter>",
+    # Return to Terminal when System Settings quits, ready for the Sharing command.
+    "<wait10s>open -W '/System/Applications/System Settings.app' && open /System/Applications/Utilities/Terminal.app<enter>",
     # Wait for System Settings to fully open before navigating with the keyboard
     "<wait120s>",
     "<wait10s><leftCtrlOn><f2><leftCtrlOff><right><right><right><down>Privacy & Security<enter>",
@@ -53,8 +54,6 @@ source "tart-cli" "tart" {
     "<wait10s><leftShiftOn><tab><leftShiftOff><wait1s><spacebar>",
     # Quit System Settings
     "<wait10s><leftAltOn>q<leftAltOff>",
-    # Refocus Terminal after quitting System Settings
-    "<wait10s><leftAltOn><spacebar><leftAltOff>Terminal<wait10s><enter>",
     # Sharing is no longer listed in the View menu on Golden Gate
     "<wait10s>open 'x-apple.systempreferences:com.apple.Sharing-Settings.extension'<enter>",
     # Enable Screen Sharing through the UI to grant the required TCC permissions

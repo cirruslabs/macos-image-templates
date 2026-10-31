@@ -270,6 +270,9 @@ build {
       inline = [
         "source ~/.zprofile",
         "xcrun simctl list runtimes > /Users/admin/runtimes.actual.txt",
+        // simctl can return runtimes with the same version in either order.
+        "LC_ALL=C sort -o /Users/admin/runtimes.actual.txt /Users/admin/runtimes.actual.txt",
+        "LC_ALL=C sort -o /Users/admin/runtimes.expected.txt /Users/admin/runtimes.expected.txt",
         "diff -q /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt || (echo 'Simulator runtimes do not match expected list' && cat /Users/admin/runtimes.actual.txt && exit 1)",
         "rm /Users/admin/runtimes.actual.txt /Users/admin/runtimes.expected.txt"
       ]
