@@ -20,6 +20,18 @@ variable "additional_ios_builds" {
   default = []
 }
 
+variable "additional_ios_xcode_version" {
+  type        = string
+  default     = ""
+  description = "Xcode used for additional iOS runtimes; empty keeps the preceding platform selection."
+}
+
+variable "platform_xcode_versions" {
+  type        = list(string)
+  default     = []
+  description = "Older Xcodes whose complete platform runtimes are installed, in order. Empty uses the second and third Xcodes as before."
+}
+
 variable "additional_tvos_builds" {
   type    = list(string)
   default = []
@@ -71,6 +83,7 @@ source "tart-cli" "tart" {
 }
 
 locals {
+  platform_xcode_versions = length(var.platform_xcode_versions) > 0 ? var.platform_xcode_versions : reverse(slice(var.xcode_version, 1, min(3, length(var.xcode_version))))
   xcode_install_provisioners = [
     for version in reverse(sort(var.xcode_version)) : {
       type = "shell"
@@ -83,8 +96,8 @@ locals {
         "APP_DIR=$(dirname $CONTENTS_DIR)",
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
         "sudo xcode-select -s /Applications/Xcode_${version}.app",
-        "xcodebuild -downloadPlatform iOS",
         "xcodebuild -runFirstLaunch",
+        "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform iOS",
         "df -h",
       ]
     }
@@ -165,8 +178,12 @@ build {
     ]
   }
 
-  // iterate over all Xcode versions and install them
-  // select the latest one as the default
+  provisioner "file" {
+    sources     = ["scripts/install-simulator-runtimes.sh", "scripts/import-simulator-runtime.py", "scripts/wait-for-simulator-runtimes.sh"]
+    destination = "/Users/admin/"
+  }
+
+  // Install Xcode versions and their iOS runtimes, then select the default below.
   dynamic "provisioner" {
     for_each = local.xcode_install_provisioners
     labels   = ["shell"]
@@ -176,25 +193,13 @@ build {
   }
 
   dynamic "provisioner" {
-    for_each = length(var.xcode_version) > 2 ? [2] : []
+    for_each = local.platform_xcode_versions
     labels   = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[2]}.app/Contents/Developer",
-        "xcodebuild -downloadAllPlatforms",
-      ]
-    }
-  }
-
-  dynamic "provisioner" {
-    for_each = length(var.xcode_version) > 1 ? [1] : []
-    labels   = ["shell"]
-    content {
-      inline = [
-        "source ~/.zprofile",
-        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[1]}.app/Contents/Developer",
-        "xcodebuild -downloadAllPlatforms",
+        "sudo xcode-select -s /Applications/Xcode_${provisioner.value}.app/Contents/Developer",
+        "bash /Users/admin/install-simulator-runtimes.sh -downloadAllPlatforms",
       ]
     }
   }
@@ -203,8 +208,9 @@ build {
   provisioner "shell" {
     inline = concat(
       ["source ~/.zprofile"],
+      var.additional_ios_xcode_version != "" ? ["sudo xcode-select -s /Applications/Xcode_${var.additional_ios_xcode_version}.app/Contents/Developer"] : [],
       [
-        for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime}"
+        for runtime in var.additional_ios_builds : "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform iOS -buildVersion ${runtime}"
       ]
     )
   }
@@ -213,7 +219,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[0]}.app/Contents/Developer",
-      "xcodebuild -downloadAllPlatforms",
+      "bash /Users/admin/install-simulator-runtimes.sh -downloadAllPlatforms",
     ]
   }
 
@@ -221,7 +227,7 @@ build {
     inline = concat(
       ["source ~/.zprofile"],
       [
-        for runtime in var.additional_tvos_builds : "xcodebuild -downloadPlatform tvOS -buildVersion ${runtime}"
+        for runtime in var.additional_tvos_builds : "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform tvOS -buildVersion ${runtime}"
       ]
     )
   }
@@ -233,6 +239,14 @@ build {
         for component in var.xcode_components : "xcodebuild -downloadComponent ${component}"
       ]
     )
+  }
+
+  provisioner "shell" {
+    inline = [
+      "source ~/.zprofile",
+      "bash /Users/admin/wait-for-simulator-runtimes.sh",
+      "rm /Users/admin/install-simulator-runtimes.sh /Users/admin/import-simulator-runtime.py /Users/admin/wait-for-simulator-runtimes.sh",
+    ]
   }
 
   provisioner "shell" {

@@ -103,11 +103,12 @@ jobs:
       matrix:
         include:
           - macos_version: golden-gate
-            xcode_versions: '"27.2","27.1","27"'
+            xcode_versions: '"27.2","27.3-beta","27.1","27"'
+            platform_xcode_versions: '"27","27.1","27.3-beta"'
             additional_ios_builds: ""
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
-            disk_size: 260
+            disk_size: 320
           - macos_version: sequoia
             xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
             additional_ios_builds: "18.5,18.4,18.2,17.5"
@@ -115,13 +116,17 @@ jobs:
             xcode_components: '"MetalToolchain"'
             disk_size: 380
           - macos_version: tahoe
-            xcode_versions: '"27.2","27.1","27","26.6","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"27.2","27.3-beta","27.1","27","26.6","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
+            additional_ios_xcode_version: "26.6"
+            platform_xcode_versions: '"27","27.1","26.6","27.3-beta"'
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
-            disk_size: 520
+            disk_size: 580
     env:
       ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
+      ADDITIONAL_IOS_XCODE_VERSION: ${{ matrix.additional_ios_xcode_version }}
+      PLATFORM_XCODE_VERSIONS: ${{ matrix.platform_xcode_versions }}
       ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}
       DISK_SIZE: ${{ matrix.disk_size }}
       MACOS_VERSION: ${{ matrix.macos_version }}
@@ -153,6 +158,8 @@ jobs:
             -var "macos_version=$MACOS_VERSION" \
             -var "xcode_version=[$XCODE_VERSIONS]" \
             -var "additional_ios_builds=[$ADDITIONAL_IOS_BUILDS]" \
+            -var "additional_ios_xcode_version=$ADDITIONAL_IOS_XCODE_VERSION" \
+            -var "platform_xcode_versions=[$PLATFORM_XCODE_VERSIONS]" \
             -var "additional_tvos_builds=[$ADDITIONAL_TVOS_BUILDS]" \
             -var "xcode_components=[$XCODE_COMPONENTS]" \
             -var "expected_runtimes_file=data/expected.$MACOS_VERSION.runtimes.txt" \
