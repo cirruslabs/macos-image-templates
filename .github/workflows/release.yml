@@ -36,7 +36,9 @@ jobs:
       matrix:
         # Xcode 27 requires macOS Tahoe 26.6 or later.
         macos_version: >-
-          ${{ startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
+          ${{ (github.event.release.tag_name || inputs.xcode_version) == '27.3-beta'
+              && fromJSON('["golden-gate"]')
+              || startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
               && fromJSON('["tahoe", "golden-gate"]')
               || fromJSON('["tahoe", "sequoia"]') }}
     env:
