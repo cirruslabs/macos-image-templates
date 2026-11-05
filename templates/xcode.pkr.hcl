@@ -20,18 +20,6 @@ variable "additional_ios_builds" {
   default = []
 }
 
-variable "additional_ios_xcode_version" {
-  type        = string
-  default     = ""
-  description = "Xcode used for additional iOS runtimes; empty keeps the preceding platform selection."
-}
-
-variable "platform_xcode_versions" {
-  type        = list(string)
-  default     = []
-  description = "Older Xcodes whose complete platform runtimes are installed, in order. Empty uses the second and third Xcodes as before."
-}
-
 variable "additional_tvos_builds" {
   type    = list(string)
   default = []
@@ -83,7 +71,7 @@ source "tart-cli" "tart" {
 }
 
 locals {
-  platform_xcode_versions = length(var.platform_xcode_versions) > 0 ? var.platform_xcode_versions : reverse(slice(var.xcode_version, 1, min(3, length(var.xcode_version))))
+  // Xcode may return 70 after exporting successfully; imports are verified below.
   xcode_install_provisioners = [
     for version in reverse(sort(var.xcode_version)) : {
       type = "shell"
@@ -97,7 +85,7 @@ locals {
         "sudo mv $APP_DIR /Applications/Xcode_${version}.app",
         "sudo xcode-select -s /Applications/Xcode_${version}.app",
         "xcodebuild -runFirstLaunch",
-        "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform iOS",
+        "xcodebuild -downloadPlatform iOS -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]",
         "df -h",
       ]
     }
@@ -175,15 +163,12 @@ build {
     inline = [
       "source ~/.zprofile",
       "df -h",
+      "mkdir /tmp/simulator-runtimes",
     ]
   }
 
-  provisioner "file" {
-    sources     = ["scripts/install-simulator-runtimes.sh", "scripts/import-simulator-runtime.py", "scripts/wait-for-simulator-runtimes.sh"]
-    destination = "/Users/admin/"
-  }
-
-  // Install Xcode versions and their iOS runtimes, then select the default below.
+  // iterate over all Xcode versions and install them
+  // select the latest one as the default
   dynamic "provisioner" {
     for_each = local.xcode_install_provisioners
     labels   = ["shell"]
@@ -193,13 +178,25 @@ build {
   }
 
   dynamic "provisioner" {
-    for_each = local.platform_xcode_versions
+    for_each = length(var.xcode_version) > 2 ? [2] : []
     labels   = ["shell"]
     content {
       inline = [
         "source ~/.zprofile",
-        "sudo xcode-select -s /Applications/Xcode_${provisioner.value}.app/Contents/Developer",
-        "bash /Users/admin/install-simulator-runtimes.sh -downloadAllPlatforms",
+        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[2]}.app/Contents/Developer",
+        "xcodebuild -downloadAllPlatforms -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]",
+      ]
+    }
+  }
+
+  dynamic "provisioner" {
+    for_each = length(var.xcode_version) > 1 ? [1] : []
+    labels   = ["shell"]
+    content {
+      inline = [
+        "source ~/.zprofile",
+        "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[1]}.app/Contents/Developer",
+        "xcodebuild -downloadAllPlatforms -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]",
       ]
     }
   }
@@ -208,9 +205,8 @@ build {
   provisioner "shell" {
     inline = concat(
       ["source ~/.zprofile"],
-      var.additional_ios_xcode_version != "" ? ["sudo xcode-select -s /Applications/Xcode_${var.additional_ios_xcode_version}.app/Contents/Developer"] : [],
       [
-        for runtime in var.additional_ios_builds : "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform iOS -buildVersion ${runtime}"
+        for runtime in var.additional_ios_builds : "xcodebuild -downloadPlatform iOS -buildVersion ${runtime} -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]"
       ]
     )
   }
@@ -219,7 +215,7 @@ build {
     inline = [
       "source ~/.zprofile",
       "sudo xcode-select -s /Applications/Xcode_${var.xcode_version[0]}.app/Contents/Developer",
-      "bash /Users/admin/install-simulator-runtimes.sh -downloadAllPlatforms",
+      "xcodebuild -downloadAllPlatforms -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]",
     ]
   }
 
@@ -227,7 +223,7 @@ build {
     inline = concat(
       ["source ~/.zprofile"],
       [
-        for runtime in var.additional_tvos_builds : "bash /Users/admin/install-simulator-runtimes.sh -downloadPlatform tvOS -buildVersion ${runtime}"
+        for runtime in var.additional_tvos_builds : "xcodebuild -downloadPlatform tvOS -buildVersion ${runtime} -exportPath /tmp/simulator-runtimes || [ $? -eq 70 ]"
       ]
     )
   }
@@ -241,11 +237,36 @@ build {
     )
   }
 
+  // MobileAsset sources can override imported runtimes after cloning (#391).
+  // Keep every export, remove the sources once, then import the saved packages.
   provisioner "shell" {
     inline = [
       "source ~/.zprofile",
-      "bash /Users/admin/wait-for-simulator-runtimes.sh",
-      "rm /Users/admin/install-simulator-runtimes.sh /Users/admin/import-simulator-runtime.py /Users/admin/wait-for-simulator-runtimes.sh",
+      <<-SHELL
+        set -euo pipefail
+        shopt -s nullglob
+        exports=(/tmp/simulator-runtimes/*.exportedBundle /tmp/simulator-runtimes/*.dmg)
+        [ "$${#exports[@]}" -gt 0 ]
+        xcrun simctl runtime list -j > /tmp/simulator-runtimes/before.json
+        if jq -e 'length > 0' /tmp/simulator-runtimes/before.json > /dev/null; then
+          sudo xcrun simctl runtime delete all
+        fi
+        jq -r '.[] | .path | sub("/AssetData(/.*)?$"; "")' /tmp/simulator-runtimes/before.json |
+          while IFS= read -r path; do
+            [ ! -e "$path" ] || { echo "Runtime source still exists: $path" >&2; exit 1; }
+          done
+        for runtime in "$${exports[@]}"; do
+          xcodebuild -importPlatform "$runtime"
+        done
+        xcrun simctl runtime list -j > /tmp/simulator-runtimes/after.json
+        jq -e --slurpfile before /tmp/simulator-runtimes/before.json '
+          length > 0 and all(.[]; .state == "Ready" and
+            (.path | contains("/com_apple_MobileAsset_") | not)) and
+          (([$before[0][] | [.platformIdentifier, .build]] -
+            [.[] | [.platformIdentifier, .build]]) | length == 0)
+        ' /tmp/simulator-runtimes/after.json
+        rm -rf /tmp/simulator-runtimes
+      SHELL
     ]
   }
 

@@ -56,22 +56,14 @@ jobs:
           bash -n scripts/update-tcc-database.sh scripts/test-update-tcc-database.sh
           bash scripts/test-update-tcc-database.sh
 
-      - name: Validate simulator runtime installation
-        run: |
-          bash -n scripts/{install,test-install,wait-for,test-wait-for}-simulator-runtimes.sh
-          bash scripts/test-install-simulator-runtimes.sh
-          python3 scripts/test-import-simulator-runtime.py
-          bash scripts/test-wait-for-simulator-runtimes.sh
-
       - name: Prepare validation inputs
         run: |
           mkdir -p "$HOME/XcodesCache"
           touch "$HOME/XcodesCache/Xcode_26.6.xip"
-          touch "$HOME/XcodesCache/Xcode_27-beta-6.xip"
+          touch "$HOME/XcodesCache/Xcode_27.3-beta.xip"
           touch "$HOME/XcodesCache/Xcode_27.xip"
           touch "$HOME/XcodesCache/Xcode_27.1.xip"
           touch "$HOME/XcodesCache/Xcode_27.2.xip"
-          touch "$HOME/XcodesCache/Xcode_27.3-beta.xip"
 
       - name: Validate templates
         run: |
@@ -92,7 +84,6 @@ jobs:
           validate templates/xcode.pkr.hcl \
             -var macos_version=golden-gate \
             -var 'xcode_version=["27.2","27.3-beta","27.1","27"]' \
-            -var 'platform_xcode_versions=["27","27.1","27.3-beta"]' \
             -var 'xcode_components=["MetalToolchain"]' \
             -var expected_runtimes_file=data/expected.golden-gate.runtimes.txt
 
@@ -120,8 +111,8 @@ jobs:
             -var expected_runtimes_file=data/expected.tahoe.runtimes.txt
 
           validate templates/xcode.pkr.hcl \
-            -var macos_version=tahoe \
-            -var 'xcode_version=["27-beta-6"]' \
+            -var macos_version=golden-gate \
+            -var 'xcode_version=["27.3-beta"]' \
             -var 'xcode_components=["MetalToolchain"]'
 
           validate templates/xcode.pkr.hcl \
@@ -132,11 +123,6 @@ jobs:
           validate templates/xcode.pkr.hcl \
             -var macos_version=tahoe \
             -var 'xcode_version=["27.2"]' \
-            -var 'xcode_components=["MetalToolchain"]'
-
-          validate templates/xcode.pkr.hcl \
-            -var macos_version=tahoe \
-            -var 'xcode_version=["27.3-beta"]' \
             -var 'xcode_components=["MetalToolchain"]'
 
   build-vanilla:
@@ -285,13 +271,11 @@ jobs:
       matrix:
         include:
           - macos_version: tahoe
-            xcode_versions: '"27.2","27.3-beta","27.1","27","26.6","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"27.2","26.6","27.1","27","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
-            additional_ios_xcode_version: "26.6"
-            platform_xcode_versions: '"27","27.1","26.6","27.3-beta"'
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
-            disk_size: 580
+            disk_size: 520
           - macos_version: sequoia
             xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
             additional_ios_builds: "18.5,18.4,18.2,17.5"
@@ -300,15 +284,12 @@ jobs:
             disk_size: 380
           - macos_version: golden-gate
             xcode_versions: '"27.2","27.3-beta","27.1","27"'
-            platform_xcode_versions: '"27","27.1","27.3-beta"'
             additional_ios_builds: ""
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
             disk_size: 320
     env:
       ADDITIONAL_IOS_BUILDS: ${{ matrix.additional_ios_builds }}
-      ADDITIONAL_IOS_XCODE_VERSION: ${{ matrix.additional_ios_xcode_version }}
-      PLATFORM_XCODE_VERSIONS: ${{ matrix.platform_xcode_versions }}
       ADDITIONAL_TVOS_BUILDS: ${{ matrix.additional_tvos_builds }}
       DISK_SIZE: ${{ matrix.disk_size }}
       MACOS_VERSION: ${{ matrix.macos_version }}
@@ -338,7 +319,7 @@ jobs:
             build=true
           elif grep -Fxq "scripts/finalize-$MACOS_VERSION.sh" changed-files.txt; then
             build=true
-          elif grep -Eq '^(templates/xcode\.pkr\.hcl|data/setup-info-template\.json|scripts/((install-actions-runner|install-simulator-runtimes|wait-for-simulator-runtimes)\.sh|import-simulator-runtime\.py))$' changed-files.txt; then
+          elif grep -Eq '^(templates/xcode\.pkr\.hcl|data/setup-info-template\.json|scripts/install-actions-runner\.sh)$' changed-files.txt; then
             build=true
           fi
 
@@ -413,8 +394,6 @@ jobs:
             -var "macos_version=$MACOS_VERSION" \
             -var "xcode_version=[$XCODE_VERSIONS]" \
             -var "additional_ios_builds=[$ADDITIONAL_IOS_BUILDS]" \
-            -var "additional_ios_xcode_version=$ADDITIONAL_IOS_XCODE_VERSION" \
-            -var "platform_xcode_versions=[$PLATFORM_XCODE_VERSIONS]" \
             -var "additional_tvos_builds=[$ADDITIONAL_TVOS_BUILDS]" \
             -var "xcode_components=[$XCODE_COMPONENTS]" \
             -var "expected_runtimes_file=data/expected.$MACOS_VERSION.runtimes.txt" \
