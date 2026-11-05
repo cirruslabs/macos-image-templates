@@ -36,7 +36,9 @@ jobs:
       matrix:
         # Xcode 27 requires macOS Tahoe 26.6 or later.
         macos_version: >-
-          ${{ startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
+          ${{ (github.event.release.tag_name || inputs.xcode_version) == '27.3-beta'
+              && fromJSON('["golden-gate"]')
+              || startsWith(github.event.release.tag_name || inputs.xcode_version, '27')
               && fromJSON('["tahoe", "golden-gate"]')
               || fromJSON('["tahoe", "sequoia"]') }}
     env:
@@ -103,11 +105,11 @@ jobs:
       matrix:
         include:
           - macos_version: golden-gate
-            xcode_versions: '"27.2","27.1","27"'
+            xcode_versions: '"27.2","27.3-beta","27.1","27"'
             additional_ios_builds: ""
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
-            disk_size: 260
+            disk_size: 320
           - macos_version: sequoia
             xcode_versions: '"26.0.1",16.4,16.3,16.2,16.1,16'
             additional_ios_builds: "18.5,18.4,18.2,17.5"
@@ -115,7 +117,7 @@ jobs:
             xcode_components: '"MetalToolchain"'
             disk_size: 380
           - macos_version: tahoe
-            xcode_versions: '"27.2","27.1","27","26.6","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
+            xcode_versions: '"27.2","26.6","27.1","27","26.5","26.4.1","26.3","26.2","26.1.1","26.0.1"'
             additional_ios_builds: "18.6"
             additional_tvos_builds: ""
             xcode_components: '"MetalToolchain"'
